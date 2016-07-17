@@ -1,103 +1,80 @@
-'use strict';
+var gulp = require('gulp');
+var ts = require('gulp-typescript');
+var merge = require('merge2');
+var compass = require('gulp-compass');
+var browserSync = require('browser-sync');
+var runSequence = require('run-sequence');
 
-var gulp = require('gulp'),
-    debug = require('gulp-debug'),
-    inject = require('gulp-inject'),
-    tsc = require('gulp-typescript'),
-    tslint = require('gulp-tslint'),
-    sourcemaps = require('gulp-sourcemaps'),
-    del = require('del'),
-    Config = require('./gulpfile.config'),
-    tsProject = tsc.createProject('tsconfig.json'),
-    browserSync = require('browser-sync'),
-    superstatic = require( 'superstatic' ),
-    sass = require('gulp-sass'),
-    concat = require('gulp-concat'),
-    rename = require('gulp-rename');
-
-var config = new Config();
-
-/**
- * Generates the app.d.ts references file dynamically from all application *.ts files.
- */
-// gulp.task('gen-ts-refs', function () {
-//     var target = gulp.src(config.appTypeScriptReferences);
-//     var sources = gulp.src([config.allTypeScript], {read: false});
-//     return target.pipe(inject(sources, {
-//         starttag: '//{',
-//         endtag: '//}',
-//         transform: function (filepath) {
-//             return '/// <reference path="../..' + filepath + '" />';
-//         }
-//     })).pipe(gulp.dest(config.typings));
-// });
-
-// Compile Our Sass
-gulp.task('sass', function() {
-    return gulp.src(config.allSass)
-        .pipe(sass({ compass: true, sourcemap: true, style: 'compressed' }))
-        .pipe(gulp.dest('dist/css/app.css'));
+gulp.task('compass', function() {
+  gulp.src('./src/*.scss')
+    .pipe(compass({
+      config_file: './config.rb',
+      css: 'dist/css',
+      sass: 'src/sass'
+    }))
+    .pipe(gulp.dest('dist/css'));
 });
 
-/**
- * Lint all custom TypeScript files.
- */
-gulp.task('ts-lint', function () {
-    return gulp.src(config.allTypeScript).pipe(tslint()).pipe(tslint.report('prose'));
+gulp.task('scripts-client', function() {
+  var tsResult = gulp.src('src/ts/client/*.ts')
+    .pipe(ts({
+        declarationFiles: true,
+        noExternalResolve: true,
+        noImplicitAny: true,
+        out: 'app.js'
+      }));
+ 
+  return merge([
+    tsResult.dts.pipe(gulp.dest('dist/definitions')),
+    tsResult.js.pipe(gulp.dest('dist/js/client'))
+    ]);
 });
 
-/**
- * Compile TypeScript and include references to library and app .d.ts files.
- */
-gulp.task('compile-ts', function () {
-    var sourceTsFiles = [config.allTypeScript,                //path to typescript files
-                         config.libraryTypeScriptDefinitions]; //reference to library .d.ts files
-                        
-
-    var tsResult = gulp.src(sourceTsFiles)
-                       .pipe(sourcemaps.init())
-                       .pipe(tsc(tsProject));
-
-        tsResult.dts.pipe(gulp.dest(config.tsOutputPath));
-        return tsResult.js
-                        .pipe(sourcemaps.write('.'))
-                        .pipe(gulp.dest(config.tsOutputPath));
+gulp.task('scripts-server', function() {
+  var tsResult = gulp.src('src/ts/server/*.ts')
+    .pipe(ts({
+        declarationFiles: true,
+        noExternalResolve: true,
+        noImplicitAny: true,
+        out: 'app.js'
+      }));
+ 
+  return merge([
+    tsResult.dts.pipe(gulp.dest('dist/definitions')),
+    tsResult.js.pipe(gulp.dest('dist/js/server'))
+    ]);
+});
+ 
+gulp.task('watch', function () {
+  gulp.watch('**/*.scss', ['compass']);
+  gulp.watch('src/ts/client/**/*.ts', ['scripts-client']);
+  gulp.watch('src/ts/server/**/*.ts', ['scripts-server']);
+  gulp.watch('index.html', browserSync.reload); 
+  gulp.watch('dist/js/client/**/*.js', browserSync.reload);
 });
 
-/**
- * Remove all generated JavaScript files from TypeScript compilation.
- */
-gulp.task('clean-ts', function (cb) {
-  var typeScriptGenFiles = [
-    config.tsOutputPath +'/**/*.js',    // path to all JS files auto gen'd by editor
-    config.tsOutputPath +'/**/*.js.map', // path to all sourcemap files auto gen'd by editor
-    '!' + config.tsOutputPath + '/lib'
-];
+gulp.task('img', function() {
+  return gulp.src('src/img/*.jpg') // Gets all files ending with
+    .pipe(gulp.dest('dist/img'))
+})
 
-  // delete the files
-  del(typeScriptGenFiles, cb);
-});
-
-gulp.task('watch', function() {
-    gulp.watch([config.allTypeScript], ['ts-lint', 'compile-ts']);
-    gulp.watch([config.allSass], ['sass']);
-});
-
-gulp.task('serve', ['compile-ts', 'watch', 'sass'], function() {
-  process.stdout.write('Starting browserSync and superstatic...\n');
-  browserSync({
+gulp.task('browserSync', function() {
+   browserSync({
     port: 3000,
     files: ['index.html', '**/*.js'],
     injectChanges: true,
-    logFileChanges: false,
-    logLevel: 'silent',
     notify: true,
     reloadDelay: 0,
     server: {
-      baseDir: './src',
-      middleware: superstatic({ debug: false})
+      baseDir: ''
     }
   });
+})
+
+gulp.task('build', ['scripts-server', 'scripts-client', 'compass', 'img']);
+
+gulp.task('serve', function() {
+  runSequence('browserSync', 'watch');
 });
 
-gulp.task('default', ['ts-lint', 'compile-ts']);
+gulp.task('default', ['serve']);

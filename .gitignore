@@ -2,4 +2,6 @@
 node_modules
 # Optional npm cache directory
 .npm
-build
+dist
+.sass-cache
+npm-debug.log
