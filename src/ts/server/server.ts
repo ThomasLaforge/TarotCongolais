@@ -11,15 +11,26 @@ var server = http.createServer(function(req, res) {
 console.log('-------------- Server started on localhost:' + port + '--------------')
 
 var io = require('socket.io').listen(server);
-var clients = [];
+var clients = 0;
 
 // Quand un client se connecte, on le note dans la console
 io.sockets.on('connection', function (socket) {
     console.log('Un client est connecté !');
+    clients++;
 
-    socket.emit('message', 'Bienvenue voyageur ! ');
+    if(clients == 4){
+        socket.broadcast.emit('message', 'La partie va commencer!');
+        socket.emit('message', 'Bienvenue, vous êtes le dernier arrivé. La partie va commencer!'); 
+        io.sockets.emit('message', 'Hello tout le monde vous êtes au complet');   
+    }
+    else if(clients > 4) {
+        socket.emit('message', 'Désolé il y a déjà assez de joueurs');
+    }
+    else{
+        socket.emit('message' ,'Bienvenue nous attendons d\'autres adversaires avant de débuter la partie');
+    }
+
 });
-
 
 server.listen(port);
 
