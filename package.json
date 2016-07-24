@@ -17,7 +17,8 @@
     "run-sequence": "^1.2.2"
   },
   "scripts": {
-    "start": "gulp && nodemon dist/js/server.js"
+    "client": "gulp",
+    "server": "node dist/js/server/app.js"
   },
   "author": "",
   "license": "ISC"
