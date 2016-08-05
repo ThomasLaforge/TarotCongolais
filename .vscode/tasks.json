@@ -1,0 +1,19 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "command": "npm.cmd",
+    "isShellCommand": true,
+    "showOutput": "always",
+    "suppressTaskName": true,
+    "tasks": [
+        {
+            "taskName": "server",
+            "args": ["run", "server"]
+        },
+        {
+            "taskName": "client",
+            "args": ["run", "client"]
+        }
+    ]
+}
