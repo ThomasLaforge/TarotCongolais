@@ -5,6 +5,8 @@ var compass = require('gulp-compass');
 var browserSync = require('browser-sync');
 var runSequence = require('run-sequence');
 
+var tsProject = ts.createProject("tsconfig.json");
+
 gulp.task('compass', function() {
   gulp.src('./src/*.scss')
     .pipe(compass({
@@ -15,40 +17,15 @@ gulp.task('compass', function() {
     .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('scripts-client', function() {
-  var tsResult = gulp.src('src/ts/client/*.ts')
-    .pipe(ts({
-        declarationFiles: true,
-        noExternalResolve: true,
-        noImplicitAny: true,
-        out: 'app.js'
-      }));
- 
-  return merge([
-    tsResult.dts.pipe(gulp.dest('dist/definitions')),
-    tsResult.js.pipe(gulp.dest('dist/js/client'))
-    ]);
-});
-
-gulp.task('scripts-server', function() {
-  var tsResult = gulp.src('src/ts/server/*.ts')
-    .pipe(ts({
-        declarationFiles: true,
-        noExternalResolve: true,
-        noImplicitAny: true,
-        out: 'app.js'
-      }));
- 
-  return merge([
-    tsResult.dts.pipe(gulp.dest('dist/definitions')),
-    tsResult.js.pipe(gulp.dest('dist/js/server'))
-    ]);
+gulp.task('scripts', function () {
+    return tsProject.src()
+        .pipe(ts(tsProject))
+        .js.pipe(gulp.dest("dist/js"));
 });
  
 gulp.task('watch', function () {
   gulp.watch('**/*.scss', ['compass']);
-  gulp.watch('src/ts/client/**/*.ts', ['scripts-client']);
-  gulp.watch('src/ts/server/**/*.ts', ['scripts-server']);
+  gulp.watch('src/ts/**/*.ts', ['scripts']);
   gulp.watch('index.html', browserSync.reload); 
   gulp.watch('dist/js/client/**/*.js', browserSync.reload);
 });
@@ -71,7 +48,7 @@ gulp.task('browserSync', function() {
   });
 })
 
-gulp.task('build', ['scripts-server', 'scripts-client', 'compass', 'img']);
+gulp.task('build', ['scripts', 'compass', 'img']);
 
 gulp.task('serve', function() {
   runSequence('browserSync', 'watch');

@@ -1,8 +1,17 @@
-{
+{ 
+    "files": [
+        "src/ts/server/app.ts",
+        "src/ts/client/app.ts",
+        "src/ts/modules/Card.ts",
+        "src/ts/modules/Deck.ts",
+        "src/ts/modules/Game.ts",
+        "src/ts/modules/Player.ts",
+        "src/ts/modules/utils.ts"
+    ],
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es5",
-        "noImplicitAny": false,
+        "target": "ES5",
+        "noImplicitAny": true,
         "sourceMap": false
     },
     "exclude": [
