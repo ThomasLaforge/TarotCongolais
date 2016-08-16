@@ -1,17 +1,22 @@
-var http = require('http');
-var fs   = require('fs');
-var port = 8080;
-var server = http.createServer(function(req, res) {
+import {Card} from '../modules/Card';
+let http = require('http');
+let fs   = require('fs');
+let colors   = require('colors');
+
+let port = 8080;
+let server = http.createServer(function(req, res) {
 	fs.readFile('./index.html', 'utf-8', function(error, content) {
         res.writeHead(200, {"Content-Type": "text/html"});
         res.end(content);
     });
 });
 
-console.log('-------------- Server started on localhost:' + port + '--------------')
+console.log(colors.green('-------------- Server started on localhost: %s --------------'), port);
 
-var io = require('socket.io').listen(server);
-var clients = 0;
+let io = require('socket.io').listen(server);
+let clients:number = 0;
+let card:Card = new Card(3);
+card.console();
 
 // Quand un client se connecte, on le note dans la console
 io.sockets.on('connection', function (socket) {
@@ -19,9 +24,11 @@ io.sockets.on('connection', function (socket) {
     clients++;
 
     if(clients == 4){
+        console.log('la partie est complète et va donc commencer');
         socket.broadcast.emit('message', 'La partie va commencer!');
         socket.emit('message', 'Bienvenue, vous êtes le dernier arrivé. La partie va commencer!'); 
-        io.sockets.emit('message', 'Hello tout le monde vous êtes au complet');   
+        io.sockets.emit('message', 'Hello tout le monde vous êtes au complet');
+
     }
     else if(clients > 4) {
         socket.emit('message', 'Désolé il y a déjà assez de joueurs');
@@ -37,12 +44,12 @@ server.listen(port);
 //////////////////////////////////////////////////////////////////////////////////
 ///                                  Objets                                    ///
 //////////////////////////////////////////////////////////////////////////////////
-// var nbPlayers = 4;		//nombre de joueurs : 3 ou 4.
-// var deck = [];
+// let nbPlayers = 4;		//nombre de joueurs : 3 ou 4.
+// let deck = [];
 
 // function getDeck(nbPlayers, turn){
-//     var nbCards = nbPlayers * nbCardsByPlayer(nbPlayers, turn);
-//     var tabAllCards = getAllCards();
+//     let nbCards = nbPlayers * nbCardsByPlayer(nbPlayers, turn);
+//     let tabAllCards = getAllCards();
 //     deck = tabAllCards;
 //     deck.shuffle();
 //     //on garde x cartes
@@ -60,8 +67,8 @@ server.listen(port);
 // /*return a tab with all possible cards */
 
 // function getAllCards(){
-//     var tab = [];
-//     for (var i = 0; i < nbCards; i++) {
+//     let tab = [];
+//     for (let i = 0; i < nbCards; i++) {
 //         tab.push(i);
 //     };
 //     return tab;
