@@ -12,7 +12,7 @@
             "args": ["run", "server"]
         },
         {
-            "taskName": "client",
+            "taskName": "build",
             "args": ["run", "client"]
         }
     ]
