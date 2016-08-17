@@ -6,6 +6,7 @@
         "src/ts/modules/Deck.ts",
         "src/ts/modules/Game.ts",
         "src/ts/modules/Player.ts",
+        "src/ts/modules/Hand.ts",
         "src/ts/modules/utils.ts"
     ],
     "compilerOptions": {
