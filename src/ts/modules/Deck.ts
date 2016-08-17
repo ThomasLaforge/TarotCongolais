@@ -11,13 +11,15 @@ export class Deck {
     private _arrayDiscard:Array<Card>;
 
     constructor() {
-        var array = [];
-        this.arrayDeck = array;
+        this._arrayDeck = [];
+        for (let i=0; i <= 21; i++) {
+            this.arrayDeck.push(new Card(i));
+        }
+        this._arrayDiscard = [];
         this.shuffleDeck();
-        this.arrayDiscard = [];
     }
     
-    removeCard(card) {
+    removeCard(card:Card) {
         var pos = this.arrayDeck.indexOf(card);
 		if(pos > -1){
 			this.arrayDeck.splice(pos, 1);
@@ -31,8 +33,10 @@ export class Deck {
         this.shuffle(this.arrayDeck);
     }
     
-    shuffle(array){
-        var currentIndex = array.length, temporaryValue, randomIndex ;
+    shuffle(array:Array<any>){
+        var currentIndex:number = array.length;
+        let temporaryValue:Card;
+        let randomIndex:number;
         
         // While there remain elements to shuffle...
         while (0 !== currentIndex) {

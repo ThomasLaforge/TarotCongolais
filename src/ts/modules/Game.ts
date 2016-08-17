@@ -3,7 +3,7 @@ import {Player} from './Player';
 import * as Utils from './utils';
 
 export class Game {
-    
+	
     private _deck:Deck;
     private _players:Array<Player>;
     private _start:Date;
