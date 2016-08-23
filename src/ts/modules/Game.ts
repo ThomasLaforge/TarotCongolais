@@ -1,17 +1,20 @@
 import {Deck} from './Deck';
 import {Player} from './Player';
+import {Timer} from './Timer';
+import {History} from './History';
 import * as Utils from './utils';
 
 export class Game {
 	
     private _deck:Deck;
     private _players:Array<Player>;
-    private _start:Date;
+    private _timer:Timer;
+    private _history:History;
     private _indexfirstPlayer:number;
 
     constructor(players:Array<Player>){
-        this._deck = new Deck();
-        this._start = new Date();
+        this._timer = new Timer();
+		this._history = new History()
         this._players = players;
         this.indexfirstPlayer = Utils.getRandomPlayer(this.getNbPlayer());
     }
@@ -20,7 +23,7 @@ export class Game {
         return this.players[this.indexfirstPlayer];
     }
 
-    changeFirstPlayer(){
+    switchPlayer(){
         if(this.indexfirstPlayer < this.getNbPlayer()){
             this.indexfirstPlayer += 1;
         }
@@ -29,15 +32,18 @@ export class Game {
         }
         return this.indexfirstPlayer;
     }
-   
-	getNbPlayer(): number {
-		return this.players.length;
-	}
-
 
 	/**
 	 *  Getters / Setters
 	 */
+
+	public get timer(): Date {
+		return this._timer;
+	}
+	public set timer(value: Date) {
+		this._timer = value;
+	}
+	
 	public get deck(): Deck {
 		return this._deck;
 	}
@@ -57,6 +63,9 @@ export class Game {
 	}
 	public set players(value: Array<Player>) {
 		this._players = value;
+	}
+	public getNbPlayer(): number {
+		return this.players.length;
 	}
     
     
