@@ -19,7 +19,7 @@ let io = require('socket.io').listen(server);
 let clients:number = 0;
 let card:Card = new Card(3);
 let hand:Hand = new Hand([new Card(13), card]);
-hand.console();
+hand.debug();
 
 // Quand un client se connecte, on le note dans la console
 io.sockets.on('connection', function (socket:any) {

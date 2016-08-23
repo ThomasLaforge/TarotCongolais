@@ -8,12 +8,11 @@ export class Hand {
         this._arrCard = arrOfCard.slice();
     }
 
-    console(){
+    debug(){
         for (let i = 0; i < this.arrCard.length; i++) {
             this.arrCard[i].console();
         }
     }
-
 
     /**
      * Getters / Setters
