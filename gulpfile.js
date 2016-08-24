@@ -27,7 +27,7 @@ gulp.task('watch', function () {
   gulp.watch('**/*.scss', ['compass']);
   gulp.watch('src/ts/**/*.ts', ['scripts']);
   gulp.watch('index.html', browserSync.reload); 
-  gulp.watch('dist/js/client/**/*.js', browserSync.reload);
+  gulp.watch('dist/js/client/**/app.js', browserSync.reload);
 });
 
 gulp.task('img', function() {
@@ -51,7 +51,7 @@ gulp.task('browserSync', function() {
 gulp.task('build', ['scripts', 'compass', 'img']);
 
 gulp.task('serve', function() {
-  runSequence('browserSync', 'watch');
+  runSequence('build', 'browserSync', 'watch');
 });
 
 gulp.task('default', ['serve']);

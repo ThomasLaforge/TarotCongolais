@@ -16,6 +16,12 @@ export class Player{
 	public set username(value: string) {
 		this._username = value;
 	}
+	public get hand(): Hand {
+		return this._hand;
+	}
+	public set hand(value: Hand) {
+		this._hand = value;
+	}
 	
 
 }

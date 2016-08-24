@@ -17,15 +17,30 @@ export class Trick {
     }
 
     addSoloTrick(soloTrick:ISoloTrick){
-        this.arrSoloTrick.push();
+        if(!this.playerAlreadyPlayed(soloTrick.player)){
+            this.arrSoloTrick.push();
+        }
+        else{
+            console.error('Player already played');
+        }
     }
 
     isDone() : boolean{
         return this.arrSoloTrick.length == this.nbPlayer;
     }
 
+    playerAlreadyPlayed(p:Player){
+        this.arrSoloTrick.forEach( soloTrick => {
+            if(soloTrick.player == p){
+                return true;
+            }
+        })
+        return false;
+    }
 
-
+    /**
+     * Getters / Setters
+     */
 	public get nbPlayer(): number {
 		return this._nbPlayer;
 	}
@@ -36,7 +51,6 @@ export class Trick {
 	public get arrSoloTrick(): Array<ISoloTrick> {
 		return this._arrSoloTrick;
 	}
-
 	public set arrSoloTrick(value: Array<ISoloTrick>) {
 		this._arrSoloTrick = value;
 	}
