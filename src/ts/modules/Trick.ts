@@ -1,6 +1,7 @@
 // Trick = un pli
 import { Player } from './Player';
 import { Card } from './Card';
+import * as  _ from 'lodash';
 
 interface ISoloTrick {
     player:Player;
@@ -14,14 +15,15 @@ export class Trick {
 
     constructor(nbPlayer:number){
         this.nbPlayer = nbPlayer;
+        this.arrSoloTrick = [];
     }
 
     addSoloTrick(soloTrick:ISoloTrick){
         if(!this.playerAlreadyPlayed(soloTrick.player)){
-            this.arrSoloTrick.push();
+            this.arrSoloTrick.push(soloTrick);
         }
         else{
-            console.error('Player already played');
+            throw new Error('Player already played');
         }
     }
 
@@ -30,12 +32,13 @@ export class Trick {
     }
 
     playerAlreadyPlayed(p:Player){
+        let res:boolean = false;
         this.arrSoloTrick.forEach( soloTrick => {
-            if(soloTrick.player == p){
-                return true;
+            if(_.isEqual(soloTrick.player,p)){
+                res = true;
             }
         })
-        return false;
+        return res;
     }
 
     /**

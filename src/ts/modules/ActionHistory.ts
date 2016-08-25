@@ -1,5 +1,6 @@
 import {Player} from './Player';
 import {Hand} from './Hand';
+import {Card} from './Card';
 
 export enum GameAction {
     Start,
@@ -12,21 +13,21 @@ export enum GameAction {
 export interface IActionHistory {
     time    : Date;
     type    : GameAction;
-    value   : string | number | Hand;
-    player? : Player;
+    value   : string | number | Hand | Card;
+    playerName? : string;
 }
 
 export class ActionHistory implements IActionHistory {
 
-    private _player: Player;
-    private _value: string | number | Hand;
+    private _playerName: string;
+    private _value: string | number | Hand | Card;
     private _type: GameAction;
     private _time: Date;
 
-    constructor(type:GameAction, value?:string | number | Hand, player?: Player){
+    constructor(type:GameAction, value?:string | number | Hand | Card, playerName?: string){
         this.time = new Date();
         this.type = type;
-        if(player) this.player = player;
+        if(playerName) this._playerName = playerName;
         if(value) this.value = value;
     }
 
@@ -38,17 +39,17 @@ export class ActionHistory implements IActionHistory {
     /**
      * Getters / Setters
      */
-    public get player(): Player {
-        return this._player;
+    public get playerName(): string {
+        return this._playerName;
     }
-    public set player(value: Player) {
-        this._player = value;
+    public set playerName(value: string) {
+        this._playerName = value;
     }
 
-    public get value(): string | number | Hand {
+    public get value(): string | number | Hand | Card {
         return this._value;
     }
-    public set value(value: string | number | Hand) {
+    public set value(value: string | number | Hand | Card) {
         this._value = value;
     }
 

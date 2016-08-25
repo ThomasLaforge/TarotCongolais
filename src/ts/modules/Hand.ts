@@ -15,26 +15,39 @@ export class Hand {
         }
     }
 
+    length() : number{
+        return this.arrCard.length;
+    }
+
     addCards(arrCard:Array<Card>){
         arrCard.forEach( card => {
             this.arrCard.push(card);
         })
     }
 
-    playCard(card:Card){
+    playCard(card:Card): Card{
         let indexOfCard:number = this.indexOfCard(card);
+        let res:boolean = false;
         if (indexOfCard > -1){
-            this.arrCard.splice(indexOfCard,1);
+            return this.arrCard.splice(indexOfCard,1)[0];
+        }
+        else{
+            throw new Error(`card doesn't exist`);
         }
     }
 
+    playFirstCard():Card{
+        return this.playCard(this.arrCard[0]);
+    }
+
     indexOfCard(card:Card){
+        let res:number = -1;
         this.arrCard.forEach( (c, index) => {
             if( _.isEqual(c,card)){
-                return index;
+                res = index;
             }
         })
-        return -1;
+        return res;
     }
 
     /**

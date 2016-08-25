@@ -1,9 +1,11 @@
 import {Deck} from './Deck';
 import {Player} from './Player';
+import {Card} from './Card';
 // import {PlayerCollection} from './PlayerCollection';
 import {Timer} from './Timer';
+import {Trick} from './Trick';
 import {History} from './History';
-import {ActionHistory} from './ActionHistory';
+import {GameAction, ActionHistory} from './ActionHistory';
 import * as Utils from './utils';
 
 export class Game {
@@ -13,7 +15,8 @@ export class Game {
     private _timer:Timer;
     private _history:History;
     private _indexfirstPlayer:number;
-	private _turnCards:number;	
+	private _turnCards:number;
+	private _actualTrick:Trick;
 
     constructor(players:Array<Player>){
 		this.init(players);
@@ -25,12 +28,21 @@ export class Game {
         this.players          = players;
         this.indexfirstPlayer = Utils.getRandomPlayer(this.getNbPlayer());
 		this.deck             = new Deck();
-		this.dealCards();
 		this.turnCards		  = Math.floor(this.deck.length() / this.getNbPlayer());
+		this.actualTrick 	  = new Trick(this.getNbPlayer());		
+		this.dealCards();
 	}
 
 	reset(players:Array<Player>){
 		this.init(players);
+	}
+
+	soloPlay(p:Player, c:Card){
+		// Action
+		this.actualTrick.addSoloTrick({player : p, card : c});
+		// History
+		let action = new ActionHistory(GameAction.Play, c, p.username);
+		this.history.add(action);
 	}
 
     getFirstPlayer(){
@@ -46,6 +58,7 @@ export class Game {
 
 	nextTurn(){
 		this.turnCards = this.turnCards > 1 ? this.turnCards - 1 : this.getNbPlayer();
+		this.actualTrick = new Trick();
 	}
 
     switchPlayer(){
@@ -101,5 +114,12 @@ export class Game {
 	public set turnCards(value: number) {
 		this._turnCards = value;
 	}
+	public get actualTrick(): Trick {
+		return this._actualTrick;
+	}
+	public set actualTrick(value: Trick) {
+		this._actualTrick = value;
+	}
+	
     
 }
