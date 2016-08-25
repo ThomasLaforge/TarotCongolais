@@ -16,12 +16,11 @@
     "gulp-typescript": "^2.13.6",
     "merge2": "^1.0.2",
     "nodemon": "^1.9.2",
-    "run-sequence": "^1.2.2",
-    "supervisor": "^0.11.0"
+    "run-sequence": "^1.2.2"
   },
   "scripts": {
     "client": "gulp",
-    "server": "supervisor dist/js/server/app.js"
+    "server": "nodemon --watch dist/js/server/app.js dist/js/server/app.js"
   },
   "author": "",
   "license": "ISC"

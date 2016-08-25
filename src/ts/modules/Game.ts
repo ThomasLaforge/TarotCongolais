@@ -1,6 +1,6 @@
 import {Deck} from './Deck';
 import {Player} from './Player';
-import {PlayerCollection} from './Player';
+// import {PlayerCollection} from './PlayerCollection';
 import {Timer} from './Timer';
 import {History} from './History';
 import {ActionHistory} from './ActionHistory';
@@ -9,21 +9,29 @@ import * as Utils from './utils';
 export class Game {
 	
     private _deck:Deck;
-    private _players:PlayerCollection;
+    private _players:Array<Player>;
     private _timer:Timer;
     private _history:History;
     private _indexfirstPlayer:number;
-	private _turnCards:number;
+	private _turnCards:number;	
 
     constructor(players:Array<Player>){
+		this.init(players);
+    }
+
+	init(players:Array<Player>){
         this.timer            = new Timer();
 		this.history          = new History()
         this.players          = players;
         this.indexfirstPlayer = Utils.getRandomPlayer(this.getNbPlayer());
 		this.deck             = new Deck();
 		this.dealCards();
-		this.turnCards		  = this.getNbPlayer();
-    }
+		this.turnCards		  = Math.floor(this.deck.length() / this.getNbPlayer());
+	}
+
+	reset(players:Array<Player>){
+		this.init(players);
+	}
 
     getFirstPlayer(){
         return this.players[this.indexfirstPlayer];
@@ -32,8 +40,8 @@ export class Game {
 	dealCards(){
 		this.players.forEach( p => {
 			let newPlayerCards = this.deck.pickCards(this._turnCards);
-			p.hand.addCards()
-		})
+			p.hand.addCards(newPlayerCards);
+		});
 	}
 
 	nextTurn(){
@@ -93,6 +101,5 @@ export class Game {
 	public set turnCards(value: number) {
 		this._turnCards = value;
 	}
-    
     
 }

@@ -1,10 +1,11 @@
-import {Card} from '../modules/Card';
+// Libs and tools
 let http = require('http');
 let fs   = require('fs');
 let colors   = require('colors');
+// Modules
+import {Game} from '../modules/Game';
 
-import {Hand} from '../modules/Hand';
-
+// Server
 let port = 8080;
 let server = http.createServer(function(req, res) {
 	fs.readFile('./index.html', 'utf-8', function(error, content) {
@@ -17,9 +18,6 @@ console.log(colors.green('-------------- Server started on localhost: %s -------
 
 let io = require('socket.io').listen(server);
 let clients:number = 0;
-let card:Card = new Card(3);
-let hand:Hand = new Hand([new Card(13), card]);
-hand.debug();
 
 // Quand un client se connecte, on le note dans la console
 io.sockets.on('connection', function (socket:any) {
