@@ -25,6 +25,7 @@ gulp.task('scripts', function () {
  
 gulp.task('watch', function () {
   gulp.watch('**/*.scss', ['compass']);
+  gulp.watch('**/*.html', ['html']);
   gulp.watch('src/ts/**/*.ts', ['scripts']);
   gulp.watch('index.html', browserSync.reload); 
   gulp.watch('dist/js/client/**/app.js', browserSync.reload);
@@ -33,22 +34,28 @@ gulp.task('watch', function () {
 gulp.task('img', function() {
   return gulp.src('src/img/*.jpg') // Gets all files ending with
     .pipe(gulp.dest('dist/img'))
+});
+
+gulp.task('html', function() {
+  return gulp.src('src/view/*.html') // Gets all files ending with
+    .pipe(gulp.dest('dist/view'))
 })
 
 gulp.task('browserSync', function() {
    browserSync({
     port: 3000,
-    files: ['index.html', '**/*.js'],
+    files: ['**/*.html', '**/*.css', '**/*.js'],
     injectChanges: true,
     notify: true,
     reloadDelay: 0,
     server: {
-      baseDir: ''
+      baseDir: 'dist',
+      index:  'view/index.html'
     }
   });
 })
 
-gulp.task('build', ['scripts', 'compass', 'img']);
+gulp.task('build', ['scripts', 'compass', 'img', 'html']);
 
 gulp.task('serve', function() {
   runSequence('build', 'browserSync', 'watch');

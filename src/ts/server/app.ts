@@ -10,7 +10,7 @@ import {Player} from '../modules/Player';
 // Server
 let port = 8080;
 let server = http.createServer(function(req, res) {
-	fs.readFile('./index.html', 'utf-8', function(error, content) {
+	fs.readFile('../../view/index.html', 'utf-8', function(error, content) {
         res.writeHead(200, {"Content-Type": "text/html"});
         res.end(content);
     });
@@ -28,6 +28,8 @@ let g = new Game(pCollTest);
 
 g.soloPlay(g.players[0], g.players[0].hand.playFirstCard());
 g.soloPlay(g.players[1], g.players[0].hand.playFirstCard());
+g.soloPlay(g.players[2], g.players[0].hand.playFirstCard());
+g.soloPlay(g.players[3], g.players[0].hand.playFirstCard());
 console.log(nodeUtil.inspect(g, false, null));
 
 // // Quand un client se connecte, on le note dans la console
