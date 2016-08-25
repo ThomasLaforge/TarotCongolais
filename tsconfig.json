@@ -2,11 +2,15 @@
     "files": [
         "src/ts/server/app.ts",
         "src/ts/client/app.ts",
+        "src/ts/modules/ActionHistory.ts",
         "src/ts/modules/Card.ts",
         "src/ts/modules/Deck.ts",
         "src/ts/modules/Game.ts",
-        "src/ts/modules/Player.ts",
         "src/ts/modules/Hand.ts",
+        "src/ts/modules/History.ts",
+        "src/ts/modules/Player.ts",
+        "src/ts/modules/Timer.ts",
+        "src/ts/modules/Trick.ts",
         "src/ts/modules/utils.ts"
     ],
     "compilerOptions": {
