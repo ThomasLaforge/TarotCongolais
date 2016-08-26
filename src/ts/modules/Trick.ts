@@ -1,40 +1,44 @@
 // Trick = un pli
 import { Player } from './Player';
 import { Card } from './Card';
+import { Play } from './Play';
 import * as  _ from 'lodash';
 
-interface ISoloTrick {
-    player:Player;
-    card:Card;
-}
-
 export class Trick {
-    
-    private _nbPlayer:number;
-    private _arrSoloTrick:Array<ISoloTrick>;
 
-    constructor(nbPlayer:number){
-        this.nbPlayer = nbPlayer;
-        this.arrSoloTrick = [];
+    private _arrTrick:Array<Play>;
+
+    constructor(){
+        this.arrTrick = [];
     }
 
-    addSoloTrick(soloTrick:ISoloTrick){
-        if(!this.playerAlreadyPlayed(soloTrick.player)){
-            this.arrSoloTrick.push(soloTrick);
+    addplay(play:Play){
+        if(!this.playerAlreadyPlayed(play.player)){
+            this.arrTrick.push(play);
         }
         else{
             throw new Error('Player already played');
         }
     }
 
-    isDone() : boolean{
-        return this.arrSoloTrick.length == this.nbPlayer;
+    getPlayerWinner():Player{
+        let res:Player;
+        let maxValueCard:number = -1;
+
+        this.arrTrick.forEach(play => {
+            if(play.card.value > maxValueCard){
+                maxValueCard = play.card.value;
+                res = play.player;
+            }
+        });
+
+        return res;
     }
 
     playerAlreadyPlayed(p:Player){
         let res:boolean = false;
-        this.arrSoloTrick.forEach( soloTrick => {
-            if(_.isEqual(soloTrick.player,p)){
+        this.arrTrick.forEach( play => {
+            if(_.isEqual(play.player,p)){
                 res = true;
             }
         })
@@ -44,18 +48,11 @@ export class Trick {
     /**
      * Getters / Setters
      */
-	public get nbPlayer(): number {
-		return this._nbPlayer;
+	public get arrTrick(): Array<Play> {
+		return this._arrTrick;
 	}
-	public set nbPlayer(value: number) {
-		this._nbPlayer = value;
-	}
-
-	public get arrSoloTrick(): Array<ISoloTrick> {
-		return this._arrSoloTrick;
-	}
-	public set arrSoloTrick(value: Array<ISoloTrick>) {
-		this._arrSoloTrick = value;
+	public set arrTrick(value: Array<Play>) {
+		this._arrTrick = value;
 	}
     
     

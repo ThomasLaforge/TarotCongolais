@@ -5,13 +5,18 @@ export class Player{
     private _username:string;
 	private _hand:Hand;
 	private _pv:number;
+	private _socketId:any;
 
-    constructor( username:string, pv:number = 10 ){
+    constructor( username:string, socketId:any, pv:number = 10 ){
         this._username 	= username;
 		this._hand		= new Hand();
 		this._pv		= pv;
+		this._socketId 	= socketId;
     }
 
+	/**
+	 * Getters / Setters
+	 */
 	public get username(): string {
 		return this._username;
 	}
@@ -30,7 +35,13 @@ export class Player{
 	public set pv(value: number) {
 		this._pv = value;
 	}
-	
+	public get socketId(): any {
+		return this._socketId;
+	}
+	public set socketId(value: any) {
+		this._socketId = value;
+	}
+		
 	
 
 }

@@ -1,7 +1,7 @@
 import {Deck} from './Deck';
 import {Player} from './Player';
 import {Card} from './Card';
-// import {PlayerCollection} from './PlayerCollection';
+import {PlayerCollection} from './PlayerCollection';
 import {Timer} from './Timer';
 import {Trick} from './Trick';
 import {History} from './History';
@@ -11,18 +11,19 @@ import * as Utils from './utils';
 export class Game {
 	
     private _deck:Deck;
-    private _players:Array<Player>;
+    private _players:PlayerCollection;
     private _timer:Timer;
     private _history:History;
     private _indexfirstPlayer:number;
 	private _turnCards:number;
+	private _turn:Turn;
 	private _actualTrick:Trick;
 
-    constructor(players:Array<Player>){
+    constructor(players:PlayerCollection){
 		this.init(players);
     }
 
-	init(players:Array<Player>){
+	init(players:PlayerCollection){
         this.timer            = new Timer();
 		this.history          = new History()
         this.players          = players;
@@ -33,7 +34,7 @@ export class Game {
 		this.dealCards();
 	}
 
-	reset(players:Array<Player>){
+	reset(players:PlayerCollection){
 		this.init(players);
 	}
 
@@ -93,10 +94,10 @@ export class Game {
 	public set indexfirstPlayer(value: number) {
 		this._indexfirstPlayer = value;
 	}
-	public get players(): Array<Player> {
+	public get players(): PlayerCollection {
 		return this._players;
 	}
-	public set players(value: Array<Player>) {
+	public set players(value: PlayerCollection) {
 		this._players = value;
 	}
 	public getNbPlayer(): number {
