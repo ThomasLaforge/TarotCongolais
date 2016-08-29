@@ -6,15 +6,15 @@ import * as  _ from 'lodash';
 
 export class Trick {
 
-    private _arrTrick:Array<Play>;
+    private _arrPlay:Array<Play>;
 
     constructor(){
-        this.arrTrick = [];
+        this.arrPlay = [];
     }
 
-    addplay(play:Play){
+    addPlay(play:Play){
         if(!this.playerAlreadyPlayed(play.player)){
-            this.arrTrick.push(play);
+            this.arrPlay.push(play);
         }
         else{
             throw new Error('Player already played');
@@ -25,7 +25,7 @@ export class Trick {
         let res:Player;
         let maxValueCard:number = -1;
 
-        this.arrTrick.forEach(play => {
+        this.arrPlay.forEach(play => {
             if(play.card.value > maxValueCard){
                 maxValueCard = play.card.value;
                 res = play.player;
@@ -37,7 +37,7 @@ export class Trick {
 
     playerAlreadyPlayed(p:Player){
         let res:boolean = false;
-        this.arrTrick.forEach( play => {
+        this.arrPlay.forEach( play => {
             if(_.isEqual(play.player,p)){
                 res = true;
             }
@@ -48,11 +48,11 @@ export class Trick {
     /**
      * Getters / Setters
      */
-	public get arrTrick(): Array<Play> {
-		return this._arrTrick;
+	public get arrPlay(): Array<Play> {
+		return this._arrPlay;
 	}
-	public set arrTrick(value: Array<Play>) {
-		this._arrTrick = value;
+	public set arrPlay(value: Array<Play>) {
+		this._arrPlay = value;
 	}
     
     

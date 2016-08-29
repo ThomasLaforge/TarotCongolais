@@ -1,23 +1,38 @@
 import {Player} from './PLayer';
+import * as Utils from './utils';
 import * as  _ from 'lodash';
 
 export class PlayerCollection {
 
     private _arrPlayers:Array<Player>;
-
+    private _indexFirstPlayer:number;
 
 	constructor(arrPlayers: Array<Player>) {
-		this._arrPlayers = arrPlayers;
+        this.indexFirstPlayer = 0;
+		this.arrPlayers = arrPlayers;
+        Utils.shuffle(this.arrPlayers);
 	}
+
+    getPlayers(){
+        return this.arrPlayers;
+    }
 
     getNames():Array<string>{
         let res:Array<string> = [];
-        
+
         this.arrPlayers.forEach( p => {
             res.push(p.username);
         });
 
         return res;
+    }
+
+    getFirstPlayer(){
+        return this.arrPlayers[ this.indexFirstPlayer ];
+    }
+
+    changeFirstPlayer(){
+        this.indexFirstPlayer = (this.indexFirstPlayer + 1) % this.getNbPlayer(); 
     }
 
     getNbPlayer(){
@@ -29,7 +44,7 @@ export class PlayerCollection {
         if(playerId == -1){
             throw new Error('player not in collection');
         }
-        let leftPlayerId:number = playerId > 0 ? playerId - 1 : this.getNbPlayer() - 1;
+        let leftPlayerId:number = Math.abs( playerId - 1 + this.getNbPlayer() ) % this.getNbPlayer();
         return this.arrPlayers[ leftPlayerId ];
     }
 
@@ -38,7 +53,7 @@ export class PlayerCollection {
         if(playerId == -1){
             throw new Error('player not in collection');
         }
-        let rightPlayerId:number = playerId < this.getNbPlayer() - 1 ? playerId - 1 : 0;
+        let rightPlayerId:number = (playerId + 1) % 4;
         return this.arrPlayers[ rightPlayerId ];
     }
 
@@ -63,5 +78,12 @@ export class PlayerCollection {
 	public set arrPlayers(value: Array<Player>) {
 		this._arrPlayers = value;
 	}
+	public get indexFirstPlayer(): number {
+		return this._indexFirstPlayer;
+	}
+	public set indexFirstPlayer(value: number) {
+		this._indexFirstPlayer = value;
+	}
+    
     
 }

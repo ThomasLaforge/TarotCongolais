@@ -2,8 +2,10 @@ import {Deck} from './Deck';
 import {Player} from './Player';
 import {Card} from './Card';
 import {PlayerCollection} from './PlayerCollection';
+import {Play} from './Play';
 import {Timer} from './Timer';
 import {Trick} from './Trick';
+import {Turn} from './Turn';
 import {History} from './History';
 import {GameAction, ActionHistory} from './ActionHistory';
 import * as Utils from './utils';
@@ -14,7 +16,6 @@ export class Game {
     private _players:PlayerCollection;
     private _timer:Timer;
     private _history:History;
-    private _indexfirstPlayer:number;
 	private _turnCards:number;
 	private _turn:Turn;
 	private _actualTrick:Trick;
@@ -27,10 +28,9 @@ export class Game {
         this.timer            = new Timer();
 		this.history          = new History()
         this.players          = players;
-        this.indexfirstPlayer = Utils.getRandomPlayer(this.getNbPlayer());
 		this.deck             = new Deck();
 		this.turnCards		  = Math.floor(this.deck.length() / this.getNbPlayer());
-		this.actualTrick 	  = new Trick(this.getNbPlayer());		
+		this.actualTrick 	  = new Trick();		
 		this.dealCards();
 	}
 
@@ -40,18 +40,18 @@ export class Game {
 
 	soloPlay(p:Player, c:Card){
 		// Action
-		this.actualTrick.addSoloTrick({player : p, card : c});
+		this.actualTrick.addPlay( new Play(p, c));
 		// History
 		let action = new ActionHistory(GameAction.Play, c, p.username);
 		this.history.add(action);
 	}
 
     getFirstPlayer(){
-        return this.players[this.indexfirstPlayer];
+        return this.players.getFirstPlayer;
     }
 
 	dealCards(){
-		this.players.forEach( p => {
+		this.players.getPlayers().forEach( p => {
 			let newPlayerCards = this.deck.pickCards(this._turnCards);
 			p.hand.addCards(newPlayerCards);
 		});
@@ -62,14 +62,8 @@ export class Game {
 		this.actualTrick = new Trick();
 	}
 
-    switchPlayer(){
-        if(this.indexfirstPlayer < this.getNbPlayer()){
-            this.indexfirstPlayer += 1;
-        }
-        else{
-            this.indexfirstPlayer = 0;
-        }
-        return this.indexfirstPlayer;
+    changeFirstPlayer(){
+		this.players.changeFirstPlayer();
     }
 
 	/**
@@ -88,12 +82,6 @@ export class Game {
 	public set deck(value: Deck) {
 		this._deck = value;
 	}
-	public get indexfirstPlayer(): number {
-		return this._indexfirstPlayer;
-	}
-	public set indexfirstPlayer(value: number) {
-		this._indexfirstPlayer = value;
-	}
 	public get players(): PlayerCollection {
 		return this._players;
 	}
@@ -101,7 +89,7 @@ export class Game {
 		this._players = value;
 	}
 	public getNbPlayer(): number {
-		return this.players.length;
+		return this.players.getNbPlayer();
 	}
 	public get history(): History {
 		return this._history;

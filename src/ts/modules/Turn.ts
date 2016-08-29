@@ -4,8 +4,6 @@ import {Bet} from './Bet';
 import {PlayerCollection} from './PlayerCollection';
 import * as  _ from 'lodash';
 
-
-
 export class Turn {
 
     private _arrTrick:Array<Trick>;
