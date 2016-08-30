@@ -16,13 +16,6 @@ $(function () {
 		$('#conversation').append('<b>'+username + ':</b> ' + data + '<br>');
 	});
 
-	// listener, whenever the server emits 'updateusers', this updates the username list
-	socket.on('updateusers', function(data) {
-		$('#users').empty();
-		$.each(data, function(key, value) {
-			$('#users').append('<div>' + key + '</div>');
-		});
-	});
 
 	// on load of page
 	$(function(){
@@ -34,12 +27,5 @@ $(function () {
 			socket.emit('sendchat', message);
 		});
 
-		// when the client hits ENTER on their keyboard
-		$('#data').keypress(function(e) {
-			if(e.which == 13) {
-				$(this).blur();
-				$('#datasend').focus().click();
-			}
-		});
 	});
 });

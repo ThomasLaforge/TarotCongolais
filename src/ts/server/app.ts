@@ -6,6 +6,7 @@ let nodeUtil   = require('util');
 // Modules
 import {Game} from '../modules/Game';
 import {Player} from '../modules/Player';
+import {PlayerCollection} from '../modules/PlayerCollection';
 
 // Server
 let port = 8080;
@@ -23,6 +24,8 @@ console.log(colors.green('-------------- Server started on localhost: %s -------
 let io = require('socket.io').listen(server);
 let clients:number = 0;
 
+let usernames:any = {};
+let playerColl = new PlayerCollection();
 // let pCollTest = [new Player('Thomas'), new Player('Julie'), new Player('Kevin'), new Player('Willy') ];
 // let g = new Game(pCollTest);
 
@@ -53,18 +56,18 @@ let clients:number = 0;
 
 // });
 // usernames which are currently connected to the chat
-var usernames = {};
 
 io.sockets.on('connection', function (socket) {
 
 	// when the client emits 'sendchat', this listens and executes
+    // io.to( "/#" + socket_id).emit("event_name",{data:true})
 	socket.on('sendchat', function (data) {
 		// we tell the client to execute 'updatechat' with 2 parameters
 		io.sockets.emit('updatechat', socket.username, data);
 	});
 
 	// when the client emits 'adduser', this listens and executes
-	socket.on('adduser', function(username){
+	socket.on('adduser', function(username:string){
 		// we store the username in the socket session for this client
 		socket.username = username;
 		// add the client's username to the global list

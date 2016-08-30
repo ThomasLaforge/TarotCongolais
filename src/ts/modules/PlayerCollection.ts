@@ -7,11 +7,20 @@ export class PlayerCollection {
     private _arrPlayers:Array<Player>;
     private _indexFirstPlayer:number;
 
-	constructor(arrPlayers: Array<Player>) {
+	constructor(arrPlayers?: Array<Player>) {
         this.indexFirstPlayer = 0;
-		this.arrPlayers = arrPlayers;
-        Utils.shuffle(this.arrPlayers);
+		if(arrPlayers){
+            this.arrPlayers = arrPlayers;
+        }
 	}
+
+    addPlayer(p:Player){
+        this.arrPlayers.push(p);
+    }
+
+    shuffle(){
+        Utils.shuffle(this.arrPlayers);
+    }
 
     getPlayers(){
         return this.arrPlayers;
