@@ -76,23 +76,28 @@ io.sockets.on('connection', function (socket) {
             if(playerColl.getNbPlayer() == MAX_PLAYER){
                 io.sockets.emit('startgame', game);
                 game = new Game(playerColl);
-                console.log(nodeUtil.inspect(game, false, null));
+                playerColl.getPlayers().forEach( (p:Player) => {
+                    let left = playerColl.getLeftPlayer(p).hand.length();
+                    let right = playerColl.getRightPlayer(p).hand.length();
+                    let face = playerColl.getFacePlayer(p).hand.length();
+                    let hand = p.hand.arrCard;
+                    let hands = {
+                        left : left,
+                        face : face,
+                        right : right,
+                        hand : hand,
+                    };
+                    console.log(nodeUtil.inspect(hands, false, null));
+                    
+                    io.to(p.socketId).emit('updatehands', hands);
+                });
             }
         }
         else{
             console.log('new player connected but no more slots');
             socket.emit('logconnection', 'Sorry game is full');
         }
-        // we store the username in the socket session for this client
-		// socket.username = username;
-		// // add the client's username to the global list
-		// usernames[username] = username;
-		// // echo to client they've connected
-		// socket.emit('updatechat', 'SERVER', 'you have connected');
-		// // echo globally (all clients) that a person has connected
-		// socket.broadcast.emit('updatechat', 'SERVER', username + ' has connected');
-		// // update the list of users in chat, client-side
-		// io.sockets.emit('updateusers', usernames);
+        
 	});
 
     socket.on('getinfogame', function(){

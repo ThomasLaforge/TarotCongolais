@@ -20,7 +20,7 @@ export class PlayerCollection {
         Utils.shuffle(this.arrPlayers);
     }
 
-    getPlayers(){
+    getPlayers():Array<Player>{
         return this.arrPlayers;
     }
 
@@ -69,6 +69,16 @@ export class PlayerCollection {
             throw new Error('player not in collection');
         }
         let leftPlayerId:number = Math.abs( playerId - 1 + this.getNbPlayer() ) % this.getNbPlayer();
+        return this.arrPlayers[ leftPlayerId ];
+    }
+
+    getFacePlayer(player:Player){
+        let playerId:number = this.getPlayerId(player);
+        if(playerId == -1){
+            throw new Error('player not in collection');
+        }
+        //Todo : If nb player = 4
+        let leftPlayerId:number = Math.abs( playerId - 2 + this.getNbPlayer() ) % this.getNbPlayer();
         return this.arrPlayers[ leftPlayerId ];
     }
 

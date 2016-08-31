@@ -1,5 +1,6 @@
 $(function () {
 	var socket = io.connect('http://localhost:8080', {
+	// var socket = io.connect('192.168.0.17:8080', {
         'reconnection': true,
         'reconnectionDelay': 500,
         'reconnectionAttempts': 10
@@ -14,6 +15,21 @@ $(function () {
 	// listener, whenever the server emits 'updatechat', this updates the chat body
 	socket.on('updatechat', function (username, data) {
 		$('#conversation').append('<b>'+username + ':</b> ' + data + '<br>');
+	});
+
+	socket.on('updatehands', function(hands){
+		console.log(hands);
+		// Clear all hands
+		$('.card-in-cards-zone').remove();
+
+		// Add Cards
+		drawFriendCards(hands.right, 4);
+		drawFriendCards(hands.face, 3);
+		drawFriendCards(hands.left, 2);
+
+		// Add my Cards
+		drawMyCards(hands.hand);
+
 	});
 
     // listener, whenever the server emits 'updatechat', this updates the chat body
@@ -36,4 +52,18 @@ $(function () {
         });
 
 	});
+
+	function drawFriendCards(nbCards:number, zone:number){
+		for (var i=0; i<nbCards; i++){
+			$('.cards-zone-' + zone).append('<div class="card-in-cards-zone"></div>');
+		};
+	}
+
+	function drawMyCards(cards){
+		for (var i=0; i<cards.length; i++){
+			$('.cards-zone-1').append('<div class="card-in-cards-zone"></div>');
+		};
+	}
+
+
 });
