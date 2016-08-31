@@ -16,6 +16,10 @@ $(function () {
 		$('#conversation').append('<b>'+username + ':</b> ' + data + '<br>');
 	});
 
+    // listener, whenever the server emits 'updatechat', this updates the chat body
+	socket.on('logconnection', function (msg) {
+		console.log(msg);
+	});
 
 	// on load of page
 	$(function(){
@@ -26,6 +30,10 @@ $(function () {
 			// tell server to execute 'sendchat' and send along one parameter
 			socket.emit('sendchat', message);
 		});
+
+        $('#getInfo').click(function(){
+            socket.emit('getinfogame',null);
+        });
 
 	});
 });

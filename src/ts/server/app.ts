@@ -22,10 +22,10 @@ process.stdout.write('\x1Bc');
 console.log(colors.green('-------------- Server started on localhost: %s --------------'), port);
 
 let io = require('socket.io').listen(server);
-let clients:number = 0;
 
-let usernames:any = {};
+const MAX_PLAYER:number = 4;
 let playerColl = new PlayerCollection();
+let game:Game;
 // let pCollTest = [new Player('Thomas'), new Player('Julie'), new Player('Kevin'), new Player('Willy') ];
 // let g = new Game(pCollTest);
 
@@ -58,8 +58,8 @@ let playerColl = new PlayerCollection();
 // usernames which are currently connected to the chat
 
 io.sockets.on('connection', function (socket) {
-
-	// when the client emits 'sendchat', this listens and executes
+    
+    // when the client emits 'sendchat', this listens and executes
     // io.to( "/#" + socket_id).emit("event_name",{data:true})
 	socket.on('sendchat', function (data) {
 		// we tell the client to execute 'updatechat' with 2 parameters
@@ -68,26 +68,47 @@ io.sockets.on('connection', function (socket) {
 
 	// when the client emits 'adduser', this listens and executes
 	socket.on('adduser', function(username:string){
-		// we store the username in the socket session for this client
-		socket.username = username;
-		// add the client's username to the global list
-		usernames[username] = username;
-		// echo to client they've connected
-		socket.emit('updatechat', 'SERVER', 'you have connected');
-		// echo globally (all clients) that a person has connected
-		socket.broadcast.emit('updatechat', 'SERVER', username + ' has connected');
-		// update the list of users in chat, client-side
-		io.sockets.emit('updateusers', usernames);
+        if(playerColl.getNbPlayer() < MAX_PLAYER){
+            let p = new Player(username, socket.id);
+            playerColl.addPlayer(p);
+            console.log(nodeUtil.inspect(playerColl, false, null));
+
+            if(playerColl.getNbPlayer() == MAX_PLAYER){
+                io.sockets.emit('startgame', game);
+                game = new Game(playerColl);
+                console.log(nodeUtil.inspect(game, false, null));
+            }
+        }
+        else{
+            console.log('new player connected but no more slots');
+            socket.emit('logconnection', 'Sorry game is full');
+        }
+        // we store the username in the socket session for this client
+		// socket.username = username;
+		// // add the client's username to the global list
+		// usernames[username] = username;
+		// // echo to client they've connected
+		// socket.emit('updatechat', 'SERVER', 'you have connected');
+		// // echo globally (all clients) that a person has connected
+		// socket.broadcast.emit('updatechat', 'SERVER', username + ' has connected');
+		// // update the list of users in chat, client-side
+		// io.sockets.emit('updateusers', usernames);
 	});
+
+    socket.on('getinfogame', function(){
+        console.log('ask info game');
+    });
+
+    socket.on('reconnection', function(){
+        console.log('reconnection');
+    });
 
 	// when the user disconnects.. perform this
 	socket.on('disconnect', function(){
-		// remove the username from global usernames list
-		delete usernames[socket.username];
-		// update list of users in chat, client-side
-		io.sockets.emit('updateusers', usernames);
-		// echo globally that this client has left
-		socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
+        // retirer le joueur de la collection
+		let pDisconnected = playerColl.getPlayerBySocketId(socket.id);
+        playerColl.remove(pDisconnected);
+        console.log(nodeUtil.inspect(pDisconnected, false, null));        
 	});
 });
 

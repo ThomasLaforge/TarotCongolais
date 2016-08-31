@@ -7,11 +7,9 @@ export class PlayerCollection {
     private _arrPlayers:Array<Player>;
     private _indexFirstPlayer:number;
 
-	constructor(arrPlayers?: Array<Player>) {
+	constructor(arrPlayers: Array<Player> = []) {
         this.indexFirstPlayer = 0;
-		if(arrPlayers){
-            this.arrPlayers = arrPlayers;
-        }
+        this.arrPlayers = arrPlayers;
 	}
 
     addPlayer(p:Player){
@@ -46,6 +44,23 @@ export class PlayerCollection {
 
     getNbPlayer(){
         return this.arrPlayers.length;
+    }
+
+    getPlayerBySocketId(sockedId:any){
+        let res:Player;
+
+        this.arrPlayers.forEach( (p) => {
+            if(p.socketId == sockedId){
+                res = p;
+            }
+        });
+
+        return res;
+    }
+
+    remove(p:Player){
+        let idPlayer = this.getPlayerId(p);
+        this.arrPlayers.splice(idPlayer,1);
     }
 
     getLeftPlayer(player:Player) : Player{
