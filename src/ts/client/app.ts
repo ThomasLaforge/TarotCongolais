@@ -33,7 +33,7 @@ $(function () {
 	});
 
     // listener, whenever the server emits 'updatechat', this updates the chat body
-	socket.on('logconnection', function (msg) {
+	socket.on('logconnection', function (msg:any) {
 		console.log(msg);
 	});
 
