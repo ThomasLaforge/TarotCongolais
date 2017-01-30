@@ -1,9 +1,9 @@
-var gulp = require('gulp');
-var ts = require('gulp-typescript');
-var merge = require('merge2');
-var compass = require('gulp-compass');
-var browserSync = require('browser-sync');
-var runSequence = require('run-sequence');
+var gulp          = require('gulp'),
+    ts            = require('gulp-typescript'),
+    merge         = require('merge2'),
+    compass       = require('gulp-compass'),
+    browserSync   = require('browser-sync'),
+    runSequence   = require('run-sequence');
 
 var tsProject = ts.createProject("tsconfig.json");
 
@@ -18,8 +18,8 @@ gulp.task('compass', function() {
 });
 
 gulp.task('scripts', function () {
-    return tsProject.src()
-        .pipe(ts(tsProject))
+    return gulp.src("src/scripts/**/*.ts") // or tsProject.src()
+        .pipe(tsProject())
         .js.pipe(gulp.dest("dist/js"));
 });
  
