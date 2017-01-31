@@ -1,8 +1,9 @@
 // Libs and tools
-let http = require('http');
-let fs   = require('fs');
-let colors   = require('colors');
-let nodeUtil   = require('util');
+let http        = require('http');
+let fs          = require('fs');
+let colors      = require('colors');
+let nodeUtil    = require('util');
+
 // Modules
 import {Game} from '../modules/Game';
 import {Player} from '../modules/Player';
@@ -26,44 +27,14 @@ let io = require('socket.io').listen(server);
 const MAX_PLAYER:number = 4;
 let playerColl = new PlayerCollection();
 let game:Game;
-// let pCollTest = [new Player('Thomas'), new Player('Julie'), new Player('Kevin'), new Player('Willy') ];
-// let g = new Game(pCollTest);
 
-// g.soloPlay(g.players[0], g.players[0].hand.playFirstCard());
-// g.soloPlay(g.players[1], g.players[0].hand.playFirstCard());
-// g.soloPlay(g.players[2], g.players[0].hand.playFirstCard());
-// g.soloPlay(g.players[3], g.players[0].hand.playFirstCard());
-// console.log(nodeUtil.inspect(g, false, null));
-
-// // Quand un client se connecte, on le note dans la console
-// io.sockets.on('connection', function (socket:any) {
-//     console.log('Un client est connecté !');
-//     clients++;
-
-//     if(clients == 4){
-//         console.log('la partie est complète et va donc commencer');
-//         socket.broadcast.emit('message', 'La partie va commencer!');
-//         socket.emit('message', 'Bienvenue, vous êtes le dernier arrivé. La partie va commencer!'); 
-//         io.sockets.emit('message', 'Hello tout le monde vous êtes au complet');
-
-//     }
-//     else if(clients > 4) {
-//         socket.emit('message', 'Désolé il y a déjà assez de joueurs');
-//     }
-//     else{
-//         socket.emit('message' ,'Bienvenue nous attendons d\'autres adversaires avant de débuter la partie');
-//     }
-
-// });
-// usernames which are currently connected to the chat
-
-io.sockets.on('connection', function (socket) {
+io.sockets.on('connection', function (socket:SocketIO.Socket) {
     
     // when the client emits 'sendchat', this listens and executes
     // io.to( "/#" + socket_id).emit("event_name",{data:true})
 	socket.on('sendchat', function (data) {
 		// we tell the client to execute 'updatechat' with 2 parameters
-		io.sockets.emit('updatechat', socket.username, data);
+		io.sockets.emit('updatechat', socket.id, data);
 	});
 
 	// when the client emits 'adduser', this listens and executes

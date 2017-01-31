@@ -1,8 +1,8 @@
 {
-  "globalDependencies": {
-    "require": "registry:dt/require#2.1.20+20160316155526"
-  },
-  "dependencies": {
-    "lodash": "registry:npm/lodash#4.0.0+20160723033700"
-  }
+    "globalDependencies": {
+        "jquery": "registry:dt/jquery#1.10.0+20160929162922",
+        "lodash": "registry:dt/lodash#4.14.0+20161110215204",
+        "node": "registry:dt/node#6.0.0+20161220160159",
+        "vue": "registry:dt/vue#1.0.21+20160929090511"
+    }
 }

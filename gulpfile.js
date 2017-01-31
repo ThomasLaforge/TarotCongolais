@@ -3,9 +3,25 @@ var gulp          = require('gulp'),
     merge         = require('merge2'),
     compass       = require('gulp-compass'),
     browserSync   = require('browser-sync'),
-    runSequence   = require('run-sequence');
+    runSequence   = require('run-sequence'),
+    browserify    = require('browserify'),
+    source        = require('vinyl-source-stream'),
+    tsify         = require('tsify');
 
-var tsProject = ts.createProject("tsconfig.json");
+let config = {
+    publicPathClient: __dirname + '/dist/scripts/client',
+    publicPathServer: __dirname + '/dist/scripts/server',
+    client: {
+        path: __dirname + '/src/scripts/client',
+        main: 'main.ts',
+        result: 'app.js'
+    },
+    server : {
+        path: __dirname + '/src/scripts/server',
+        main: 'main.ts',
+        result: 'app.js'
+    }
+};
 
 gulp.task('compass', function() {
   gulp.src('./src/*.scss')
@@ -17,16 +33,37 @@ gulp.task('compass', function() {
     .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('scripts', function () {
-    return gulp.src("src/scripts/**/*.ts") // or tsProject.src()
-        .pipe(tsProject())
-        .js.pipe(gulp.dest("dist/js"));
+gulp.task('scripts-server', function () {
+    let bundler = browserify({ basedir: config.server.path })
+        .add(config.server.path + '/' + config.server.main)
+        .plugin(tsify, { target: 'ES5' });
+
+    return bundler.bundle()
+        .on('error', function(error) { console.error(error.toString()); })
+        .pipe(source(config.server.result))
+        //.pipe(uglify())
+        //.pipe(gzip())
+        .pipe(gulp.dest(config.publicPathServer));
+});
+
+gulp.task('scripts-client', function () {
+    let bundler = browserify({ basedir: config.client.path })
+        .add(config.client.path + '/' + config.client.main)
+        .plugin(tsify, { target: 'ES5' });
+
+    return bundler.bundle()
+        .on('error', function(error) { console.error(error.toString()); })
+        .pipe(source(config.client.result))
+        //.pipe(uglify())
+        //.pipe(gzip())
+        .pipe(gulp.dest(config.publicPathClient));
 });
  
 gulp.task('watch', function () {
   gulp.watch('**/*.scss', ['compass']);
   gulp.watch('**/*.html', ['html']);
-  gulp.watch('src/ts/**/*.ts', ['scripts']);
+  gulp.watch('src/ts/**/*.ts', ['scripts-client']);
+  gulp.watch('src/ts/**/*.ts', ['scripts-server']);
   gulp.watch('index.html', browserSync.reload); 
   gulp.watch('dist/js/client/**/app.js', browserSync.reload);
 });
@@ -55,7 +92,7 @@ gulp.task('browserSync', function() {
   });
 })
 
-gulp.task('build', ['scripts', 'compass', 'img', 'html']);
+gulp.task('build', ['scripts-server', 'scripts-client', 'compass', 'img', 'html']);
 
 gulp.task('serve', function() {
   runSequence('build', 'browserSync', 'watch');
