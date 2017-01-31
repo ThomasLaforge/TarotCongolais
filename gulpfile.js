@@ -36,10 +36,8 @@ gulp.task('compass', function() {
 });
 
 gulp.task('scripts-server', function() {
-    var tsResult = gulp.src(["src/scripts/server/**/*.ts", "src/scripts/modules/**/*.ts"]) // or tsProject.src()
+    return gulp.src(["src/scripts/server/**/*.ts", "src/scripts/modules/**/*.ts"]) // or tsProject.src()
         .pipe(tsProject());
-
-    return tsResult.js.pipe(gulp.dest('dist/scripts/server'));
 });
 
 gulp.task('scripts-client', function() {

@@ -7,7 +7,8 @@
         "preserveConstEnums": true,
         "sourceMap": false,
         "moduleResolution": "node",
-        "lib": ["es6", "dom"]
+        "lib": ["es6", "dom"],
+        "outDir": "dist/scripts/server"
     },
     "exclude": [
         "node_modules",
