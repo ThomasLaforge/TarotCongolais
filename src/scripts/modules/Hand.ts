@@ -11,7 +11,7 @@ export class Hand {
 
     debug(){
         for (let i = 0; i < this.arrCard.length; i++) {
-            this.arrCard[i].console();
+            this.arrCard[i].log();
         }
     }
 

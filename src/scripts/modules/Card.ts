@@ -6,7 +6,7 @@ export class Card {
         this._value = value;
     }
 
-    console(){
+    log(){
         console.log('value : ' + this.value);
     }
 

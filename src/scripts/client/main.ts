@@ -13,7 +13,7 @@ $(function () {
 	});
 
 	// listener, whenever the server emits 'updatechat', this updates the chat body
-	socket.on('updatechat', function (username, data) {
+	socket.on('updatechat', function (username: string, data:{}) {
 		$('#conversation').append('<b>'+username + ':</b> ' + data + '<br>');
 	});
 
