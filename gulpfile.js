@@ -36,19 +36,6 @@ gulp.task('compass', function() {
 });
 
 gulp.task('scripts-server', function() {
-    let bundler = browserify({ basedir: config.server.path })
-        .add(config.server.path + '/' + config.server.main)
-        .plugin(tsify, { target: 'ES5' });
-
-    return bundler.bundle()
-        .on('error', function(error) { console.error(error.toString()); })
-        .pipe(source(config.server.result))
-        //.pipe(uglify())
-        //.pipe(gzip())
-        .pipe(gulp.dest(config.publicPathServer));
-});
-
-gulp.task('scripts', function() {
     var tsResult = gulp.src(["src/scripts/server/**/*.ts", "src/scripts/modules/**/*.ts"]) // or tsProject.src()
         .pipe(tsProject());
 
