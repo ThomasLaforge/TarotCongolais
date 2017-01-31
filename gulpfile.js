@@ -1,11 +1,14 @@
 var gulp = require('gulp'),
     merge = require('merge2'),
     compass = require('gulp-compass'),
+    ts = require('gulp-typescript'),
     browserSync = require('browser-sync'),
     runSequence = require('run-sequence'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
     tsify = require('tsify');
+
+var tsProject = ts.createProject('tsconfig.json');
 
 let config = {
     publicPathClient: __dirname + '/dist/scripts/client',
@@ -43,6 +46,13 @@ gulp.task('scripts-server', function() {
         //.pipe(uglify())
         //.pipe(gzip())
         .pipe(gulp.dest(config.publicPathServer));
+});
+
+gulp.task('scripts', function() {
+    var tsResult = gulp.src(["src/scripts/server/**/*.ts", "src/scripts/modules/**/*.ts"]) // or tsProject.src()
+        .pipe(tsProject());
+
+    return tsResult.js.pipe(gulp.dest('dist/scripts/server'));
 });
 
 gulp.task('scripts-client', function() {
