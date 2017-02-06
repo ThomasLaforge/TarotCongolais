@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "system",
         "target": "es5",
         "noImplicitAny": true,
         "removeComments": true,
@@ -8,8 +8,12 @@
         "sourceMap": false,
         "moduleResolution": "node",
         "lib": ["es6", "dom"],
-        "outDir": "dist/scripts/server"
+        "outFile": "dist/scripts/server/app.js"
     },
+    "include": [
+        "src/scripts/server/**/*.ts",
+        "src/scripts/modules/**/*.ts"
+    ],
     "exclude": [
         "node_modules",
         "dist"
