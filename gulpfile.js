@@ -37,7 +37,8 @@ gulp.task('compass', function() {
 
 gulp.task('scripts-server', function() {
     return gulp.src(["src/scripts/server/**/*.ts", "src/scripts/modules/**/*.ts"]) // or tsProject.src()
-        .pipe(tsProject());
+        .pipe(tsProject())
+        .pipe(gulp.dest(config.publicPathServer))
 });
 
 gulp.task('scripts-client', function() {
