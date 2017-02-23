@@ -21,7 +21,7 @@ export class Turn {
             let score:number = 0;
             
             this.arrTrick.forEach(trick => {
-                if( _.isEqual(trick.getPlayerWinner(), player) ){
+                if( _.isEqual(trick.getWinner(), player) ){
                     score++;
                 }
             });

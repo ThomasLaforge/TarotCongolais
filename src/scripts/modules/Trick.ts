@@ -21,7 +21,7 @@ export class Trick {
         }
     }
 
-    getPlayerWinner():Player{
+    getWinner():Player{
         let res:Player;
         let maxValueCard:number = -1;
 

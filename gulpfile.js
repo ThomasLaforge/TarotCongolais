@@ -12,34 +12,28 @@ var tsProject = ts.createProject('tsconfig.json');
 
 let config = {
     publicPathClient: __dirname + '/dist/scripts/client',
-    publicPathServer: __dirname + '/dist/scripts/server',
     client: {
         path: __dirname + '/src/scripts/client',
-        main: 'main.ts',
-        result: 'app.js'
-    },
-    server: {
-        path: __dirname + '/src/scripts/server',
         main: 'main.ts',
         result: 'app.js'
     }
 };
 
 gulp.task('compass', function() {
-    gulp.src('./src/*.scss')
+    gulp.src('./src/stylesheet/*.scss')
         .pipe(compass({
             config_file: './config.rb',
             css: 'dist/css',
-            sass: 'src/sass'
+            sass: 'src/stylesheet'
         }))
         .pipe(gulp.dest('dist/css'));
 });
 
-gulp.task('scripts-server', function() {
-    return gulp.src(["src/scripts/server/**/*.ts", "src/scripts/modules/**/*.ts"]) // or tsProject.src()
-        .pipe(tsProject())
-        .pipe(gulp.dest(config.publicPathServer))
-});
+// gulp.task('scripts-server', function() {
+//     return gulp.src(["src/scripts/server/**/*.ts", "src/scripts/modules/**/*.ts"]) // or tsProject.src()
+//         .pipe(tsProject())
+//         // .pipe(gulp.dest(config.publicPathServer))
+// });
 
 gulp.task('scripts-client', function() {
     let bundler = browserify({ basedir: config.client.path })
@@ -55,12 +49,12 @@ gulp.task('scripts-client', function() {
 });
 
 gulp.task('watch', function() {
-    gulp.watch('**/*.scss', ['compass']);
-    gulp.watch('**/*.html', ['html']);
-    gulp.watch('src/ts/**/*.ts', ['scripts-client']);
-    gulp.watch('src/ts/**/*.ts', ['scripts-server']);
+    gulp.watch('src/stylesheet/**/*.scss', ['compass']);
+    gulp.watch('src/index.html', ['html']);
+    gulp.watch(['src/scripts/modules/**/*.ts', 'src/scripts/client/**/*.ts'], ['scripts-client']);
+    // gulp.watch(['src/scripts/modules/**/*.ts', 'src/scripts/server/**/*.ts'], ['scripts-server']);
     gulp.watch('index.html', browserSync.reload);
-    gulp.watch('dist/js/client/**/app.js', browserSync.reload);
+    gulp.watch('dist/scripts/client/app.js', browserSync.reload);
 });
 
 gulp.task('img', function() {
@@ -69,9 +63,16 @@ gulp.task('img', function() {
 });
 
 gulp.task('html', function() {
-    return gulp.src('src/view/*.html') // Gets all files ending with
-        .pipe(gulp.dest('dist/view'))
+    return gulp.src('src/index.html') // Gets all files ending with
+        .pipe(gulp.dest('dist'))
 })
+
+gulp.task('js-libs', () => {
+    return gulp.src([
+            'node_modules/vue/dist/vue.js',
+        ])
+        .pipe(gulp.dest('dist/libs/js'));
+});
 
 gulp.task('browserSync', function() {
     browserSync({
@@ -82,12 +83,12 @@ gulp.task('browserSync', function() {
         reloadDelay: 0,
         server: {
             baseDir: 'dist',
-            index: 'view/index.html'
+            index: 'index.html'
         }
     });
 })
 
-gulp.task('build', ['scripts-server', 'scripts-client', 'compass', 'img', 'html']);
+gulp.task('build', ['scripts-client', 'compass', 'img', 'html', 'js-libs']);
 
 gulp.task('serve', function() {
     runSequence('build', 'browserSync', 'watch');

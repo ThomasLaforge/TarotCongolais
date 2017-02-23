@@ -7,26 +7,29 @@
     "bufferutil": "^1.3.0",
     "colors": "^1.1.2",
     "express": "^4.12.1",
-    "gulp-typescript": "^3.1.4",
     "lodash": "^4.15.0",
     "socket.io": "^1.7.2",
-    "utf-8-validate": "^2.0.0"
+    "utf-8-validate": "^2.0.0",
+    "vue": "^2.1.10",
+    "vue-socket.io": "^2.1.0"
   },
   "devDependencies": {
     "browser-sync": "^2.13.0",
+    "gulp-typescript": "^3.1.4",
     "browserify": "^14.0.0",
     "gulp": "^3.9.1",
     "gulp-compass": "^2.1.0",
     "merge2": "^1.0.2",
     "nodemon": "^1.9.2",
     "run-sequence": "^1.2.2",
+    "socket.io-client": "^1.7.3",
     "tsify": "^3.0.1",
     "typescript": "^2.1.5",
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
     "client": "gulp",
-    "server": "nodemon --watch dist/scripts/server/app.js dist/scripts/server/app.js"
+    "server": "nodemon dist/scripts/server/app.js"
   },
   "author": "",
   "license": "ISC"

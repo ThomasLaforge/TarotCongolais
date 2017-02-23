@@ -8,7 +8,7 @@
         "sourceMap": false,
         "moduleResolution": "node",
         "lib": ["es6", "dom"],
-        "outDir": "./dist/scripts/server"
+        "outDir": "./dist/scripts/"
     },
     "include": [
         "src/scripts/server/**/*.ts",
