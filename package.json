@@ -14,11 +14,14 @@
     "vue-socket.io": "^2.1.0"
   },
   "devDependencies": {
+    "@types/node": "^7.0.5",
+    "@types/socket.io": "^1.4.28",
+    "@types/vue": "^2.0.0",
     "browser-sync": "^2.13.0",
-    "gulp-typescript": "^3.1.4",
     "browserify": "^14.0.0",
     "gulp": "^3.9.1",
     "gulp-compass": "^2.1.0",
+    "gulp-typescript": "^3.1.4",
     "merge2": "^1.0.2",
     "nodemon": "^1.9.2",
     "run-sequence": "^1.2.2",

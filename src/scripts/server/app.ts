@@ -1,8 +1,9 @@
 // Libs and tools
-let http        = require('http');
-let fs          = require('fs');
-let colors      = require('colors');
-let nodeUtil    = require('util');
+import * as http        from 'http';
+import * as fs          from 'fs';
+import * as nodeUtil    from 'util';
+import * as SocketIO    from 'socket.io'
+let colors = require('colors');
 
 // Modules
 import {Game} from '../modules/Game';
@@ -17,14 +18,13 @@ let server = http.createServer(function(req, res) {
         res.end(content);
     });
 });
+let io = require('socket.io').listen(server);
 
 // reset console
 process.stdout.write('\x1Bc'); 
 console.log(colors.green('-------------- Server started on localhost: %s --------------'), port);
 
-
-let io = require('socket.io').listen(server);
-
+// init
 const MAX_PLAYER:number = 4;
 let playerColl = new PlayerCollection();
 let game:Game;
@@ -35,7 +35,7 @@ io.sockets.on('connection', function (socket:SocketIO.Socket) {
     
     // when the client emits 'sendchat', this listens and executes
     // io.to( "/#" + socket_id).emit("event_name",{data:true})
-	socket.on('sendchat', function (data) {
+	socket.on('sendchat', function (data:any) {
 		// we tell the client to execute 'updatechat' with 2 parameters
 		io.sockets.emit('updatechat', socket.id, data);
 	});
@@ -76,6 +76,7 @@ io.sockets.on('connection', function (socket:SocketIO.Socket) {
 
     socket.on('getinfogame', function(){
         console.log('ask info game');
+        socket.emit('test', 'hello, ask info game is received')
     });
 
     socket.on('reconnection', function(){
