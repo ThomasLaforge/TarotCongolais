@@ -10,27 +10,32 @@
 <body>
     <div id="app">
         <!--<h1>Le Tarot Congolais</h1>-->
-        <div class="boardgame">
+        <!--<div class="boardgame">
             <div id="cards-zone-1" class="cards-zone cards-zone-1"></div>
             <div id="cards-zone-2" class="cards-zone cards-zone-2"></div>
             <div id="cards-zone-3" class="cards-zone cards-zone-3">
-                <!--<div class="card-in-cards-zone"></div>-->
-                <!--<div class="card-in-cards-zone"></div>-->
-                <!--<div class="card-in-cards-zone"></div>-->
-                <!--<div class="card-in-cards-zone"></div>-->
+                <div class="card-in-cards-zone"></div>
+                <div class="card-in-cards-zone"></div>
+                <div class="card-in-cards-zone"></div>
+                <div class="card-in-cards-zone"></div>
             </div>
             <div id="cards-zone-4" class="cards-zone cards-zone-4"></div>
         </div>
 
         <div class="zone-action">
             <button id="getInfo" @click="clickButton">Get some data</button>
-        </div>
+        </div>-->
 
+        <router-link to="/foo">Go to Foo</router-link>
+        <router-link to="/bar">Go to Bar</router-link>
+
+        <router-view></router-view>
 
     </div>
 
     <!-- Scripts -->
     <script src="libs/js/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
     <script type="text/javascript" src="scripts/client/app.js"></script>
 
 </body>
