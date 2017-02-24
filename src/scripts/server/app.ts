@@ -17,6 +17,7 @@ let server = http.createServer(function(req, res) {
         res.writeHead(200, {"Content-Type": "text/html"});
         res.end(content);
     });
+
 });
 let io = require('socket.io').listen(server);
 
@@ -29,7 +30,7 @@ const MAX_PLAYER:number = 4;
 let playerColl = new PlayerCollection();
 let game:Game;
 
-console.log('ok boy 2')
+console.log('ok boy')
 
 io.sockets.on('connection', function (socket:SocketIO.Socket) {
     
