@@ -1,6 +1,7 @@
-import {Hand} from '../modules/Hand';
+import {Hand} from './Hand';
+import {PlayerInterface} from './TarotCongolais'
 
-export class Player{
+export class Player implements PlayerInterface {
 
     private _username:string;
 	private _hand:Hand;

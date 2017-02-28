@@ -1,6 +1,7 @@
 import {Player} from './Player';
+import {BetInterface} from './TarotCongolais'
 
-export class Bet {
+export class Bet implements BetInterface{
 
     private _player:Player;
     private _bet:number;

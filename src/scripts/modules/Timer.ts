@@ -1,25 +1,33 @@
 export class Timer {
 
-    private _start:Date;
+    private _startTime:number;
 
-    constructor(){
-        this.start = new Date();
+    constructor(autoStart: boolean = true){
+        if(autoStart){
+			this.start();
+		}
     }
 
-	getTimeSinceStart() : number { //Time in miliseconds since 1901-01-01
-		let now = new Date();
-		return now.getTime() - this.start.getTime();
+	start(){
+		this.restart();
+	}
+	restart(){
+		this.startTime = Date.now();
+	}
+
+	getTimeSinceStart() : number { //Time in miliseconds
+		return Date.now() - this.startTime;
 	}
 
     /**
      * Getters / Setters
      */
 
-	public get start(): Date {
-		return this._start;
+	public get startTime(): number {
+		return this._startTime;
 	}
-	public set start(value: Date) {
-		this._start = value;
+	public set startTime(value: number) {
+		this._startTime = value;
 	}
     
 
