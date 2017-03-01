@@ -51,7 +51,7 @@ gulp.task('scripts-client', function() {
 gulp.task('watch', function() {
     gulp.watch('src/stylesheet/**/*.scss', ['compass']);
     gulp.watch('src/index.html', ['html']);
-    gulp.watch(['src/scripts/modules/**/*.ts', 'src/scripts/client/**/*.ts'], ['scripts-client']);
+    gulp.watch(['src/scripts/modules/**/*.ts', 'src/scripts/client/**/*.ts', 'src/scripts/vue/**/*.ts'], ['scripts-client']);
     // gulp.watch(['src/scripts/modules/**/*.ts', 'src/scripts/server/**/*.ts'], ['scripts-server']);
     gulp.watch('index.html', browserSync.reload);
     gulp.watch('dist/scripts/client/app.js', browserSync.reload);
