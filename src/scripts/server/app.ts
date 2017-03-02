@@ -58,23 +58,29 @@ interface SocketTarot extends SocketIO.Socket {
 }
 
 // init
-const MAX_PLAYER:number = 4;
-let playerColl = new PlayerCollection();
 let game:Game;
+let pc = new PlayerCollection();
 
 io.sockets.on('connection', function (socket: SocketTarot) {
     socket.on('set_pseudo', (pseudo: string) => {
-        let newPlayer = new Player(pseudo);
-        socket.player = newPlayer
-        // game.players.addPlayer(new Player(pseudo))
-        socket.emit('pseudo_accepted');
-        console.log('new pseudo', socket.player.username)
-    });
-
-    socket.on('new_player_on_board', () => {
-        io.emit('new_player', socket.player.username)
+        if(pc.isFull()){
+            socket.emit('game_is_full');
+        }
+        else{
+            let newPlayer = new Player(pseudo);
+            socket.player = newPlayer
+            pc.addPlayer(new Player(pseudo))
+            console.log('new pseudo', socket.player.username)
+            socket.emit('pseudo_accepted');
+            io.emit('new_player', socket.player.username)        
+        }
     })
     
+    socket.on('is_on_game', () => {
+        let isOnGame = socket.player ? true : false;
+        socket.emit('is_on_game', isOnGame);
+    })
+
     // when the client emits 'sendchat', this listens and executes
     // io.to( "/#" + socket_id).emit("event_name",{data:true})
 	socket.on('new_message', function (msg: string) {
