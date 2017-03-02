@@ -11,10 +11,9 @@ let template = `
             <!--<div class="card-in-cards-zone"></div>-->
             <!--<div class="card-in-cards-zone"></div>-->
         </div>
-        {{ voiture }}
         <div id="cards-zone-4" class="cards-zone cards-zone-4"></div>
     </div>
-    
+
     <chat />
 </div>
 `
@@ -23,26 +22,19 @@ export const board = {
     template : template,
     data: function(){
         return {
-            voiture : 'BM'
+
         }
     },
     components : {
         chat
     },
     sockets:{
-		connect: function(){
-			console.log('socket connected', 'Thomas')
-			this.$socket.emit('adduser', 'Thomas')
-    	},
-		test: function(msg: string){
-			console.log('test from server', msg)
-		}
+        
 	},
 	methods: {
-		clickButton: function(val){
-			// $socket is socket.io-client instance
-			console.log('click')
-			this.$socket.emit('getinfogame', val);
-		}
-	}
+
+	},
+    mounted: function(){
+        this.$socket.emit('is_on_game')
+    }
 }

@@ -5,7 +5,7 @@ import { board } from '../vue/board'
 import { connection } from '../vue/connection' 
 
 const routes = [
-  { path: '/', component: board },
+  { path: '/', component: connection },
   { path: '/login', component: connection },
   { path: '/board', component: board }
 ]
@@ -17,4 +17,10 @@ const router = new VueRouter({
 let app = new Vue({
     el: '#app',
 		router,
+		sockets:{
+		connect: function(){
+			console.log('socket connected', 'Thomas')
+			this.$socket.emit('adduser', 'Thomas')
+    	},
+		}
 });

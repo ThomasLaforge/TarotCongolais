@@ -3,13 +3,9 @@
 body {
     @include box-sizing(border-box);
     //   background-color: #000;
-    color: #FFF;
-    width: 100%;
-}
-
-h1,
-h2 {
-    text-align: center;
+    // color: #FFF;
+    width: 80%;
+    margin: auto;
 }
 
 .boardgame {

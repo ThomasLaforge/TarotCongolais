@@ -53,3 +53,8 @@ export interface HistoryInterface {
 export interface ActionHistoryInterface {
     
 }
+
+export interface ChatLine {
+    pseudo: string
+    msg: string
+}

@@ -6,10 +6,12 @@ export class PlayerCollection {
 
     private _arrPlayers:Array<Player>;
     private _indexFirstPlayer:number;
+    private _maxNbPlayer:number;
 
-	constructor(arrPlayers: Array<Player> = []) {
-        this.indexFirstPlayer = 0;
+	constructor(arrPlayers: Array<Player> = [], indexFirstPlayer = 0, maxNbPlayer = 4) {
+        this.indexFirstPlayer = indexFirstPlayer;
         this.arrPlayers = arrPlayers;
+        this.maxNbPlayer = maxNbPlayer;
 	}
 
     addPlayer(p:Player){
@@ -44,18 +46,6 @@ export class PlayerCollection {
 
     getNbPlayer(){
         return this.arrPlayers.length;
-    }
-
-    getPlayerBySocketId(sockedId:any){
-        let res:Player;
-
-        this.arrPlayers.forEach( (p) => {
-            if(p.socketId == sockedId){
-                res = p;
-            }
-        });
-
-        return res;
     }
 
     remove(p:Player){
@@ -103,6 +93,10 @@ export class PlayerCollection {
         return res;
     }
 
+    isFull(): boolean {
+        return this.arrPlayers.length >= this.maxNbPlayer
+    }
+
     /**
      * Getters / Setters
      */
@@ -117,6 +111,12 @@ export class PlayerCollection {
 	}
 	public set indexFirstPlayer(value: number) {
 		this._indexFirstPlayer = value;
+	}
+	public get maxNbPlayer(): number {
+		return this._maxNbPlayer;
+	}
+	public set maxNbPlayer(value: number) {
+		this._maxNbPlayer = value;
 	}
     
     
