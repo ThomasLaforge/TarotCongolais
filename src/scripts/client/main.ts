@@ -18,9 +18,9 @@ let app = new Vue({
     el: '#app',
 		router,
 		sockets:{
-		connect: function(){
-			console.log('socket connected', 'Thomas')
-			this.$socket.emit('adduser', 'Thomas')
-    	},
+			connect: function(){
+				console.log('socket connected', 'Thomas')
+				this.$socket.emit('adduser', 'Thomas')
+			},
 		}
 });

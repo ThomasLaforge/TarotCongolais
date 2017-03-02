@@ -15,7 +15,7 @@ export const connection = {
         }
     },
     sockets: {
-        game_is_full(){
+        game_is_already_full(){
             console.log('sorry but game is already full')
             alert('game is already full');
         },

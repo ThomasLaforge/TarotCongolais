@@ -29,7 +29,9 @@ export const board = {
         chat
     },
     sockets:{
-        
+        game_is_ready_to_start(){
+            this.$socket.emit('update_game_data')
+        }
 	},
 	methods: {
 

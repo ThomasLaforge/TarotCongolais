@@ -63,22 +63,40 @@ let pc = new PlayerCollection();
 
 io.sockets.on('connection', function (socket: SocketTarot) {
     socket.on('set_pseudo', (pseudo: string) => {
-        if(pc.isFull()){
-            socket.emit('game_is_full');
+        if(pc.isFull() && !socket.player){
+            console.log('game_is_already_full', pseudo)
+            socket.emit('game_is_already_full');
+        }
+        else if(pc.getNames().indexOf(pseudo) !== -1){
+            console.log('pseudo_not_free', pseudo)
+            socket.emit('pseudo_not_free')
         }
         else{
+            if(socket.player){
+                let oldPseudo = socket.player.username
+                delete socket.player
+                io.emit('player_change_pseudo', oldPseudo, pseudo)
+            }
             let newPlayer = new Player(pseudo);
             socket.player = newPlayer
             pc.addPlayer(new Player(pseudo))
-            console.log('new pseudo', socket.player.username)
+            console.log('new player on board', socket.player.username)
             socket.emit('pseudo_accepted');
             io.emit('new_player', socket.player.username)        
+        }
+
+        if(pc.isFull()){
+            io.emit('game_is_ready_to_start')
         }
     })
     
     socket.on('is_on_game', () => {
         let isOnGame = socket.player ? true : false;
         socket.emit('is_on_game', isOnGame);
+    })
+
+    socket.on('update_game_data', () => {
+        
     })
 
     // when the client emits 'sendchat', this listens and executes
@@ -89,11 +107,6 @@ io.sockets.on('connection', function (socket: SocketTarot) {
 		io.emit('updatechat', { pseudo : socket.player.username, msg: msg});  
 	});
 
-    socket.on('getinfogame', function(){
-        console.log('ask info game');
-        socket.emit('test', 'hello, ask info game is received')
-    });
-
     socket.on('reconnection', function(){
         console.log('reconnection');
     });
@@ -101,9 +114,11 @@ io.sockets.on('connection', function (socket: SocketTarot) {
 	// when the user disconnects.. perform this
 	socket.on('disconnect', function(){
         // retirer le joueur de la collection
-		let pDisconnected = playerColl.getPlayerBySocketId(socket.id);
-        playerColl.remove(pDisconnected);
-        console.log(nodeUtil.inspect(pDisconnected, false, null));        
+        console.log('player disconnect', socket.player)
+        pc.remove(socket.player)
+		// let pDisconnected = pc.getPlayerBySocketId(socket.id);
+        // pc.remove(pDisconnected);
+        // console.log(nodeUtil.inspect(pDisconnected, false, null));        
 	});
 });
 
