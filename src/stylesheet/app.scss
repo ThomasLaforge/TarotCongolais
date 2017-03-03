@@ -28,24 +28,27 @@ body {
     width: 300px;
 }
 
-.cards-zone-1 {
+.cards-zone-me {
     top: 500px;
     left: 450px;
+    @include transform(rotate(180deg));
 }
 
-.cards-zone-2 {
+.cards-zone-left {
     top: 300px;
     left: 50px;
+    @include transform(rotate(90deg));
 }
 
-.cards-zone-3 {
+.cards-zone-top {
     top: 100px;
     left: 450px;
 }
 
-.cards-zone-4 {
+.cards-zone-right {
     top: 300px;
     left: 850px;
+    @include transform(rotate(-90deg));
 }
 
 .card-in-cards-zone {
@@ -55,18 +58,6 @@ body {
     display: inline-block;
     background-image: url('../img/dos_carte.jpg');
     /* @include transform(scaleY(1.25)); */
-}
-
-.cards-zone-2 {
-    @include transform(rotate(90deg));
-}
-
-.cards-zone-4 {
-    @include transform(rotate(-90deg));
-}
-
-.cards-zone-3 {
-    @include transform(rotate(180deg));
 }
 
 // $startAngle : 0;

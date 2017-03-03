@@ -3,15 +3,21 @@ import { chat } from './chat'
 let template = `
 <div>
     <div class="boardgame">
-        <div id="cards-zone-1" class="cards-zone cards-zone-1"></div>
-        <div id="cards-zone-2" class="cards-zone cards-zone-2"></div>
-        <div id="cards-zone-3" class="cards-zone cards-zone-3">
-            <!--<div class="card-in-cards-zone"></div>-->
-            <!--<div class="card-in-cards-zone"></div>-->
-            <!--<div class="card-in-cards-zone"></div>-->
-            <!--<div class="card-in-cards-zone"></div>-->
+        <div id="cards-zone-top" class="cards-zone cards-zone-top">
+            <div class="card-in-cards-zone" v-for="card in hands.top" />
+        </div>        
+
+        <div id="cards-zone-left" class="cards-zone cards-zone-left">
+            <div class="card-in-cards-zone" v-for="card in hands.left" />        
         </div>
-        <div id="cards-zone-4" class="cards-zone cards-zone-4"></div>
+        
+        <div id="cards-zone-right" class="cards-zone cards-zone-right">
+            <div class="card-in-cards-zone" v-for="card in hands.right" />            
+        </div>
+        
+        <div id="cards-zone-me" class="cards-zone cards-zone-me">
+            <div class="card-in-cards-zone" v-for="card in hands.me" />
+        </div>
     </div>
 
     <chat />
@@ -22,15 +28,26 @@ export const board = {
     template : template,
     data: function(){
         return {
-
+            hands : {
+                top: [],
+                me: [],
+                left: [],
+                right: []
+            }
         }
     },
     components : {
         chat
     },
     sockets:{
-        game_is_ready_to_start(){
-            this.$socket.emit('update_game_data')
+        start_game(gameData: any){
+            
+        },
+        is_on_game(isOnGame: boolean){
+            console.log('is on game = player exists', isOnGame)
+            if(!isOnGame){
+                this.$router.push({path: '/login'});  
+            }
         }
 	},
 	methods: {

@@ -8,7 +8,7 @@ export class PlayerCollection {
     private _indexFirstPlayer:number;
     private _maxNbPlayer:number;
 
-	constructor(arrPlayers: Array<Player> = [], indexFirstPlayer = 0, maxNbPlayer = 4) {
+	constructor(maxNbPlayer = 4, arrPlayers: Array<Player> = [], indexFirstPlayer = 0) {
         this.indexFirstPlayer = indexFirstPlayer;
         this.arrPlayers = arrPlayers;
         this.maxNbPlayer = maxNbPlayer;

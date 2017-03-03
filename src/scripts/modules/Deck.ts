@@ -11,11 +11,8 @@ class Deck {
     private _arrayDeck: Array<Card>;
     private _arrayDiscard: Array<Card>;
 
-    constructor(arrayDeck? : Array<Card>) {
-        if(!arrayDeck){
-            this.arrayDeck = []
-            this.initDeck();
-        }
+    constructor(arrayDeck : Array<Card> = []) {
+        this.arrayDeck = arrayDeck
     }
 
     initDeck():void{
@@ -96,17 +93,21 @@ class Deck {
         return this.arrayDeck[index]
     }
 
+    length(){
+        return this.arrayDeck.length
+    }
+
     get arrayDeck(){
         return this._arrayDeck
     }
     set arrayDeck(array){
-        this.arrayDeck = array
+        this._arrayDeck = array
     }
     get arrayDiscard(){
         return this._arrayDiscard
     }
     set arrayDiscard(array){
-        this.arrayDiscard = array
+        this._arrayDiscard = array
     }
 }
 

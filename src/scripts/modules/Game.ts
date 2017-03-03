@@ -53,7 +53,7 @@ export class Game {
 
 	dealCards(){
 		this.players.getPlayers().forEach( p => {
-			let newPlayerCards = this.deck.pickCards(this._turnCards);
+			let newPlayerCards = this.deck.drawCards(this.turnCards);
 			p.hand.addCards(newPlayerCards);
 		});
 	}
