@@ -27,7 +27,12 @@ export const connection = {
     methods: {
         registerPseudo(pseudo: string){
             console.log('set pseudo : ', pseudo)
-            this.$socket.emit('set_pseudo', pseudo)
+            if(pseudo !== ''){
+                this.$socket.emit('set_pseudo', pseudo)
+            }
+            else{
+                console.log('Err : pseudo is empty')
+            }
         }
     }
 }

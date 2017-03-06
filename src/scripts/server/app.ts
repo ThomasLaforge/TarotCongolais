@@ -19,7 +19,10 @@ let server = http.createServer(function(req, res) {
     });
 
 });
-let io = require('socket.io').listen(server);
+
+import {SocketIOTarot, SocketTarot, SocketTarotInterface} from './SocketTarot'
+let io:SocketIO.Server = require('socket.io').listen(server);
+let socketIOTarot = new SocketIOTarot(io); 
 
 // reset console
 process.stdout.write('\x1Bc'); 
@@ -53,10 +56,6 @@ console.log(colors.green('-------------- Server started on localhost: %s -------
     socket.broadcast.to(socketid).emit('message', 'for your eyes only');
  */
 
-interface SocketTarot extends SocketIO.Socket {
-    player: Player
-}
-
 interface PlayerInfo {
     // hand : Hand
     pv : number
@@ -71,49 +70,63 @@ interface GameData {
 }
 
 // init
-let game:Game = null;
-let pc = new PlayerCollection(1);
-pc.addPlayer(new Player('tom'))
-game = new Game(pc)
+let current_pc = new PlayerCollection();
+let room_counter = 0;
 
-io.sockets.on('connection', function (socket: SocketTarot) {
+io.sockets.on('connection', function (socket: SocketTarotInterface) {
+    let socketTarot = new SocketTarot(socket);
+    socketTarot.showSocketId();
+
     socket.on('set_pseudo', (pseudo: string) => {
-        if(pc.isFull() && !socket.player){
-            console.log('game_is_already_full', pseudo)
-            socket.emit('game_is_already_full');
-        }
-        else if(pc.getNames().indexOf(pseudo) !== -1){
+        // if(current_pc.isFull() && !socket.player){
+        //     console.log('game_is_already_full', pseudo)
+        //     socket.emit('game_is_already_full');
+        // }
+
+        // Pseudo not free 
+        if(current_pc.getNames().indexOf(pseudo) !== -1){
             console.log('pseudo_not_free', pseudo)
             socket.emit('pseudo_not_free')
         }
+        // Pseudo empty (must be checked on client too)
         else if(pseudo === ''){
             console.log('trying to add player with empty username')
             socket.emit('try_add_player_with_empty_username')
         }
+        else if(socket.player){
+            console.log('player try to change is pseudo. Not possible')
+            // let oldPseudo = socket.player.username
+            socket.emit('player_cant_change_pseudo')
+        }
         else{
-            if(socket.player){
-                let oldPseudo = socket.player.username
-                delete socket.player
-                io.emit('player_change_pseudo', oldPseudo, pseudo)
-            }
+            // Connect on room
+            let gameRoom = 'game-' + room_counter;
+            socket.gameRoom = gameRoom;
+            socket.join( gameRoom );
+
             let newPlayer = new Player(pseudo);
             socket.player = newPlayer
-            pc.addPlayer(new Player(pseudo))
+            current_pc.addPlayer(newPlayer)
+
+            // Auto connection on board of room
             console.log('new player on board', socket.player.username)
-            socket.emit('pseudo_accepted');
-            io.emit('new_player', socket.player.username)        
+            socket.to(gameRoom).emit('pseudo_accepted');
+            io.in(gameRoom).emit('new_player', socket.player.username)        
+            
+            if(current_pc.isFull()){
+                console.log('new player complete the game. Game will start')
+                room_counter++;
+                let newGame = new Game(current_pc);
+                current_pc = new PlayerCollection();
+                let gameData = {};
+                io.emit('start_game', gameData)
+            }
         }
 
-        if(pc.isFull()){
-            console.log('new player complete the game. Game will start')
-            // game = new Game(pc);
-            // io.emit('start_game', gameData)
-        }
     })
     
     socket.on('is_on_game', () => {
         let isOnGame = socket.player ? true : false;
-        console.log('this socket is on game', isOnGame)
         socket.emit('is_on_game', isOnGame);
     })
 
@@ -134,7 +147,7 @@ io.sockets.on('connection', function (socket: SocketTarot) {
         // retirer le joueur de la collection
         if(socket.player){
             console.log('player disconnect', socket.player)
-            pc.remove(socket.player)
+            current_pc.remove(socket.player)
         }
 		// let pDisconnected = pc.getPlayerBySocketId(socket.id);
         // pc.remove(pDisconnected);
@@ -143,3 +156,5 @@ io.sockets.on('connection', function (socket: SocketTarot) {
 });
 
 server.listen(port);
+
+export {port}

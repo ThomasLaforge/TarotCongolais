@@ -1,5 +1,9 @@
+// import {port} from '../server/app'
 import VueSocketio from 'vue-socket.io';
 Vue.use(VueSocketio, 'http://localhost:8080');
+
+// import * as Vue from 'vue'
+// import * as VueRouter from 'vue-router'
 
 import { board } from '../vue/board' 
 import { connection } from '../vue/connection' 
