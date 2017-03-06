@@ -1,40 +1,41 @@
 {
-    "name": "tarotcongolais",
-    "version": "1.0.0",
-    "description": "",
-    "main": "dist/scripts/server/app.js",
-    "dependencies": {
-        "bufferutil": "^1.3.0",
-        "colors": "^1.1.2",
-        "express": "^4.12.1",
-        "lodash": "^4.15.0",
-        "socket.io": "^1.7.2",
-        "utf-8-validate": "^2.0.0",
-        "vue": "^2.1.10",
-        "vue-socket.io": "^2.1.0"
-    },
-    "devDependencies": {
-        "@types/node": "^7.0.5",
-        "@types/socket.io": "^1.4.28",
-        "@types/vue": "^2.0.0",
-        "browser-sync": "^2.13.0",
-        "browserify": "^14.0.0",
-        "gulp": "^3.9.1",
-        "gulp-compass": "^2.1.0",
-        "gulp-typescript": "^3.1.4",
-        "merge2": "^1.0.2",
-        "nodemon": "^1.9.2",
-        "run-sequence": "^1.2.2",
-        "socket.io-client": "^1.7.3",
-        "tsify": "^3.0.1",
-        "typescript": "^2.1.5",
-        "vinyl-source-stream": "^1.1.0"
-    },
-    "scripts": {
-        "installation" : "npm install && typings install",
-        "client": "gulp",
-        "server": "nodemon dist/scripts/server/app.js --watch dist/scripts/**/*.js"
-    },
-    "author": "",
-    "license": "ISC"
+  "name": "tarotcongolais",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/scripts/server/app.js",
+  "dependencies": {
+    "bufferutil": "^1.3.0",
+    "colors": "^1.1.2",
+    "express": "^4.12.1",
+    "lodash": "^4.15.0",
+    "socket.io": "^1.7.2",
+    "utf-8-validate": "^2.0.0",
+    "vue": "^2.1.10",
+    "vue-router": "^2.3.0",
+    "vue-socket.io": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.5",
+    "@types/socket.io": "^1.4.28",
+    "@types/vue": "^2.0.0",
+    "browser-sync": "^2.13.0",
+    "browserify": "^14.0.0",
+    "gulp": "^3.9.1",
+    "gulp-compass": "^2.1.0",
+    "gulp-typescript": "^3.1.4",
+    "merge2": "^1.0.2",
+    "nodemon": "^1.9.2",
+    "run-sequence": "^1.2.2",
+    "socket.io-client": "^1.7.3",
+    "tsify": "^3.0.1",
+    "typescript": "^2.1.5",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "scripts": {
+    "installation": "npm install && typings install",
+    "client": "gulp",
+    "server": "nodemon dist/scripts/server/app.js --watch dist/scripts/**/*.js"
+  },
+  "author": "",
+  "license": "ISC"
 }
