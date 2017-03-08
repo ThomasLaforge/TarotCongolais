@@ -20,9 +20,10 @@ let template = `
         </div>
     </div>
 
-    <chat />
+    <chat socketActionSendMessage="new_game_message" />
 </div>
 `
+
 
 export const board = {
     template : template,
@@ -44,7 +45,6 @@ export const board = {
             
         },
         is_on_game(isOnGame: boolean){
-            console.log('is on game = player exists', isOnGame)
             if(!isOnGame){
                 this.$router.push({path: '/login'});  
             }

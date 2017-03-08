@@ -24,7 +24,10 @@ let app = new Vue({
     el: '#app',
 		router,
 		sockets:{
-			connect: function(){
-			},
+      is_on_game(isOnGame: boolean){
+        if(!isOnGame){
+            this.$router.push({path: '/login'});  
+        }
+      }
 		}
 });

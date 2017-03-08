@@ -1,8 +1,10 @@
+import { chat } from './chat'
+
 let template = `
 <div>
     <h2>Lobby</h2>
 
-    <button @click="action">Auto find game</button>
+    <button @click="auto">Auto find game</button>
 
     <div class="game-list">
         <table>
@@ -19,8 +21,10 @@ let template = `
             </tbody>
         </table>
     </div>
-    <button @click="action">Create</button>
-    <button @click="action">Rejoindre</button>
+    <button @click="create">Create</button>
+    <button @click="join">Join</button>
+
+    <chat socketActionSendMessage="new_lobby_message" />
 </div>
 `
 
@@ -28,19 +32,34 @@ export const lobby = {
     template : template,
     data: function(){
         return {
+            selectedGame: null,
             gameList : [{
-                name : 'game 1',
+                name : 'game 2',
                 maxPlayers : 4,
                 playerOn : 2
             }]
         }
     },
+    components: {
+        chat
+    },
     sockets: {
 
     },
     methods: {
-        action(){
-            console.log('click on lobby button')
+        auto(){
+            this.$socket.emit('lobby-auto')
+        },
+        create(){
+            this.$socket.emit('lobby-create')
+        },
+        join(){
+            if(this.selectedGame){
+                this.$socket.emit('lobby-join', this.selectedGame)
+            }
         }
+    },
+    mounted: function(){
+        this.$socket.emit('is_on_game')
     }
 }

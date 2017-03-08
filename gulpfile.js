@@ -84,7 +84,8 @@ gulp.task('browserSync', function() {
         server: {
             baseDir: 'dist',
             index: 'index.html'
-        }
+        },
+        socket: {}
     });
 })
 

@@ -78,10 +78,12 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
 
     socket.on('register', (pseudo: string) => {
         // if player already exist and he is different of current socket pseudo 
-        if( socketIOTarot.getAllPseudo().indexOf(pseudo) !== -1 && socket.player.username !== pseudo){
+        if( socketIOTarot.getAllPseudo().indexOf(pseudo) !== -1 ){
             console.log('pseudo already used', pseudo)
+            socket.emit('pseudo_already_used')
         }
         else{
+            socket.join('lobby');
             let newPlayer = new Player(pseudo);
             socket.player = newPlayer
             console.log('new player connected', pseudo)
@@ -89,7 +91,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         }
     })
 
-    socket.on('connect-to-game', (pseudo) => {
+    socket.on('connect-to-game', (pseudo: string) => {
         // Pseudo not free 
         if(current_pc.getNames().indexOf(pseudo) !== -1){
             console.log('pseudo_not_free', pseudo)
@@ -146,12 +148,12 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         socket.emit('is_on_game', isOnGame);
     })
 
-    // when the client emits 'sendchat', this listens and executes
-    // io.to( "/#" + socket_id).emit("event_name",{data:true})
-	socket.on('new_message', function (msg: string) {
-        console.log('get new message', msg)
-		// we tell the client to execute 'updatechat' with 2 parameters
-		io.emit('updatechat', { pseudo : socket.player.username, msg: msg});  
+	socket.on('new_game_message', function (msg: string) {
+		io.to(socket.gameRoom).emit('updatechat', { pseudo : socket.player.username, msg: msg});  
+	});
+
+    socket.on('new_lobby_message', function (msg: string) {
+		io.to('lobby').emit('updatechat', { pseudo : socket.player.username, msg: msg});  
 	});
 
     socket.on('reconnection', function(){

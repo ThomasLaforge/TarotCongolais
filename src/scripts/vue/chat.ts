@@ -4,17 +4,21 @@ let template = `
 <div class="chat-zone">
     <h2>Chat</h2>
     <div class="chat">
-        <p v-for="chatLine in chatHistory">{{ chatLine.pseudo }} : {{ chatLine.msg }}</p>
+        <div class="chat-line" v-for="chatLine in chatHistory">
+            <div class="chat-line-pseudo">{{ chatLine.pseudo }} : </div>
+            <div class="chat-line-message">{{ chatLine.msg }}</div>
+        </div>
     </div>
     <div class="chat-new-msg">
-        <input type="text" v-model="newMessage" />
-        <button @click="sendMsg">Send</button>
+        <input class="chat-new-msg-input" type="text" v-model="newMessage" />
+        <button class="chat-new-msg-button" @click="sendMsg">Send</button>
     </div>
 </div>
 `
 
 export const chat = {
     template : template,
+    props: ['socketActionSendMessage'],
     data: function(){
         return {
             chatHistory: [],
@@ -31,7 +35,7 @@ export const chat = {
     },
     methods : {
         sendMsg : function(){
-            this.$socket.emit('new_message', this.newMessage);
+            this.$socket.emit(this.socketActionSendMessage, this.newMessage);
             this.newMessage = ''
         }
     }
