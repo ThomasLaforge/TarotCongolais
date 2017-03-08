@@ -34,6 +34,24 @@ export class SocketIOTarot {
 	constructor(socketIO: SocketIO.Server) {
         this.socketIO = socketIO
     }
+
+	getAllSocketId(){
+		return Object.keys(this.socketIO.sockets.connected)
+	}
+
+	getAllSockets(){
+		return Object.keys(this.socketIO.sockets.connected).map( socketid => {
+			return this.socketIO.sockets.connected[socketid]
+		})
+	}
+
+	getAllPseudo(){
+		return this.getAllSockets().filter( socket => {
+			return socket.player;
+		}).map( socket => {
+			return socket.player.username;
+		})
+	}
     
 	public get socketIO(): SocketIO.Server {
 		return this._socketIO;

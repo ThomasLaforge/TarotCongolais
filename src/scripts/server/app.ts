@@ -75,14 +75,21 @@ let room_counter = 0;
 
 io.sockets.on('connection', function (socket: SocketTarotInterface) {
     let socketTarot = new SocketTarot(socket);
-    socketTarot.showSocketId();
 
-    socket.on('set_pseudo', (pseudo: string) => {
-        // if(current_pc.isFull() && !socket.player){
-        //     console.log('game_is_already_full', pseudo)
-        //     socket.emit('game_is_already_full');
-        // }
+    socket.on('register', (pseudo: string) => {
+        // if player already exist and he is different of current socket pseudo 
+        if( socketIOTarot.getAllPseudo().indexOf(pseudo) !== -1 && socket.player.username !== pseudo){
+            console.log('pseudo already used', pseudo)
+        }
+        else{
+            let newPlayer = new Player(pseudo);
+            socket.player = newPlayer
+            console.log('new player connected', pseudo)
+            socket.emit('player_added')
+        }
+    })
 
+    socket.on('connect-to-game', (pseudo) => {
         // Pseudo not free 
         if(current_pc.getNames().indexOf(pseudo) !== -1){
             console.log('pseudo_not_free', pseudo)
@@ -123,6 +130,15 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
             }
         }
 
+    })
+
+    socket.on('log-pseudo-list', () => {
+        console.log('------------------------')
+        console.log('pseudo list :');
+        socketIOTarot.getAllPseudo().forEach( (p: string) => {
+            console.log(p);
+        })  
+        console.log('------------------------')
     })
     
     socket.on('is_on_game', () => {

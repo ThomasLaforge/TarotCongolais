@@ -4,6 +4,7 @@ let template = `
 
     <input type="text" v-model="pseudo" />
     <button @click="registerPseudo(pseudo)">Connexion</button>
+    <button @click="getAllPseudo">Server log all pseudo</button>
 </div>
 `
 
@@ -21,18 +22,24 @@ export const connection = {
         },
         pseudo_accepted(){
             console.log('pseudo accepted')
-            this.$router.push({path: '/board'});  
+            this.$router.push({path: '/lobby'});  
+        },
+        player_added(){
+            this.$router.push({path: '/lobby'});
         }
     },
     methods: {
         registerPseudo(pseudo: string){
-            console.log('set pseudo : ', pseudo)
+            console.log('connect : ', pseudo)
             if(pseudo !== ''){
-                this.$socket.emit('set_pseudo', pseudo)
+                this.$socket.emit('register', pseudo)
             }
             else{
                 console.log('Err : pseudo is empty')
             }
+        },
+        getAllPseudo(){
+            this.$socket.emit('log-pseudo-list')
         }
     }
 }

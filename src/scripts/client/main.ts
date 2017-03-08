@@ -7,11 +7,13 @@ Vue.use(VueSocketio, 'http://localhost:8080');
 
 import { board } from '../vue/board' 
 import { connection } from '../vue/connection' 
+import { lobby } from '../vue/lobby' 
 
 const routes = [
   { path: '/', component: connection },
   { path: '/login', component: connection },
-  { path: '/board', component: board }
+  { path: '/board', component: board },
+  { path: '/lobby', component: lobby },
 ]
 
 const router = new VueRouter({
@@ -23,8 +25,6 @@ let app = new Vue({
 		router,
 		sockets:{
 			connect: function(){
-				console.log('socket connected', 'Thomas')
-				this.$socket.emit('adduser', 'Thomas')
 			},
 		}
 });
