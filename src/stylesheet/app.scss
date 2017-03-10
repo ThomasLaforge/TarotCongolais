@@ -1,6 +1,10 @@
 @import "compass";
 @import "compass/css3";
 @import "chat";
+* {
+    margin: 0;
+}
+
 body {
     @include box-sizing(border-box);
     //   background-color: #000;

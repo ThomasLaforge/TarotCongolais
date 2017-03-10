@@ -1,0 +1,24 @@
+.chat-zone {
+    .chat {
+        border: 1px black solid;
+        width: 100%;
+        padding: 10px 0;
+    }
+    .chat-line {
+        width: 100%;
+        min-height: 20px;
+        display: flex;
+        .chat-line-pseudo {
+            font: bold;
+        }
+        .chat-line-message {
+            flex: 1;
+        }
+    }
+    .chat-new-msg-input {
+        width: 80%;
+    }
+    .chat-new-msg-button {
+        width: 18%;
+    }
+}
