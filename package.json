@@ -15,9 +15,13 @@
     "vue-socket.io": "^2.1.0"
   },
   "devDependencies": {
+    "@types/express": "^4.0.35",
+    "@types/lodash": "^4.14.55",
     "@types/node": "^7.0.5",
     "@types/socket.io": "^1.4.28",
+    "@types/socket.io-client": "^1.4.29",
     "@types/vue": "^2.0.0",
+    "@types/vue-router": "^2.0.0",
     "browser-sync": "^2.13.0",
     "browserify": "^14.0.0",
     "gulp": "^3.9.1",
