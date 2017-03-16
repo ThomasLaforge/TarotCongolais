@@ -46,9 +46,9 @@ export class SocketIOTarot {
 	}
 
 	getAllPseudo(){
-		return this.getAllSockets().filter( socket => {
+		return this.getAllSockets().filter( (socket:SocketTarotInterface) => {
 			return socket.player;
-		}).map( socket => {
+		}).map( (socket:SocketTarotInterface) => {
 			return socket.player.username;
 		})
 	}

@@ -34,6 +34,11 @@ export class Turn {
         return res;
     }
 
+    allPlayerBet(){
+        console.log('allPlayerBet to code')
+        return false;
+    }
+
     getPlayerHavingBet():Array<Player>{
         let res:Array<Player> = [];
 

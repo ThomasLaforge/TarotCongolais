@@ -1,4 +1,4 @@
-import {Player} from './PLayer';
+import {Player} from './Player';
 import * as Utils from './utils';
 import * as  _ from 'lodash';
 

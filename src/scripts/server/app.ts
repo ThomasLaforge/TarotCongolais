@@ -17,7 +17,6 @@ let server = http.createServer(function(req, res) {
         res.writeHead(200, {"Content-Type": "text/html"});
         res.end(content);
     });
-
 });
 
 import {SocketIOTarot, SocketTarot, SocketTarotInterface} from './SocketTarot'
@@ -144,12 +143,10 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     
     // Pseudos
     socket.on('log-pseudo-list', () => {
-        console.log('------------------------')
         console.log('pseudo list :');
         socketIOTarot.getAllPseudo().forEach( (p: string) => {
             console.log(p);
         })  
-        console.log('------------------------')
     })
     
     // Player is connected on site

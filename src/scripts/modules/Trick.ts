@@ -1,5 +1,6 @@
 // Trick = un pli
 import { Player } from './Player';
+import { PlayerCollection } from './PlayerCollection';
 import { Card } from './Card';
 import { Play } from './Play';
 import * as  _ from 'lodash';
@@ -7,9 +8,11 @@ import * as  _ from 'lodash';
 export class Trick {
 
     private _arrPlay:Array<Play>;
+    private _playerCollection: PlayerCollection;
 
-    constructor(){
-        this.arrPlay = [];
+    constructor(playerCollection: PlayerCollection, arrPlay: Array<Play> = []){
+        this.playerCollection = playerCollection;
+        this.arrPlay = arrPlay;
     }
 
     addPlay(play:Play){
@@ -54,6 +57,13 @@ export class Trick {
 	public set arrPlay(value: Array<Play>) {
 		this._arrPlay = value;
 	}
+	public get playerCollection(): PlayerCollection {
+		return this._playerCollection;
+	}
+	public set playerCollection(value: PlayerCollection) {
+		this._playerCollection = value;
+	}
+    
     
     
 }
