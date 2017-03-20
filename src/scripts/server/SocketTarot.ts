@@ -3,7 +3,7 @@ import { Player } from '../modules/Player'
 
 export interface SocketTarotInterface extends SocketIO.Socket {
     player: Player,
-    gameRoom: string
+    gameRoomId: string
 }
 
 export class SocketTarot {

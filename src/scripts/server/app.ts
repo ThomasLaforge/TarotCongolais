@@ -113,21 +113,17 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         }
     })
 
-    // connect on game room
-    socket.on('connect-to-game', (pseudo: string) => {
+    // connect on game room by matchmaking
+    socket.on('enter_in_game_by_matchmaking', () => {
         // Connect on room
-        let gameRoom = 'game-' + room_counter;
-        socket.gameRoom = gameRoom;
-        socket.join( gameRoom );
-
-        let newPlayer = new Player(pseudo);
-        socket.player = newPlayer
-        current_pc.addPlayer(newPlayer)
+        let gameRoomId = 'game-' + room_counter;
+        socket.gameRoomId = gameRoomId;
+        socket.join( gameRoomId );
 
         // Auto connection on board of room
         console.log('new player on board', socket.player.username)
-        socket.to(gameRoom).emit('pseudo_accepted');
-        io.in(gameRoom).emit('new_player', socket.player.username)        
+        socket.to(gameRoomId).emit('pseudo_accepted');
+        io.in(gameRoomId).emit('new_player', socket.player.username)        
         
         if(current_pc.isFull()){
             console.log('new player complete the game. Game will start')
