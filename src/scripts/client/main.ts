@@ -24,7 +24,7 @@ let app = new Vue({
     el: '#app',
 		router,
 		sockets:{
-      is_logged_in(isOnGame: boolean){
+      isLoggedIn(isOnGame: boolean){
         if(!isOnGame){
             this.$router.push({path: '/login'});  
         }

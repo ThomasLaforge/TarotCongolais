@@ -60,6 +60,6 @@ export const lobby = {
         }
     },
     mounted: function(){
-        this.$socket.emit('is_logged_in')
+        this.$socket.emit('isLoggedIn')
     }
 }

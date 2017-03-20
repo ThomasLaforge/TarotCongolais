@@ -153,6 +153,10 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     * Infos
     */
     
+    socket.on('log_ok', () => {
+         socket.emit('logOk')
+    })
+
     // Pseudos
     socket.on('log-pseudo-list', () => {
         console.log('pseudo list :');
@@ -162,9 +166,9 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     })
     
     // Player is connected on site
-    socket.on('is_logged_in', () => {
+    socket.on('isLoggedIn', () => {
         let isLoggedIn = socket.player ? true : false;
-        socket.emit('is_logged_in', isLoggedIn);
+        socket.emit('isLoggedIn', isLoggedIn);
     })
 
     /**
