@@ -31,7 +31,7 @@ export class Game {
 		this.players.shuffle();
 		this.deck             = new Deck();
 		this.turnCards		  = Math.floor(this.deck.length() / this.getNbPlayer());
-		this.actualTrick 	  = new Trick();		
+		this.actualTrick 	  = new Trick(this.players);
 		this.dealCards();
 	}
 
@@ -48,7 +48,7 @@ export class Game {
 	}
 
     getFirstPlayer(){
-        return this.players.getFirstPlayer;
+        return this.players.getFirstPlayer();
     }
 
 	dealCards(){
@@ -60,7 +60,7 @@ export class Game {
 
 	nextTurn(){
 		this.turnCards = this.turnCards > 1 ? this.turnCards - 1 : this.getNbPlayer();
-		this.actualTrick = new Trick();
+		this.actualTrick = new Trick(this.players);
 	}
 
     changeFirstPlayer(){

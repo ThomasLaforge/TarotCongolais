@@ -54,6 +54,10 @@ export interface ActionHistoryInterface {
     
 }
 
+// ------------------------- //
+// Socket message definition //
+// ------------------------- //
+
 export interface ChatLine {
     pseudo: string
     msg: string
