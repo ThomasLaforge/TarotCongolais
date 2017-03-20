@@ -139,6 +139,20 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         }
     })
 
+    // connect on game room selecting a game
+    socket.on('enter_in_game_selecting_a_game', () => {
+        
+    })
+
+    // connect on game room creating a game
+    socket.on('enter_in_game_creating_a_game', () => {
+        // Connect on room
+        room_counter++;
+        let gameRoomId = 'game-' + room_counter;
+        socket.gameRoomId = gameRoomId;
+        socket.join( gameRoomId );
+    })
+
     /**
     * Infos
     */
@@ -162,12 +176,51 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     */
 
 	socket.on('new_game_message', function (msg: string) {
-		io.to(socket.gameRoom).emit('updatechat', { pseudo : socket.player.username, msg: msg});  
+		io.to(socket.gameRoomId).emit('updatechat', { pseudo : socket.player.username, msg: msg});  
 	});
 
     socket.on('new_lobby_message', function (msg: string) {
 		io.to('lobby').emit('updatechat', { pseudo : socket.player.username, msg: msg});  
 	});
+
+    /**
+    * Game states
+    */
+
+    socket.on('player_is_ready', (data:any) => {
+        console.log('player_is_ready', data)
+        let game = GC.getGame(socket.gameRoomId)
+        if(game){
+            // game.addReadyPlayer(socket.player);
+            // if(game.isFull()){
+
+            // }
+            // else{
+
+            // }
+        }
+    })
+
+    socket.on('player_bet', (data:any) => {
+        console.log('player_bet', data)
+    })
+
+    socket.on('player_not_betting', (data:any) => {
+        console.log('player_not_betting', data)
+    })
+
+    socket.on('player_hover_card', (data:any) => {
+        console.log('player_hover_card', data)
+    })
+
+    socket.on('player_play', (data:any) => {
+        console.log('player_play', data)
+    })
+
+    socket.on('player_not_playing', (data:any) => {
+        console.log('player_not_playing', data)
+    })
+
 
 });
 
