@@ -9,6 +9,7 @@ let colors = require('colors');
 import {Game} from '../modules/Game';
 import {Player} from '../modules/Player';
 import {PlayerCollection} from '../modules/PlayerCollection';
+import {GameCollection} from '../modules/GameCollection';
 
 // Server
 let port = 8080;
@@ -70,6 +71,7 @@ interface GameData {
 
 // init
 let current_pc = new PlayerCollection();
+let GC = new GameCollection();
 let room_counter = 0;
 
 io.sockets.on('connection', function (socket: SocketTarotInterface) {
