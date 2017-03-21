@@ -54,6 +54,16 @@ export interface ActionHistoryInterface {
     
 }
 
+// ------------- //
+// UI interfaces //
+// ------------- //
+
+export interface LobbyList {
+    gameRoomId: string,
+    nbPlayer: number, 
+    nbMaxPlayer: number 
+}
+
 // ------------------------- //
 // Socket message definition //
 // ------------------------- //

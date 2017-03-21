@@ -9,7 +9,7 @@ export class Turn {
     private _arrTrick:Array<Trick>;
     private _arrBet:Array<Bet>;
 
-	constructor(arrTrick: Array<Trick>, arrBet: Array<Bet>) {
+	constructor(arrTrick: Array<Trick> = [], arrBet: Array<Bet> = []) {
 		this._arrTrick = arrTrick;
 		this._arrBet = arrBet;
 	}
