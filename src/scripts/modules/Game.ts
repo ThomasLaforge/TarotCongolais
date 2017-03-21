@@ -30,9 +30,13 @@ export class Game {
         this.players          = players;
 		this.players.shuffle();
 		this.deck             = new Deck();
-		this.turnCards		  = Math.floor(this.deck.length() / this.getNbPlayer());
+		this.turnCards		  = Math.floor(this.deck.length() / this.getNbMaxPlayer());
 		this.actualTrick 	  = new Trick(this.players);
 		this.dealCards();
+	}
+
+	start(){
+		this.turn = new Turn();
 	}
 
 	reset(players:PlayerCollection){
@@ -61,11 +65,26 @@ export class Game {
 	nextTurn(){
 		this.turnCards = this.turnCards > 1 ? this.turnCards - 1 : this.getNbPlayer();
 		this.actualTrick = new Trick(this.players);
+		this.turn = new Turn();
 	}
 
     changeFirstPlayer(){
 		this.players.changeFirstPlayer();
     }
+
+	isFull(){
+		return this.players.isFull();
+	}
+	isNotFull(){
+		return !this.isFull()
+	}
+
+	addReadyPlayer(p: Player){
+		this.players.addReadyPlayer(p);
+	}
+	areAllPlayersReady(){
+		this.players.areAllPlayersReady()
+	}
 
 	/**
 	 *  Getters / Setters
@@ -92,6 +111,9 @@ export class Game {
 	public getNbPlayer(): number {
 		return this.players.getNbPlayer();
 	}
+	public getNbMaxPlayer(): number {
+		return this.players.maxNbPlayer;
+	}
 	public get history(): History {
 		return this._history;
 	}
@@ -109,6 +131,12 @@ export class Game {
 	}
 	public set actualTrick(value: Trick) {
 		this._actualTrick = value;
+	}
+	public get turn(): Turn {
+		return this._turn;
+	}
+	public set turn(value: Turn) {
+		this._turn = value;
 	}
 	
     
