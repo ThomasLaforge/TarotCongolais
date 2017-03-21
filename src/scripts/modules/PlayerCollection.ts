@@ -5,28 +5,38 @@ import * as  _ from 'lodash';
 export class PlayerCollection {
 
     private _arrPlayers:Array<Player>;
+    private _arrReadyPlayers:Array<Player>;
     private _indexFirstPlayer:number;
     private _maxNbPlayer:number;
 
-	constructor(maxNbPlayer = 4, arrPlayers: Array<Player> = [], indexFirstPlayer = 0) {
+	constructor(maxNbPlayer = 4, arrPlayers: Array<Player> = [], indexFirstPlayer = 0, arrReadyPlayers: Array<Player> = []) {
         this.indexFirstPlayer = indexFirstPlayer;
         this.arrPlayers = arrPlayers;
         this.maxNbPlayer = maxNbPlayer;
+        this.arrReadyPlayers = arrReadyPlayers;
 	}
 
-    addPlayer(p:Player){
-        this.arrPlayers.push(p);
+    addPlayer(p: Player){
+        if( this.playerIsOnCollection(p) ) {
+            this.arrPlayers.push(p);
+        }
+    }
+
+    addReadyPlayer(p: Player){
+        if( this.isPlayerReady(p) && this.playerIsOnCollection(p) ) {
+            this.arrReadyPlayers.push(p);
+        }
     }
 
     shuffle(){
         Utils.shuffle(this.arrPlayers);
     }
 
-    getPlayers():Array<Player>{
+    getPlayers():Array<Player> {
         return this.arrPlayers;
     }
 
-    getNames():Array<string>{
+    getNames():Array<string> {
         let res:Array<string> = [];
 
         this.arrPlayers.forEach( p => {
@@ -36,25 +46,25 @@ export class PlayerCollection {
         return res;
     }
 
-    getFirstPlayer(){
+    getFirstPlayer() {
         return this.arrPlayers[ this.indexFirstPlayer ];
     }
 
-    changeFirstPlayer(){
+    changeFirstPlayer() {
         this.indexFirstPlayer = (this.indexFirstPlayer + 1) % this.getNbPlayer(); 
     }
 
-    getNbPlayer(){
+    getNbPlayer() {
         return this.arrPlayers.length;
     }
 
-    remove(p:Player){
-        let idPlayer = this.getPlayerId(p);
+    remove(p: Player) {
+        let idPlayer = this.getPlayerIndex(p);
         this.arrPlayers.splice(idPlayer,1);
     }
 
-    getLeftPlayer(player:Player) : Player{
-        let playerId:number = this.getPlayerId(player);
+    getLeftPlayer(player: Player) : Player {
+        let playerId:number = this.getPlayerIndex(player);
         if(playerId == -1){
             throw new Error('player not in collection');
         }
@@ -62,8 +72,8 @@ export class PlayerCollection {
         return this.arrPlayers[ leftPlayerId ];
     }
 
-    getFacePlayer(player:Player){
-        let playerId:number = this.getPlayerId(player);
+    getFacePlayer(player: Player) {
+        let playerId:number = this.getPlayerIndex(player);
         if(playerId == -1){
             throw new Error('player not in collection');
         }
@@ -72,8 +82,8 @@ export class PlayerCollection {
         return this.arrPlayers[ leftPlayerId ];
     }
 
-    getRightPlayer(player:Player) : Player {
-        let playerId:number = this.getPlayerId(player);
+    getRightPlayer(player: Player) : Player {
+        let playerId:number = this.getPlayerIndex(player);
         if(playerId == -1){
             throw new Error('player not in collection');
         }
@@ -81,11 +91,11 @@ export class PlayerCollection {
         return this.arrPlayers[ rightPlayerId ];
     }
 
-    getPlayerId(player:Player):number{
-        let res:number = -1;
+    getPlayerIndex(player: Player): number {
+        let res: number = -1;
 
         this.arrPlayers.forEach( (p, index) => {
-            if( _.isEqual(p,player)){
+            if( _.isEqual(p, player)){
                 res = index;
             }
         });
@@ -97,9 +107,21 @@ export class PlayerCollection {
         return this.arrPlayers.length >= this.maxNbPlayer
     }
 
+    areAllPlayersReady(): boolean {
+        return this.arrReadyPlayers.length >= this.maxNbPlayer
+    }
+
+    playerIsOnCollection(p: Player) {
+        return this.arrPlayers.indexOf(p) !== -1
+    }
+    
+    isPlayerReady(p: Player) {
+        return this.arrReadyPlayers.indexOf(p) !== -1
+    }
+
     /**
-     * Getters / Setters
-     */
+    * Getters / Setters
+    */
 	public get arrPlayers(): Array<Player> {
 		return this._arrPlayers;
 	}
@@ -118,6 +140,11 @@ export class PlayerCollection {
 	public set maxNbPlayer(value: number) {
 		this._maxNbPlayer = value;
 	}
-    
+	public get arrReadyPlayers(): Array<Player> {
+		return this._arrReadyPlayers;
+	}
+	public set arrReadyPlayers(value: Array<Player>) {
+		this._arrReadyPlayers = value;
+	}    
     
 }

@@ -191,13 +191,13 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         console.log('player_is_ready', data)
         let game = GC.getGame(socket.gameRoomId)
         if(game){
-            // game.addReadyPlayer(socket.player);
-            // if(game.isFull()){
+            game.addReadyPlayer(socket.player);
+            if(game.areAllPlayersReady()){
+                
+            }
+            else{
 
-            // }
-            // else{
-
-            // }
+            }
         }
     })
 

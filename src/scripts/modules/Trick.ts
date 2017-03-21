@@ -1,10 +1,10 @@
-// Trick = un pli
 import { Player } from './Player';
 import { PlayerCollection } from './PlayerCollection';
 import { Card } from './Card';
 import { Play } from './Play';
 import * as  _ from 'lodash';
 
+// Trick = un pli
 export class Trick {
 
     private _arrPlay:Array<Play>;
@@ -24,11 +24,16 @@ export class Trick {
         }
     }
 
-    getWinner():Player{
-        let res:Player;
+    getWinner(): Player { 
+        if(this.allPlayerHavePlayed())
+        return this.getLeader()
+    }
+    
+    getLeader(): Player {
+        let res: Player;
         let maxValueCard:number = -1;
 
-        this.arrPlay.forEach(play => {
+        this.arrPlay.forEach( (play: Play) => {
             if(play.card.value > maxValueCard){
                 maxValueCard = play.card.value;
                 res = play.player;
@@ -38,19 +43,28 @@ export class Trick {
         return res;
     }
 
-    playerAlreadyPlayed(p:Player){
+
+    playerAlreadyPlayed(p: Player){
         let res:boolean = false;
-        this.arrPlay.forEach( play => {
-            if(_.isEqual(play.player,p)){
+        this.arrPlay.forEach( (play: Play) => {
+            if(_.isEqual(play.player, p)){
                 res = true;
             }
         })
         return res;
     }
 
+    getListOfPlayerHavingPlayed(){
+        return this.playerCollection.getPlayers().filter( (p: Player) => { return this.playerAlreadyPlayed(p) } )
+    }
+
+    allPlayerHavePlayed(){
+        return this.getListOfPlayerHavingPlayed().length === this.playerCollection.maxNbPlayer
+    }
+
     /**
-     * Getters / Setters
-     */
+    * Getters / Setters
+    */
 	public get arrPlay(): Array<Play> {
 		return this._arrPlay;
 	}
@@ -63,7 +77,5 @@ export class Trick {
 	public set playerCollection(value: PlayerCollection) {
 		this._playerCollection = value;
 	}
-    
-    
     
 }
