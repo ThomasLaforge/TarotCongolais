@@ -26,9 +26,8 @@ export class Game {
 
 	init(players:PlayerCollection){
         this.timer            = new Timer();
-		this.history          = new History()
+		this.history          = new History();
         this.players          = players;
-		this.players.shuffle();
 		this.deck             = new Deck();
 		this.turnCards		  = Math.floor(this.deck.length() / this.getNbMaxPlayer());
 		this.actualTrick 	  = new Trick(this.players);

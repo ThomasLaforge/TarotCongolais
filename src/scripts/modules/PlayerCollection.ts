@@ -9,7 +9,7 @@ export class PlayerCollection {
     private _indexFirstPlayer:number;
     private _maxNbPlayer:number;
 
-	constructor(maxNbPlayer = 4, arrPlayers: Array<Player> = [], indexFirstPlayer = 0, arrReadyPlayers: Array<Player> = []) {
+	constructor(maxNbPlayer = 4, arrPlayers: Array<Player> = new Array(maxNbPlayer).fill(null), indexFirstPlayer = 0, arrReadyPlayers: Array<Player> = []) {
         this.indexFirstPlayer = indexFirstPlayer;
         this.arrPlayers = arrPlayers;
         this.maxNbPlayer = maxNbPlayer;
@@ -17,13 +17,20 @@ export class PlayerCollection {
 	}
 
     addPlayer(p: Player){
-        if( this.playerIsOnCollection(p) ) {
-            this.arrPlayers.push(p);
+        if( !this.isOnCollection(p) ) {
+            let freeIndexes: Array<number> = [];
+            this.arrPlayers.map((elt, index) => {
+                if (!elt) {
+                    freeIndexes.push(index)
+                }
+            } );
+            let randomFreeIndex = freeIndexes[Math.floor(Math.random() * freeIndexes.length)];
+            this.arrPlayers[randomFreeIndex] = p;
         }
     }
 
     addReadyPlayer(p: Player){
-        if( this.isPlayerReady(p) && this.playerIsOnCollection(p) ) {
+        if( this.isPlayerReady(p) && this.isOnCollection(p) ) {
             this.arrReadyPlayers.push(p);
         }
     }
@@ -111,7 +118,7 @@ export class PlayerCollection {
         return this.arrReadyPlayers.length >= this.maxNbPlayer
     }
 
-    playerIsOnCollection(p: Player) {
+    isOnCollection(p: Player) {
         return this.arrPlayers.indexOf(p) !== -1
     }
     
