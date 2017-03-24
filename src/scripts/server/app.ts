@@ -115,29 +115,35 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
 
     // connect on game room by matchmaking
     socket.on('enter_in_game_by_matchmaking', () => {
-        // Connect on room
-        let gameRoomId = 'game-' + room_counter;
-        socket.gameRoomId = gameRoomId;
-        socket.join( gameRoomId );
+        // get game room id 
+        let gameRoomId: string;
 
-        // Auto connection on board of room
-        console.log('new player on board', socket.player.username)
-        socket.to(gameRoomId).emit('pseudo_accepted');
-        io.in(gameRoomId).emit('new_player', socket.player.username)        
-        
-        if(current_pc.isFull()){
+        if(gameRoomId){
+            // Auto connection on board of room
+            console.log('new player on board', socket.player.username)
+            socket.to(gameRoomId).emit('pseudo_accepted');
+            io.in(gameRoomId).emit('new_player', socket.player.username)        
+        }
+        else {
             console.log('new player complete the game. Game will start')
             room_counter++;
             let newGame = new Game(current_pc);
-            current_pc = new PlayerCollection();
             let gameData = {};
             io.emit('start_game', gameData)
         }
     })
 
     // connect on game room selecting a game
-    socket.on('enter_in_game_selecting_a_game', () => {
-        
+    socket.on('enter_in_game_selecting_a_game', (gameRoomId: string) => {
+        let game = GC.getGame(gameRoomId) 
+        if( game.isNotFull() ){
+            game.addPlayer(socket.player);
+            // emit to player add on this game
+            // emit others players that this player enter the game and update state of game
+        }
+        else{
+            // emit to player that game is already full
+        }
     })
 
     // connect on game room creating a game
@@ -147,6 +153,9 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         let gameRoomId = 'game-' + room_counter;
         socket.gameRoomId = gameRoomId;
         socket.join( gameRoomId );
+
+        // enter player on this game
+        // update lobby list
     })
 
     /**

@@ -6,18 +6,24 @@ import * as  _ from 'lodash';
 
 export class Turn {
 
+    private _playerCollection: PlayerCollection;
+    private _firstPlayer: Player;
+    private _nbCards: number;
     private _arrTrick:Array<Trick>;
     private _arrBet:Array<Bet>;
 
-	constructor(arrTrick: Array<Trick> = [], arrBet: Array<Bet> = []) {
-		this._arrTrick = arrTrick;
-		this._arrBet = arrBet;
+	constructor(firstPlayer: Player, nbCards: number, pc: PlayerCollection, arrTrick: Array<Trick> = [], arrBet: Array<Bet> = []) {
+        this.playerCollection = pc;
+        this.firstPlayer = firstPlayer;
+        this.nbCards = nbCards;
+		this.arrTrick = arrTrick;
+		this.arrBet = arrBet;
 	}
 
-    getLosers(playerCollection:PlayerCollection):Array<Player>{
+    getLosers():Array<Player>{
         let res:Array<Player> = [];
 
-        playerCollection.arrPlayers.forEach( player => {
+        this.playerCollection.arrPlayers.forEach( player => {
             let score:number = 0;
             
             this.arrTrick.forEach(trick => {
@@ -95,6 +101,26 @@ export class Turn {
 	public set arrBet(value: Array<Bet>) {
 		this._arrBet = value;
 	}
+	public get playerCollection(): PlayerCollection {
+		return this._playerCollection;
+	}
+	public set playerCollection(value: PlayerCollection) {
+		this._playerCollection = value;
+	}
+	public get firstPlayer(): Player {
+		return this._firstPlayer;
+	}
+	public set firstPlayer(value: Player) {
+		this._firstPlayer = value;
+	}
+	public get nbCards(): number {
+		return this._nbCards;
+	}
+	public set nbCards(value: number) {
+		this._nbCards = value;
+	}
+    
+    
     
 
 }

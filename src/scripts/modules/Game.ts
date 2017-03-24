@@ -32,10 +32,7 @@ export class Game {
 		this.turnCards		  = Math.floor(this.deck.length() / this.getNbMaxPlayer());
 		this.actualTrick 	  = new Trick(this.players);
 		this.dealCards();
-	}
-
-	start(){
-		this.turn = new Turn();
+		this.turn = new Turn(this.getFirstPlayer(), this.turnCards, this.players);		
 	}
 
 	reset(players:PlayerCollection){
@@ -62,9 +59,9 @@ export class Game {
 	}
 
 	nextTurn(){
-		this.turnCards = this.turnCards > 1 ? this.turnCards - 1 : this.getNbPlayer();
+		this.turnCards = this.turnCards > 1 ? this.turnCards-- : Math.floor( 22 / this.getNbPlayer() );
 		this.actualTrick = new Trick(this.players);
-		this.turn = new Turn();
+		this.turn = new Turn(this.getFirstPlayer(), this.turnCards, this.players);
 	}
 
     changeFirstPlayer(){
@@ -76,6 +73,10 @@ export class Game {
 	}
 	isNotFull(){
 		return !this.isFull()
+	}
+
+	addPlayer(p: Player){
+		this.players.addPlayer(p)
 	}
 
 	addReadyPlayer(p: Player){
