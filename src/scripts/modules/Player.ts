@@ -13,6 +13,11 @@ export class Player implements PlayerInterface {
 		this._pv		= pv;
     }
 
+
+	addCard(card: Card|Array<Card>){
+		this.hand.addCards(card)
+	}
+
 	/**
 	 * Getters / Setters
 	 */

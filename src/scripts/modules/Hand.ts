@@ -19,8 +19,11 @@ export class Hand {
         return this.arrCard.length;
     }
 
-    addCards(arrCard:Array<Card>){
-        arrCard.forEach( card => {
+    addCards(c:Array<Card>|Card){
+        if(!Array.isArray(c)){
+            c = [c];
+        }
+        c.forEach( card => {
             this.arrCard.push(card);
         })
     }
