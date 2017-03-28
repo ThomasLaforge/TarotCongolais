@@ -32,8 +32,14 @@ export class Game {
 		this.turn = new Turn(this.getFirstPlayer(), this.turnCards, this.players);		
 	}
 
-	reset(players:PlayerCollection){
-		this.init(players);
+	start(){
+		let started = false;
+
+		if( this.isFull() ){
+			started = true;
+		}
+		
+		return started;
 	}
 
 	soloPlay(p:Player, c:Card){
