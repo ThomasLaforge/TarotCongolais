@@ -10,6 +10,16 @@ export class GameCollection {
         this.gameList = gameList;
     }
 
+	addNewGame(gameRoomId: string){
+		this.addGame(gameRoomId, new Game())
+	}
+
+	addGame(gameRoomId: string, game: Game){
+		if( !this.gameList[gameRoomId] ){
+			this.gameList[gameRoomId] = game;
+		}
+	}
+
     getGame(gameRoomId:string){
         return this.gameList[gameRoomId];
     }
