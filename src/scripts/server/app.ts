@@ -12,7 +12,7 @@ import {PlayerCollection} from '../modules/PlayerCollection';
 import {GameCollection} from '../modules/GameCollection';
 
 // Server
-let port = 8080;
+export const port = 8080;
 let server = http.createServer(function(req, res) {
 	fs.readFile('../../view/index.html', 'utf-8', function(error, content) {
         res.writeHead(200, {"Content-Type": "text/html"});
@@ -234,5 +234,3 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
 });
 
 server.listen(port);
-
-export {port}
