@@ -13,6 +13,13 @@ export class Player implements PlayerInterface {
 		this._pv		= pv;
     }
 
+	losePV(nbPV = 1){
+		this.pv -= nbPV
+	}
+
+	winPv(nbPV = 1){
+		this.pv += nbPV
+	}
 
 	addCard(card: Card|Array<Card>){
 		this.hand.addCards(card)
