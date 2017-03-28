@@ -1,3 +1,5 @@
+export const DEFAULT_NB_PLAYER = 4;
+
 export interface BetInterface {
     player:PlayerInterface;
     bet:number;

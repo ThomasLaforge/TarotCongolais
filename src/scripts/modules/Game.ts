@@ -9,6 +9,7 @@ import {Turn} from './Turn';
 import {History} from './History';
 import {GameAction, ActionHistory} from './ActionHistory';
 import * as Utils from './utils';
+import {DEFAULT_NB_PLAYER} from './TarotCongolais'
 
 export class Game {
 	
@@ -20,11 +21,7 @@ export class Game {
 	private _turn:Turn;
 	private _actualTrick:Trick;
 
-    constructor(players:PlayerCollection){
-		this.init(players);
-    }
-
-	init(players:PlayerCollection){
+    constructor(players = new PlayerCollection(DEFAULT_NB_PLAYER)){
         this.timer            = new Timer();
 		this.history          = new History();
         this.players          = players;
