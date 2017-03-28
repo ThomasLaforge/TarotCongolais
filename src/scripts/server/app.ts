@@ -72,7 +72,8 @@ interface GameData {
 // init
 let current_pc = new PlayerCollection();
 let GC = new GameCollection();
-let room_counter = 0;
+let startRoomCounterValue = 1;
+let roomCounter = startRoomCounterValue;
 
 io.sockets.on('connection', function (socket: SocketTarotInterface) {
     // Init extended socket
@@ -107,64 +108,74 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         else{
             socket.join('lobby');
             let newPlayer = new Player(pseudo);
-            socket.player = newPlayer
-            console.log('new player connected', pseudo)
-            socket.emit('player_added')
+            socket.player = newPlayer;
+            console.log('new player connected', pseudo);
+            socket.emit('player_added');
         }
     })
 
     // connect on game room by matchmaking
     socket.on('enter_in_game_by_matchmaking', () => {
-        // get game room id 
-        let gameRoomId: string;
-
-        if(gameRoomId){
-            // Auto connection on board of room
-            console.log('new player on board', socket.player.username)
-            socket.to(gameRoomId).emit('pseudo_accepted');
-            io.in(gameRoomId).emit('new_player', socket.player.username)        
+        // get game room id by auto matchmaking
+        let gameRoomId = GC.getRandomAndNotFullGameRoomId();
+        if(!gameRoomId) {
+            roomCounter++; gameRoomId = "game-" + roomCounter;
+            // Check collision on room counter
+            while(!GC.getGame(gameRoomId)){
+                roomCounter++; gameRoomId = "game-" + roomCounter;
+                GC.addNewGame(gameRoomId);
+            }
         }
-        else {
-            console.log('new player complete the game. Game will start')
-            room_counter++;
-            let newGame = new Game(current_pc);
-            let gameData = {};
-            io.emit('start_game', gameData)
+
+        let game = GC.getGame(gameRoomId);
+        game.addPlayer(socket.player);
+        
+        socket.gameRoomId = gameRoomId;
+        socket.join( gameRoomId );
+
+        socket.emit('enter_gameroom', gameRoomId);
+        socket.broadcast.to(gameRoomId).emit('gameroom_new_player', socket.player);
+
+        if(game.isFull()){
+            io.in(gameRoomId).emit('game_is_full', gameRoomId);
         }
     })
 
     // connect on game room selecting a game
     socket.on('enter_in_game_selecting_a_game', (gameRoomId: string) => {
         let game = GC.getGame(gameRoomId) 
-        if( game.isNotFull() ){
-            game.addPlayer(socket.player);
-            // emit to player add on this game
-            // emit others players that this player enter the game and update state of game
+        if( game ) {
+            if( game.isNotFull() ){
+                game.addPlayer(socket.player);
+                
+                socket.gameRoomId = gameRoomId
+                socket.join( gameRoomId );
+                
+                socket.emit('enter_gameroom', gameRoomId)            
+                socket.broadcast.to(gameRoomId).emit('gameroom_new_player', socket.player)            
+            }
+            else{
+                socket.emit('game_is_already_full', gameRoomId)
+            }
         }
         else{
-            // emit to player that game is already full
+            socket.emit('try_to_join_undefined_gameroom', gameRoomId)
         }
     })
 
     // connect on game room creating a game
     socket.on('enter_in_game_creating_a_game', () => {
-        // Connect on room
-        room_counter++;
-        let gameRoomId = 'game-' + room_counter;
+        roomCounter++;
+        let gameRoomId = 'game-' + roomCounter;
         socket.gameRoomId = gameRoomId;
         socket.join( gameRoomId );
 
-        // enter player on this game
-        // update lobby list
+        socket.broadcast.emit('lobby_update-list');
     })
 
     /**
     * Infos
     */
-    
-    socket.on('log_ok', () => {
-         socket.emit('logOk')
-    })
 
     // Pseudos
     socket.on('log-pseudo-list', () => {
