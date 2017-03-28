@@ -1,5 +1,6 @@
 import {Game} from './Game'
 import {LobbyList} from './TarotCongolais'
+import * as _ from 'lodash'
 
 export class GameCollection {
 
@@ -12,6 +13,15 @@ export class GameCollection {
     getGame(gameRoomId:string){
         return this.gameList[gameRoomId];
     }
+
+	getRandomAndNotFullGameRoomId(){
+		let gameRoomId: string;
+		
+		return _.sample(Object.keys(this.gameList).filter( (key: string) => {
+			return this.gameList[key].isNotFull();
+		}));
+
+	}
 
 	getLobbyList( withFullGames: boolean = true, withPrivateGames: boolean = true ): Array<LobbyList>{
 		let lobbyList: Array<LobbyList> = [];
