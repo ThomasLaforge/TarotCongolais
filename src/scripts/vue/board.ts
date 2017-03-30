@@ -43,11 +43,6 @@ export const board = {
     sockets:{
         start_game(gameData: any){
             
-        },
-        isLoggedIn(isOnGame: boolean){
-            if(!isOnGame){
-                this.$router.push({path: '/login'});  
-            }
         }
 	},
 	methods: {
@@ -55,5 +50,6 @@ export const board = {
 	},
     mounted: function(){
         this.$socket.emit('isLoggedIn')
+        console.log('player on table')
     }
 }
