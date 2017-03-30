@@ -28,7 +28,7 @@ export class Game {
 		this.deck             = new Deck();
 		this.turnCards		  = Math.floor(this.deck.length() / this.getNbMaxPlayer());
 		this.actualTrick 	  = new Trick(this.players);
-		this.dealCards();
+		// this.dealCards();
 		this.turn = new Turn(this.getFirstPlayer(), this.turnCards, this.players);		
 	}
 
