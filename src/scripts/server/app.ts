@@ -73,7 +73,7 @@ interface GameData {
 let current_pc = new PlayerCollection();
 let GC = new GameCollection();
 let startRoomCounterValue = 1;
-let roomCounter = startRoomCounterValue;
+let roomCounter = startRoomCounterValue - 1;
 
 io.sockets.on('connection', function (socket: SocketTarotInterface) {
     // Init extended socket
@@ -115,17 +115,20 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     })
 
     // connect on game room by matchmaking
-    socket.on('enter_in_game_by_matchmaking', () => {
+    socket.on('lobby-auto', () => {
         // get game room id by auto matchmaking
         let gameRoomId = GC.getRandomAndNotFullGameRoomId();
+        console.log('getRandomAndNotFullGameRoomId : ' + gameRoomId)
         if(!gameRoomId) {
-            roomCounter++; gameRoomId = "game-" + roomCounter;
+            gameRoomId = "game-" + roomCounter;
             // Check collision on room counter
             while(!GC.getGame(gameRoomId)){
                 roomCounter++; gameRoomId = "game-" + roomCounter;
                 GC.addNewGame(gameRoomId);
             }
         }
+
+        console.log('lobby-auto : ' + gameRoomId + ', ' + socket.player.username)
 
         let game = GC.getGame(gameRoomId);
         game.addPlayer(socket.player);
@@ -142,7 +145,8 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     })
 
     // connect on game room selecting a game
-    socket.on('enter_in_game_selecting_a_game', (gameRoomId: string) => {
+    socket.on('lobby-join', (gameRoomId: string) => {
+        console.log('lobby-join : ' + gameRoomId + ', ' + socket.player.username)
         let game = GC.getGame(gameRoomId) 
         if( game ) {
             if( game.isNotFull() ){
@@ -151,7 +155,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
                 socket.gameRoomId = gameRoomId
                 socket.join( gameRoomId );
                 
-                socket.emit('enter_gameroom', gameRoomId)            
+                socket.emit('enter_gameroom', gameRoomId)
                 socket.broadcast.to(gameRoomId).emit('gameroom_new_player', socket.player)            
             }
             else{
@@ -164,12 +168,16 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     })
 
     // connect on game room creating a game
-    socket.on('enter_in_game_creating_a_game', () => {
+    socket.on('lobby-create', () => {
         roomCounter++;
         let gameRoomId = 'game-' + roomCounter;
+        console.log('lobby-create : ' + gameRoomId + ', ' + socket.player.username)
+        
+        GC.addNewGame(gameRoomId);
         socket.gameRoomId = gameRoomId;
         socket.join( gameRoomId );
 
+        socket.emit('enter_gameroom', gameRoomId)
         socket.broadcast.emit('lobby_update-list');
     })
 
