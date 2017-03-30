@@ -204,6 +204,14 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
 	});
 
     /**
+    * Lobby
+    */
+
+	socket.on('update_lobby_list', function (msg: string) {
+        io.emit('update_lobby_list', GC.getLobbyList());
+    });
+
+    /**
     * Game states
     */
 
