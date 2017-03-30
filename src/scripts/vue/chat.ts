@@ -5,11 +5,11 @@ let template = `
     <h2>Chat</h2>
     <div class="chat">
         <div class="chat-line" v-for="chatLine in chatHistory">
-            <div class="chat-line-pseudo">{{ chatLine.pseudo }} : </div>
+            <div class="chat-line-pseudo">{{ chatLine.pseudo }} :&nbsp;</div>
             <div class="chat-line-message">{{ chatLine.msg }}</div>
         </div>
     </div>
-    <div class="chat-new-msg">
+    <div class="chat-form-msg">
         <input class="chat-new-msg-input" type="text" v-model="newMessage" />
         <button class="chat-new-msg-button" @click="sendMsg">Send</button>
     </div>

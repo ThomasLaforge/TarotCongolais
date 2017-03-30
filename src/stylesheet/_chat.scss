@@ -2,23 +2,31 @@
     .chat {
         border: 1px black solid;
         width: 100%;
-        padding: 10px 0;
+        padding: 0;
+        height: 150px;
+        overflow-y: auto;
     }
     .chat-line {
         width: 100%;
         min-height: 20px;
         display: flex;
         .chat-line-pseudo {
-            font: bold;
+            font-weight: bold;
         }
         .chat-line-message {
             flex: 1;
         }
     }
-    .chat-new-msg-input {
-        width: 80%;
-    }
-    .chat-new-msg-button {
-        width: 18%;
+    .chat-form-msg {
+        margin-top: 10px;
+        width: 100%;
+        display: flex;
+        .chat-new-msg-input {
+            flex: 1;
+        }
+        .chat-new-msg-button {
+            min-width: 60px;
+            margin-left: 10px;
+        }
     }
 }
