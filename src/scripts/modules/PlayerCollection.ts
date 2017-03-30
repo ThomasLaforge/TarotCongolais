@@ -40,7 +40,9 @@ export class PlayerCollection {
     }
 
     getPlayers():Array<Player> {
-        return this.arrPlayers;
+        return this.arrPlayers.filter((p:Player) => {
+            return p
+        });
     }
 
     getNames():Array<string> {
@@ -62,7 +64,7 @@ export class PlayerCollection {
     }
 
     getNbPlayer() {
-        return this.arrPlayers.length;
+        return this.getPlayers().length;
     }
 
     remove(p: Player) {
@@ -111,7 +113,7 @@ export class PlayerCollection {
     }
 
     isFull(): boolean {
-        return this.arrPlayers.length >= this.maxNbPlayer
+        return this.getPlayers().length >= this.maxNbPlayer
     }
 
     areAllPlayersReady(): boolean {
