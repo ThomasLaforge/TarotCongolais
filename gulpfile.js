@@ -78,7 +78,7 @@ gulp.task('js-libs', () => {
 gulp.task('browserSync', function() {
     browserSync({
         port: 3000,
-        files: ['**/*.html', '**/*.css', '**/*.js'],
+        files: ['**/*.html', '**/*.js'],
         injectChanges: true,
         notify: true,
         reloadDelay: 0,
