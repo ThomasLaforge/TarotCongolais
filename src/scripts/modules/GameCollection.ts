@@ -41,9 +41,9 @@ export class GameCollection {
 
 			if( ( withFullGames || game.isNotFull() ) && withPrivateGames ){
 				lobbyList.push({
-					gameRoomId: gameRoomId,
-					nbMaxPlayer: game.getNbMaxPlayer(),
-					nbPlayer: game.getNbPlayer()
+					name: gameRoomId,
+					maxPlayers: game.getNbMaxPlayer(),
+					playerOn: game.getNbPlayer()
 				})
 			}
 		}

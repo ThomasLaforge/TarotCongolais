@@ -61,9 +61,9 @@ export interface ActionHistoryInterface {
 // ------------- //
 
 export interface LobbyList {
-    gameRoomId: string,
-    nbPlayer: number, 
-    nbMaxPlayer: number 
+    name: string,
+    maxPlayers: number, 
+    playerOn: number 
 }
 
 // ------------------------- //
