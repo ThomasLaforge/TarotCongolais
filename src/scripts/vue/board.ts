@@ -2,6 +2,8 @@ import { chat } from './chat'
 
 let template = `
 <div>
+    <h2>{{gameroomid}}</h2>
+
     <div class="boardgame">
         <div id="cards-zone-top" class="cards-zone cards-zone-top">
             <div class="card-in-cards-zone" v-for="card in hands.top" />
@@ -27,6 +29,7 @@ let template = `
 
 export const board = {
     template : template,
+    props : [ 'gameroomid' ],
     data: function(){
         return {
             hands : {

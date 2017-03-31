@@ -12,7 +12,7 @@ import { lobby } from '../vue/lobby'
 const routes = [
   { path: '/', component: connection },
   { path: '/login', component: connection },
-  { path: '/board', component: board },
+  { path: '/board/:gameroomid', component: board, props: true },
   { path: '/lobby', component: lobby },
 ]
 

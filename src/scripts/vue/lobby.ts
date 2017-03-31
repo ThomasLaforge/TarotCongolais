@@ -46,7 +46,7 @@ export const lobby = {
     },
     sockets: {
         enter_gameroom(gameRoomId:string){
-            this.$router.push({path: '/board'});
+            this.$router.push({path: '/board/' + gameRoomId });
         },
         update_lobby_list(list){
             console.log('update_list', list)
