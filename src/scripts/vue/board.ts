@@ -54,5 +54,13 @@ export const board = {
     mounted: function(){
         this.$socket.emit('isLoggedIn')
         console.log('player on table')
+    },
+    beforeRouteLeave (to, from, next) {
+        // called when the route that renders this component is about to
+        // be navigated away from.
+        // has access to `this` component instance.
+        console.log('can\'t leave board')
+        alert('you can\'t leave the board')
+        next(false)
     }
 }
