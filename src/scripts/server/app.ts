@@ -120,17 +120,19 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     */
 
     // Pseudos
-    socket.on('log-pseudo-list', () => {
-        console.log('pseudo list :');
-        socketIOTarot.getAllPseudo().forEach( (p: string) => {
-            console.log(p);
-        })  
+    socket.on('get_player_list', () => {
+        socket.emit('getAllPlayer', socketIOTarot.getAllPseudo());
     })
     
     // Player is connected on site
     socket.on('isLoggedIn', () => {
         let isLoggedIn = socket.player ? true : false;
         socket.emit('isLoggedIn', isLoggedIn);
+    })
+
+    // get game colleciton
+    socket.on('get_game_collection', () => {
+        socket.emit('getGameCollection', GC);
     })
 
     /**
