@@ -8,6 +8,7 @@ let colors = require('colors');
 // Modules
 import {Game} from '../modules/Game';
 import {Player} from '../modules/Player';
+import {Bet}    from '../modules/Bet';
 import {PlayerCollection} from '../modules/PlayerCollection';
 import {GameCollection} from '../modules/GameCollection';
 
@@ -114,7 +115,45 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         }
     })
 
-    // connect on game room by matchmaking
+    /**
+    * Infos
+    */
+
+    // Pseudos
+    socket.on('log-pseudo-list', () => {
+        console.log('pseudo list :');
+        socketIOTarot.getAllPseudo().forEach( (p: string) => {
+            console.log(p);
+        })  
+    })
+    
+    // Player is connected on site
+    socket.on('isLoggedIn', () => {
+        let isLoggedIn = socket.player ? true : false;
+        socket.emit('isLoggedIn', isLoggedIn);
+    })
+
+    /**
+    * Chat
+    */
+
+	socket.on('new_game_message', function (msg: string) {
+		io.to(socket.gameRoomId).emit('updatechat', { pseudo : socket.player.username, msg: msg});  
+	});
+
+    socket.on('new_lobby_message', function (msg: string) {
+		io.to('lobby').emit('updatechat', { pseudo : socket.player.username, msg: msg});  
+	});
+
+    /**
+    * Lobby
+    */
+
+	socket.on('update_lobby_list', function (msg: string) {
+        io.emit('update_lobby_list', GC.getLobbyList());
+    });
+
+        // connect on game room by matchmaking
     socket.on('lobby-auto', () => {
         // get game room id by auto matchmaking
         let gameRoomId = GC.getRandomAndNotFullGameRoomId();
@@ -182,44 +221,6 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     })
 
     /**
-    * Infos
-    */
-
-    // Pseudos
-    socket.on('log-pseudo-list', () => {
-        console.log('pseudo list :');
-        socketIOTarot.getAllPseudo().forEach( (p: string) => {
-            console.log(p);
-        })  
-    })
-    
-    // Player is connected on site
-    socket.on('isLoggedIn', () => {
-        let isLoggedIn = socket.player ? true : false;
-        socket.emit('isLoggedIn', isLoggedIn);
-    })
-
-    /**
-    * Chat
-    */
-
-	socket.on('new_game_message', function (msg: string) {
-		io.to(socket.gameRoomId).emit('updatechat', { pseudo : socket.player.username, msg: msg});  
-	});
-
-    socket.on('new_lobby_message', function (msg: string) {
-		io.to('lobby').emit('updatechat', { pseudo : socket.player.username, msg: msg});  
-	});
-
-    /**
-    * Lobby
-    */
-
-	socket.on('update_lobby_list', function (msg: string) {
-        io.emit('update_lobby_list', GC.getLobbyList());
-    });
-
-    /**
     * Game states
     */
 
@@ -237,8 +238,12 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         }
     })
 
-    socket.on('player_bet', (data:any) => {
-        console.log('player_bet', data)
+    socket.on('player_bet', (playerBet: number) => {
+        console.log('player_bet', playerBet)
+        let g = GC.getGame(socket.gameRoomId);
+        if(g){
+            g.addBet( new Bet(socket.player, playerBet) )
+        }
     })
 
     socket.on('player_not_betting', (data:any) => {
