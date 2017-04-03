@@ -3,6 +3,7 @@ import {Player} from './Player';
 import {Card} from './Card';
 import {PlayerCollection} from './PlayerCollection';
 import {Play} from './Play';
+import {Bet} from './Bet';
 import {Timer} from './Timer';
 import {Trick} from './Trick';
 import {Turn} from './Turn';
@@ -87,6 +88,10 @@ export class Game {
 	}
 	areAllPlayersReady(){
 		this.players.areAllPlayersReady()
+	}
+
+	addBet(bet: Bet){
+		this.turn.addbet(bet)
 	}
 
 	/**
