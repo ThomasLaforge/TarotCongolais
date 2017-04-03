@@ -18,6 +18,7 @@ export class PlayerCollection {
 
     addPlayer(p: Player){
         if( !this.isOnCollection(p) ) {
+            // Todo: Check if collection not already full
             let freeIndexes: Array<number> = [];
             this.arrPlayers.map((elt, index) => {
                 if (!elt) {
@@ -26,6 +27,9 @@ export class PlayerCollection {
             } );
             let randomFreeIndex = freeIndexes[Math.floor(Math.random() * freeIndexes.length)];
             this.arrPlayers[randomFreeIndex] = p;
+        }
+        else{
+            console.log('player already in collection')
         }
     }
 
@@ -40,6 +44,7 @@ export class PlayerCollection {
     }
 
     getPlayers():Array<Player> {
+        console.log('players', this.arrPlayers);
         return this.arrPlayers.filter((p:Player) => {
             return p
         });
@@ -48,7 +53,7 @@ export class PlayerCollection {
     getNames():Array<string> {
         let res:Array<string> = [];
 
-        this.arrPlayers.forEach( p => {
+        this.getPlayers().forEach( p => {
             res.push(p.username);
         });
 
@@ -56,7 +61,7 @@ export class PlayerCollection {
     }
 
     getFirstPlayer() {
-        return this.arrPlayers[ this.indexFirstPlayer ];
+        return this.getPlayers()[ this.indexFirstPlayer ];
     }
 
     changeFirstPlayer() {
