@@ -14,6 +14,14 @@ body {
     padding-bottom: 50px;
 }
 
+hr {
+    margin : 10px 0;
+}
+
+.game-list-elt-selected {
+    background-color: grey;
+}
+
 // .boardgame {
 //     position: relative;
 //     margin: 50px auto;
