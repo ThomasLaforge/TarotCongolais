@@ -77,12 +77,12 @@ export const board = {
         // };
     },
     beforeRouteLeave(to:string, from:string, next:Function) {
-        next();
         // called when the route that renders this component is about to
         // be navigated away from.
         // => refresh and navigate (back or after)
-        // console.log('beforeRouteLeave', to, from)
+        console.log('beforeRouteLeave', to, from)
         // let answer = confirm('Are you sure to leave the game?');
         // next(answer)
+        next(false)
     }
 }
