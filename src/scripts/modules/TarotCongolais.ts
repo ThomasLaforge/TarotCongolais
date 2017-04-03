@@ -66,6 +66,25 @@ export interface LobbyListElt {
     playerOn: number 
 }
 
+export interface VueBoardData {
+    hands : {
+        top: Array<number>,
+        me: Array<number>,
+        left: Array<number>,
+        right: Array<number>
+    }
+}
+
+export interface VueChatData {
+    chatHistory: Array<string>,
+    newMessage: string
+}
+
+export interface VueLobbyData {
+    selectedGameRoomId: string,
+    gameList : Array<LobbyListElt>
+}
+
 // ------------------------- //
 // Socket message definition //
 // ------------------------- //
