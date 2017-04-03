@@ -1,9 +1,11 @@
 import { chat } from './chat'
-import { VueBoardData } from '../modules/TarotCongolais'
+import { VueBoardData, GameState } from '../modules/TarotCongolais'
 
 let template = `
 <div>
     <h2>{{gameroomid}}</h2>
+
+    State: {{ gameState }}
 
     <div class="boardgame">
         <div id="cards-zone-top" class="cards-zone cards-zone-top">
@@ -38,7 +40,8 @@ export const board = {
                 me: [],
                 left: [],
                 right: []
-            }
+            },
+            state : GameState[GameState.WaitingPlayer]
         }
     },
     components : {

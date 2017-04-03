@@ -1,5 +1,11 @@
 export const DEFAULT_NB_PLAYER = 4;
 
+export enum GameState {
+    WaitingPlayer,
+    WaitingPlayerToBeReady,
+    InGame
+}
+
 export interface BetInterface {
     player:PlayerInterface;
     bet:number;
@@ -72,7 +78,8 @@ export interface VueBoardData {
         me: Array<number>,
         left: Array<number>,
         right: Array<number>
-    }
+    },
+    state: string
 }
 
 export interface VueChatData {
