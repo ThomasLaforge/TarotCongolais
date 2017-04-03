@@ -9,6 +9,7 @@ Vue.use(VueSocketio, 'http://localhost:' + port);
 import { board } from '../vue/board' 
 import { connection } from '../vue/connection' 
 import { lobby } from '../vue/lobby' 
+import { toolbox } from '../vue/toolbox' 
 
 const routes = [
   { path: '/', component: connection },
@@ -23,6 +24,9 @@ const router = new VueRouter({
 
 let app = new Vue({
     el: '#app',
+    components : {
+        toolbox
+    },
 		router,
 		sockets:{
       isLoggedIn(isOnGame: boolean){
