@@ -1,4 +1,4 @@
-import {port} from '../server/app'
+import {port} from '../modules/Config'
 import VueSocketio from 'vue-socket.io';
 // Vue.use(VueSocketio, 'http://192.168.0.28:8080');
 Vue.use(VueSocketio, 'http://localhost:' + port);

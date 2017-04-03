@@ -8,12 +8,12 @@ let colors = require('colors');
 // Modules
 import {Game} from '../modules/Game';
 import {Player} from '../modules/Player';
+import {port} from '../modules/Config';
 import {Bet}    from '../modules/Bet';
 import {PlayerCollection} from '../modules/PlayerCollection';
 import {GameCollection} from '../modules/GameCollection';
 
 // Server
-export const port = 8080;
 let server = http.createServer(function(req, res) {
 	fs.readFile('../../view/index.html', 'utf-8', function(error, content) {
         res.writeHead(200, {"Content-Type": "text/html"});
