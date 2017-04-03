@@ -177,10 +177,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
 
         socket.emit('enter_gameroom', gameRoomId);
         socket.broadcast.to(gameRoomId).emit('gameroom_new_player', socket.player);
-
-        if(game.isFull()){
-            io.in(gameRoomId).emit('game_is_full', gameRoomId);
-        }
+        io.emit('update_lobby_list', GC.getLobbyList());
     })
 
     // connect on game room selecting a game
@@ -196,6 +193,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
                 
                 socket.emit('enter_gameroom', gameRoomId)
                 socket.broadcast.to(gameRoomId).emit('gameroom_new_player', socket.player)            
+                io.emit('update_lobby_list', GC.getLobbyList());             
             }
             else{
                 socket.emit('game_is_already_full', gameRoomId)
@@ -204,6 +202,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         else{
             socket.emit('try_to_join_undefined_gameroom', gameRoomId)
         }
+        
     })
 
     // connect on game room creating a game
@@ -218,6 +217,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
 
         socket.emit('enter_gameroom', gameRoomId)
         socket.broadcast.emit('lobby_update-list');
+        io.emit('update_lobby_list', GC.getLobbyList());     
     })
 
     /**
