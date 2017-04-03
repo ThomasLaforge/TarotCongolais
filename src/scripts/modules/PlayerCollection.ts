@@ -44,7 +44,6 @@ export class PlayerCollection {
     }
 
     getPlayers():Array<Player> {
-        console.log('players', this.arrPlayers);
         return this.arrPlayers.filter((p:Player) => {
             return p
         });
