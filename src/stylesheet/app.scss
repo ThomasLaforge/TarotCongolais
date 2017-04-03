@@ -14,56 +14,56 @@ body {
     padding-bottom: 50px;
 }
 
-.boardgame {
-    position: relative;
-    margin: 50px auto;
-    width: 1200px;
-    min-height: 650px;
-    height: 650px;
-    background-color: green;
-}
+// .boardgame {
+//     position: relative;
+//     margin: 50px auto;
+//     width: 1200px;
+//     min-height: 650px;
+//     height: 650px;
+//     background-color: green;
+// }
 
-.cards-zone {
-    text-align: center;
-    border: 2px solid yellow;
-    position: absolute;
-    background-color: #aaa;
-    min-height: 100px;
-    height: 100px;
-    width: 300px;
-}
+// .cards-zone {
+//     text-align: center;
+//     border: 2px solid yellow;
+//     position: absolute;
+//     background-color: #aaa;
+//     min-height: 100px;
+//     height: 100px;
+//     width: 300px;
+// }
 
-.cards-zone-me {
-    top: 500px;
-    left: 450px;
-    @include transform(rotate(180deg));
-}
+// .cards-zone-me {
+//     top: 500px;
+//     left: 450px;
+//     @include transform(rotate(180deg));
+// }
 
-.cards-zone-left {
-    top: 300px;
-    left: 50px;
-    @include transform(rotate(90deg));
-}
+// .cards-zone-left {
+//     top: 300px;
+//     left: 50px;
+//     @include transform(rotate(90deg));
+// }
 
-.cards-zone-top {
-    top: 100px;
-    left: 450px;
-}
+// .cards-zone-top {
+//     top: 100px;
+//     left: 450px;
+// }
 
-.cards-zone-right {
-    top: 300px;
-    left: 850px;
-    @include transform(rotate(-90deg));
-}
+// .cards-zone-right {
+//     top: 300px;
+//     left: 850px;
+//     @include transform(rotate(-90deg));
+// }
 
-.card-in-cards-zone {
-    height: 100px;
-    min-height: 100px;
-    width: 50px;
-    display: inline-block;
-    background-image: url('../img/dos_carte.jpg');
-    /* @include transform(scaleY(1.25)); */
-}
+// .card-in-cards-zone {
+//     height: 100px;
+//     min-height: 100px;
+//     width: 50px;
+//     display: inline-block;
+//     background-image: url('../img/dos_carte.jpg');
+//     /* @include transform(scaleY(1.25)); */
+// }
 
 // $startAngle : 0;
 // $spaceAngle : 0;
