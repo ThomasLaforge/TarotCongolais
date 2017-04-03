@@ -50,29 +50,39 @@ export const board = {
     sockets:{
         start_game(gameData: any){
             
+        },
+        isOnGame(isOnGame: boolean){
+            if(!isOnGame){
+                this.$router.push({path: '/login'});
+            }
         }
 	},
 	methods: {
 
 	},
     mounted: function(){
+        // Checking integrity => Fuck hackers
         this.$socket.emit('isLoggedIn')
-        window.onbeforeunload = function (e) {
-            e = e || window.event;
-            // For IE and Firefox prior to version 4
-            if (e) {
-                e.returnValue = 'Any string';
-            }
-            // For Safari
-            return 'Any string';
-        };
+        this.$socket.emit('isOnGame', this.gameroomid)        
+        
+        // Closing tab or refreshing tab
+        // window.onbeforeunload = function (e) {
+        //     e = e || window.event;
+        //     // For IE and Firefox prior to version 4
+        //     if (e) {
+        //         e.returnValue = 'Any string';
+        //     }
+        //     // For Safari
+        //     return 'Any string';
+        // };
     },
     beforeRouteLeave(to:string, from:string, next:Function) {
+        next();
         // called when the route that renders this component is about to
         // be navigated away from.
-        // has access to `this` component instance.
-        console.log('beforeRouteLeave', to, from)
-        let answer = confirm('Are you sure to leave the game?');
-        next(answer)
+        // => refresh and navigate (back or after)
+        // console.log('beforeRouteLeave', to, from)
+        // let answer = confirm('Are you sure to leave the game?');
+        // next(answer)
     }
 }

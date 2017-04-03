@@ -130,6 +130,13 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         socket.emit('isLoggedIn', isLoggedIn);
     })
 
+    // Player is connected on site
+    socket.on('isOnGame', (gameRoomId: string) => {
+        let isOnGame = GC.getGame(gameRoomId) && GC.getGame(gameRoomId).players.isOnCollection(socket.player);
+        console.log('is on game : ', isOnGame, !!GC.getGame(gameRoomId), !!GC.getGame(gameRoomId) ? GC.getGame(gameRoomId).players.isOnCollection(socket.player) : 'false')
+        socket.emit('isOnGame', isOnGame);
+    })
+
     // get game colleciton
     socket.on('get_game_collection', () => {
         socket.emit('getGameCollection', GC);
