@@ -1,5 +1,5 @@
 import {Game} from './Game'
-import {LobbyList} from './TarotCongolais'
+import {LobbyListElt} from './TarotCongolais'
 import * as _ from 'lodash'
 
 export class GameCollection {
@@ -33,8 +33,8 @@ export class GameCollection {
 
 	}
 
-	getLobbyList( withFullGames: boolean = true, withPrivateGames: boolean = true ): Array<LobbyList>{
-		let lobbyList: Array<LobbyList> = [];
+	getLobbyList( withFullGames: boolean = true, withPrivateGames: boolean = true ): Array<LobbyListElt>{
+		let lobbyList: Array<LobbyListElt> = [];
 
 		for(var gameRoomId in this.gameList) {
 			let game = this.gameList[gameRoomId];

@@ -48,7 +48,7 @@ export const lobby = {
         enter_gameroom(gameRoomId:string){
             this.$router.push({path: '/board/' + gameRoomId });
         },
-        update_lobby_list(list){
+        update_lobby_list(list: Array<LobbyListElt>){
             console.log('update_list', list)
             this.gameList = list;
         }

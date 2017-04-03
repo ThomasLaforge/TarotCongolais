@@ -60,7 +60,7 @@ export interface ActionHistoryInterface {
 // UI interfaces //
 // ------------- //
 
-export interface LobbyList {
+export interface LobbyListElt {
     name: string,
     maxPlayers: number, 
     playerOn: number 
