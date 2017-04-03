@@ -212,6 +212,8 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         console.log('lobby-create : ' + gameRoomId + ', ' + socket.player.username)
         
         GC.addNewGame(gameRoomId);
+        GC.getGame(gameRoomId).addPlayer(socket.player);
+        
         socket.gameRoomId = gameRoomId;
         socket.join( gameRoomId );
 
