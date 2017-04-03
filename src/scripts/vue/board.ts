@@ -1,4 +1,5 @@
 import { chat } from './chat'
+import { VueBoardData } from '../modules/TarotCongolais'
 
 let template = `
 <div>
@@ -30,7 +31,7 @@ let template = `
 export const board = {
     template : template,
     props : [ 'gameroomid' ],
-    data: function(){
+    data: function(): VueBoardData {
         return {
             hands : {
                 top: [],
@@ -53,14 +54,22 @@ export const board = {
 	},
     mounted: function(){
         this.$socket.emit('isLoggedIn')
-        console.log('player on table')
+        window.onbeforeunload = function (e) {
+            e = e || window.event;
+            // For IE and Firefox prior to version 4
+            if (e) {
+                e.returnValue = 'Any string';
+            }
+            // For Safari
+            return 'Any string';
+        };
     },
-    beforeRouteLeave (to, from, next) {
+    beforeRouteLeave(to:string, from:string, next:Function) {
         // called when the route that renders this component is about to
         // be navigated away from.
         // has access to `this` component instance.
-        console.log('can\'t leave board')
-        alert('you can\'t leave the board')
-        next(false)
+        console.log('beforeRouteLeave', to, from)
+        let answer = confirm('Are you sure to leave the game?');
+        next(answer)
     }
 }
