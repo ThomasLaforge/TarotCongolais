@@ -29,6 +29,7 @@
     "gulp-typescript": "^3.1.4",
     "merge2": "^1.0.2",
     "nodemon": "^1.9.2",
+    "npm-run-all": "^4.0.2",
     "run-sequence": "^1.2.2",
     "socket.io-client": "^1.7.3",
     "tsify": "^3.0.1",
@@ -37,8 +38,9 @@
   },
   "scripts": {
     "client": "gulp",
-    "server-watch" : "tsc -w",
-    "server": "nodemon dist/scripts/server/app.js --watch dist/scripts/**/*.js"
+    "server-compile": "tsc -w",
+    "server-watch": "nodemon dist/scripts/server/app.js --watch dist/scripts/**/*.js",
+    "server": "run-p server-compile server-watch"
   },
   "author": "",
   "license": "ISC"
