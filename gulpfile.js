@@ -86,14 +86,15 @@ gulp.task('browserSync', function() {
             baseDir: 'dist',
             index: 'index.html'
         },
-        socket: {}
+        socket: {},
+        ghostMode: false
     });
 })
 
 gulp.task('build', ['scripts-client', 'compass', 'img', 'html', 'js-libs']);
 
 gulp.task('serve', function() {
-    runSequence('build', /*'browserSync',*/ 'watch');
+    runSequence('build', 'browserSync', 'watch');
 });
 
 gulp.task('default', ['serve']);
