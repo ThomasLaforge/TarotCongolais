@@ -1,4 +1,4 @@
-export const DEFAULT_NB_PLAYER = 4;
+export const DEFAULT_NB_PLAYER = 2;
 
 export enum GameState {
     WaitingPlayer,
@@ -79,7 +79,7 @@ export interface VueBoardData {
         left: Array<number>,
         right: Array<number>
     },
-    state: string
+    gameState: string
 }
 
 export interface VueChatData {

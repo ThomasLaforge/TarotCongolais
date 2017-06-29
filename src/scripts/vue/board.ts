@@ -41,13 +41,13 @@ export const board = {
                 left: [],
                 right: []
             },
-            state : GameState[GameState.WaitingPlayer]
+            gameState : GameState[GameState.WaitingPlayer]
         }
     },
     components : {
         chat
     },
-    sockets:{
+    sockets : {
         start_game(gameData: any){
             
         },
@@ -55,6 +55,9 @@ export const board = {
             if(!isOnGame){
                 this.$router.push({path: '/login'});
             }
+        },
+        game_is_full(){
+            this.gameState = GameState[GameState.InGame]
         }
 	},
 	methods: {
@@ -63,18 +66,7 @@ export const board = {
     mounted: function(){
         // Checking integrity => Fuck hackers
         this.$socket.emit('isLoggedIn')
-        this.$socket.emit('isOnGame', this.gameroomid)        
-        
-        // Closing tab or refreshing tab
-        // window.onbeforeunload = function (e) {
-        //     e = e || window.event;
-        //     // For IE and Firefox prior to version 4
-        //     if (e) {
-        //         e.returnValue = 'Any string';
-        //     }
-        //     // For Safari
-        //     return 'Any string';
-        // };
+        this.$socket.emit('isOnGame', this.gameroomid)
     },
     beforeRouteLeave(to:string, from:string, next:Function) {
         // called when the route that renders this component is about to
@@ -83,6 +75,10 @@ export const board = {
         console.log('beforeRouteLeave', to, from)
         // let answer = confirm('Are you sure to leave the game?');
         // next(answer)
-        next(false)
+
+        // never leave
+        // next(false)
+        
+        next(true)
     }
 }

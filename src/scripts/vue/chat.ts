@@ -26,11 +26,14 @@ export const chat = {
         }
     },
     sockets : {
-        updatechat : function(chatLine : ChatLine){
+        updatechat(chatLine : ChatLine){
             this.chatHistory.push(chatLine);
         },
-        new_player(pseudo: string){
-            this.chatHistory.push({ pseudo : 'Admin', msg: 'Un nouveau joueur vient de rentrer à la table : ' + pseudo})    
+        player_connected(pseudo){
+            this.chatHistory.push({ pseudo : 'Admin', msg: 'Un nouveau joueur vient de se connecter : ' + pseudo})    
+        },
+        player_added(pseudo: string){
+            this.chatHistory.push({ pseudo : 'Admin', msg: 'Un nouveau joueur vient de se connecter : ' + pseudo})                
         }
     },
     methods : {

@@ -22,7 +22,7 @@ let server = http.createServer(function(req, res) {
 });
 
 import {SocketIOTarot, SocketTarot, SocketTarotInterface} from './SocketTarot'
-let io:SocketIO.Server = require('socket.io').listen(server);
+let io:SocketIO.Server = require('socket.io').listen(server);632.63
 let socketIOTarot = new SocketIOTarot(io); 
 
 // reset console
@@ -112,6 +112,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
             socket.player = newPlayer;
             console.log('new player connected', pseudo);
             socket.emit('player_added');
+            io.to('lobby').emit('player_added', socket.player.username);
         }
     })
 
@@ -187,6 +188,9 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         socket.emit('enter_gameroom', gameRoomId);
         socket.broadcast.to(gameRoomId).emit('gameroom_new_player', socket.player);
         io.emit('update_lobby_list', GC.getLobbyList());
+        if(game.isFull()){
+            io.to(gameRoomId).emit('game_is_full')
+        }
     })
 
     // connect on game room selecting a game
@@ -196,13 +200,17 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         if( game ) {
             if( game.isNotFull() ){
                 game.addPlayer(socket.player);
+
                 
                 socket.gameRoomId = gameRoomId
                 socket.join( gameRoomId );
                 
                 socket.emit('enter_gameroom', gameRoomId)
                 socket.broadcast.to(gameRoomId).emit('gameroom_new_player', socket.player)            
-                io.emit('update_lobby_list', GC.getLobbyList());             
+                io.emit('update_lobby_list', GC.getLobbyList());
+                if(game.isFull()){
+                    io.to(gameRoomId).emit('game_is_full')
+                }             
             }
             else{
                 socket.emit('game_is_already_full', gameRoomId)
@@ -226,7 +234,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         socket.gameRoomId = gameRoomId;
         socket.join( gameRoomId );
 
-        socket.emit('enter_gameroom', gameRoomId)
+        socket.emit('enter_gameroom', gameRoomId);
         socket.broadcast.emit('lobby_update-list');
         io.emit('update_lobby_list', GC.getLobbyList());     
     })
