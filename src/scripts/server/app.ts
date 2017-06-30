@@ -7,6 +7,8 @@ let colors = require('colors');
 
 // Modules
 import {Game} from '../modules/Game';
+import {Card} from '../modules/Card';
+import {Play} from '../modules/Play';
 import {Player} from '../modules/Player';
 import {port} from '../modules/Config';
 import {Bet}    from '../modules/Bet';
@@ -244,16 +246,13 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     */
 
     socket.on('player_is_ready', (data:any) => {
-        console.log('player_is_ready', data)
         let game = GC.getGame(socket.gameRoomId)
         if(game){
             game.addReadyPlayer(socket.player);
             if(game.areAllPlayersReady()){
-                
+                io.to(socket.gameRoomId).emit('game_is_starting')
             }
-            else{
-
-            }
+            socketIOTarot.updateGameUI(socket.gameRoomId, game);
         }
     })
 
@@ -262,6 +261,18 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         let g = GC.getGame(socket.gameRoomId);
         if(g){
             g.addBet( new Bet(socket.player, playerBet) )
+            let res = g.turn.allPlayerBet();
+        }
+    })
+
+    socket.on('player_play', (card: Card) => {
+        console.log('player_play', card)
+        let g = GC.getGame(socket.gameRoomId);
+        if(g){
+            g.addPlay( new Play(socket.player, card) )
+            if(g.actualTrick.allPlayerHavePlayed()){
+                g.addTrick()
+            }
         }
     })
 
@@ -273,14 +284,9 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         console.log('player_hover_card', data)
     })
 
-    socket.on('player_play', (data:any) => {
-        console.log('player_play', data)
-    })
-
     socket.on('player_not_playing', (data:any) => {
         console.log('player_not_playing', data)
     })
-
 
 });
 

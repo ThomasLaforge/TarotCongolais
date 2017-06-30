@@ -1,4 +1,5 @@
 import {Player} from './Player';
+import {DEFAULT_NB_PLAYER} from './TarotCongolais'
 import * as Utils from './utils';
 import * as  _ from 'lodash';
 
@@ -9,7 +10,7 @@ export class PlayerCollection {
     private _indexFirstPlayer:number;
     private _maxNbPlayer:number;
 
-	constructor(maxNbPlayer = 4, arrPlayers: Array<Player> = new Array(maxNbPlayer).fill(null), indexFirstPlayer = 0, arrReadyPlayers: Array<Player> = []) {
+	constructor(maxNbPlayer = DEFAULT_NB_PLAYER, arrPlayers: Array<Player> = new Array(maxNbPlayer).fill(null), indexFirstPlayer = 0, arrReadyPlayers: Array<Player> = []) {
         this.indexFirstPlayer = indexFirstPlayer;
         this.arrPlayers = arrPlayers;
         this.maxNbPlayer = maxNbPlayer;
@@ -34,7 +35,7 @@ export class PlayerCollection {
     }
 
     addReadyPlayer(p: Player){
-        if( this.isPlayerReady(p) && this.isOnCollection(p) ) {
+        if( !this.isPlayerReady(p) && this.isOnCollection(p) ) {
             this.arrReadyPlayers.push(p);
         }
     }
@@ -121,7 +122,8 @@ export class PlayerCollection {
     }
 
     areAllPlayersReady(): boolean {
-        return this.arrReadyPlayers.length >= this.maxNbPlayer
+        console.log('are all p ready', this.arrReadyPlayers.length, this.maxNbPlayer)
+        return this.arrReadyPlayers.length === this.maxNbPlayer
     }
 
     isOnCollection(p: Player) {

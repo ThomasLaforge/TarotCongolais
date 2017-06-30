@@ -29,7 +29,7 @@ export const chat = {
         updatechat(chatLine : ChatLine){
             this.chatHistory.push(chatLine);
         },
-        player_connected(pseudo){
+        player_connected(pseudo: string){
             this.chatHistory.push({ pseudo : 'Admin', msg: 'Un nouveau joueur vient de se connecter : ' + pseudo})    
         },
         player_added(pseudo: string){

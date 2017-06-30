@@ -10,6 +10,7 @@ import {Turn} from './Turn';
 import {History} from './History';
 import {GameAction, ActionHistory} from './ActionHistory';
 import * as Utils from './utils';
+import * as _ from 'lodash';
 import {DEFAULT_NB_PLAYER} from './TarotCongolais'
 
 export class Game {
@@ -43,17 +44,25 @@ export class Game {
 		return started;
 	}
 
-	soloPlay(p:Player, c:Card){
+	addPlay(play: Play){
 		// Action
-		this.actualTrick.addPlay( new Play(p, c));
+		this.actualTrick.addPlay( play );
 		// History
-		let action = new ActionHistory(GameAction.Play, c, p.username);
+		let action = new ActionHistory(GameAction.Play, play.card, play.player.username);
 		this.history.add(action);
+	}
+
+	addTrick() {
+		this.turn.addTrick(this.actualTrick);
+		this.actualTrick = new Trick(this.players);
 	}
 
     getFirstPlayer(){
         return this.players.getFirstPlayer();
     }
+	isFirstPlayer(p: Player){
+		return _.isEqual(this.getFirstPlayer(), p)
+	}
 
 	dealCards(){
 		this.players.getPlayers().forEach( p => {
@@ -87,7 +96,7 @@ export class Game {
 		this.players.addReadyPlayer(p);
 	}
 	areAllPlayersReady(){
-		this.players.areAllPlayersReady()
+		return this.players.areAllPlayersReady()
 	}
 
 	addBet(bet: Bet){

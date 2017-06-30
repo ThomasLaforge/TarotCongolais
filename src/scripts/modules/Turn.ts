@@ -41,11 +41,10 @@ export class Turn {
     }
 
     allPlayerBet(){
-        console.log('allPlayerBet to code')
-        return false;
+        return this.getPlayersHavingBet().length === this.playerCollection.getNbPlayer();
     }
 
-    getPlayerHavingBet():Array<Player>{
+    getPlayersHavingBet():Array<Player>{
         let res:Array<Player> = [];
 
         this.arrBet.forEach(bet => {
@@ -84,6 +83,10 @@ export class Turn {
             }
         })
         return res;
+    }
+
+    addTrick(trick: Trick){
+        this.arrTrick.push(trick)
     }
 
     /**

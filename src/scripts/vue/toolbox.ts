@@ -1,5 +1,6 @@
 import {LobbyListElt} from '../modules/TarotCongolais'
 import {Player} from '../modules/Player'
+import {GameCollection} from '../modules/GameCollection'
 
 let template = `
 <div class="toolbox-zone">

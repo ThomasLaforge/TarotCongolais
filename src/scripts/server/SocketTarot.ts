@@ -1,5 +1,6 @@
 import * as SocketIO from 'socket.io'
 import { Player } from '../modules/Player'
+import { Game } from '../modules/Game'
 
 export interface SocketTarotInterface extends SocketIO.Socket {
     player: Player,
@@ -51,6 +52,11 @@ export class SocketIOTarot {
 		}).map( (socket:SocketTarotInterface) => {
 			return socket.player.username;
 		})
+	}
+
+	updateGameUI(gameroomId: string, game: Game){
+		// this.socketIO.emit()
+		console.log('update game ui')
 	}
     
 	public get socketIO(): SocketIO.Server {

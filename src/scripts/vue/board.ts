@@ -1,28 +1,20 @@
 import { chat } from './chat'
+import { otherPlayer } from './otherPlayer'
+import { myPlayer } from './myPlayer'
 import { VueBoardData, GameState } from '../modules/TarotCongolais'
 
 let template = `
-<div>
+<div class="board">
     <h2>{{gameroomid}}</h2>
 
     State: {{ gameState }}
 
     <div class="boardgame">
-        <div id="cards-zone-top" class="cards-zone cards-zone-top">
-            <div class="card-in-cards-zone" v-for="card in hands.top" />
-        </div>        
-
-        <div id="cards-zone-left" class="cards-zone cards-zone-left">
-            <div class="card-in-cards-zone" v-for="card in hands.left" />        
+        <div class="other-players">
+            <otherPlayer v-for="playerInfo in playersInfos" :playerInfo="playerInfo" />
         </div>
-        
-        <div id="cards-zone-right" class="cards-zone cards-zone-right">
-            <div class="card-in-cards-zone" v-for="card in hands.right" />            
-        </div>
-        
-        <div id="cards-zone-me" class="cards-zone cards-zone-me">
-            <div class="card-in-cards-zone" v-for="card in hands.me" />
-        </div>
+        <myPlayer :myPlayer="me" />
+        <button v-if="showReadyButton" @click="ready">Ready</button>
     </div>
 
     <chat socketActionSendMessage="new_game_message" />
@@ -45,7 +37,9 @@ export const board = {
         }
     },
     components : {
-        chat
+        chat,
+        myPlayer,
+        otherPlayer
     },
     sockets : {
         start_game(gameData: any){
@@ -57,11 +51,19 @@ export const board = {
             }
         },
         game_is_full(){
+            this.gameState = GameState[GameState.WaitingPlayerToBeReady]
+        },
+        game_is_starting(){
+            console.log('game is starting')
             this.gameState = GameState[GameState.InGame]
-        }
+        },
+        
 	},
+    computed : {
+        showReadyButton : function(){ return this.gameState === GameState.WaitingPlayerToBeReady } 
+    },
 	methods: {
-
+        ready(){ this.$socket.emit('player_is_ready')}
 	},
     mounted: function(){
         // Checking integrity => Fuck hackers
