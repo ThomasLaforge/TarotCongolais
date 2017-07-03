@@ -1,4 +1,7 @@
-export const DEFAULT_NB_PLAYER = 2;
+import { Hand } from './Hand'
+import { Card } from './Card'
+
+export const DEFAULT_NB_PLAYER = 3;
 
 export enum GameState {
     WaitingPlayer,
@@ -72,14 +75,25 @@ export interface LobbyListElt {
     playerOn: number 
 }
 
+export interface playerInfos {
+    name?: string,
+    pv?: number,
+    handLength?: number,
+    betValue?: number,
+    nbTricks?: number,
+    isReady?: boolean,
+    cardPlayed?: Card
+}
+
+export interface myPlayerInfos extends playerInfos {
+    hand?: Hand
+}
+
+// others? : playerInfos[],
 export interface VueBoardData {
-    hands : {
-        top: Array<number>,
-        me: Array<number>,
-        left: Array<number>,
-        right: Array<number>
-    },
-    gameState: string
+    others? : {},
+    me? : myPlayerInfos,
+    gameState?: GameState,
 }
 
 export interface VueChatData {

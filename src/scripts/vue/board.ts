@@ -3,17 +3,21 @@ import { otherPlayer } from './otherPlayer'
 import { myPlayer } from './myPlayer'
 import { VueBoardData, GameState } from '../modules/TarotCongolais'
 
+import * as _ from 'lodash'
+
 let template = `
 <div class="board">
     <h2>{{gameroomid}}</h2>
 
-    State: {{ gameState }}
+    State: {{ gameStateName }}
 
     <div class="boardgame">
         <div class="other-players">
-            <otherPlayer v-for="playerInfo in playersInfos" :playerInfo="playerInfo" />
+            <otherPlayer v-for="playerInfoIndex in Object.keys(others)" :key="playerInfoIndex" :playerInfo="others[playerInfoIndex]" />
         </div>
+        <hr />
         <myPlayer :myPlayer="me" />
+        <hr />
         <button v-if="showReadyButton" @click="ready">Ready</button>
     </div>
 
@@ -27,13 +31,18 @@ export const board = {
     props : [ 'gameroomid' ],
     data: function(): VueBoardData {
         return {
-            hands : {
-                top: [],
-                me: [],
-                left: [],
-                right: []
+            others : {},
+            me : { 
+                betValue : null, 
+                cardPlayed: null, 
+                hand: null, 
+                handLength: null, 
+                isReady: null, 
+                name: null, 
+                nbTricks: null, 
+                pv: null
             },
-            gameState : GameState[GameState.WaitingPlayer]
+            gameState : GameState.WaitingPlayer
         }
     },
     components : {
@@ -51,16 +60,28 @@ export const board = {
             }
         },
         game_is_full(){
-            this.gameState = GameState[GameState.WaitingPlayerToBeReady]
+            console.log('game is full')
+            this.gameState = GameState.WaitingPlayerToBeReady
         },
         game_is_starting(){
             console.log('game is starting')
-            this.gameState = GameState[GameState.InGame]
+            this.gameState = GameState.InGame
         },
-        
+        self_board_update(dataForPlayer:any){
+            this.me = Object.assign(this.me, dataForPlayer)
+            console.log('this.me', this.me)
+        },
+        other_board_update(dataForOthers:any){
+            let objCopy = _.cloneDeep(this.others)
+            objCopy[dataForOthers.name] = Object.assign(objCopy[dataForOthers.name] || {}, dataForOthers)
+            this.others = objCopy;
+        }
+
 	},
     computed : {
-        showReadyButton : function(){ return this.gameState === GameState.WaitingPlayerToBeReady } 
+        showReadyButton : function(){ return this.gameState === GameState.WaitingPlayerToBeReady && !this.isReady},
+        gameStateName : function(){ return GameState[this.gameState] },
+        isReady : function(){ return this.me && !!this.me.isReady }
     },
 	methods: {
         ready(){ this.$socket.emit('player_is_ready')}

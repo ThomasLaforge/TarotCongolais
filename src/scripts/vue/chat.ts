@@ -33,7 +33,7 @@ export const chat = {
             this.chatHistory.push({ pseudo : 'Admin', msg: 'Un nouveau joueur vient de se connecter : ' + pseudo})    
         },
         player_added(pseudo: string){
-            this.chatHistory.push({ pseudo : 'Admin', msg: 'Un nouveau joueur vient de se connecter : ' + pseudo})                
+            this.chatHistory.push({ pseudo : 'Admin', msg: 'Un nouveau joueur vient de rejoindre la partie : ' + pseudo})                
         }
     },
     methods : {
