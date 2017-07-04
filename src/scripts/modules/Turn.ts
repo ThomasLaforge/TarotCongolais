@@ -9,10 +9,10 @@ export class Turn {
     private _playerCollection: PlayerCollection;
     private _firstPlayer: Player;
     private _nbCards: number;
-    private _arrTrick:Array<Trick>;
-    private _arrBet:Array<Bet>;
+    private _arrTrick:Trick[];
+    private _arrBet:Bet[];
 
-	constructor(firstPlayer: Player, nbCards: number, pc: PlayerCollection, arrTrick: Array<Trick> = [], arrBet: Array<Bet> = []) {
+	constructor(firstPlayer: Player, nbCards: number, pc: PlayerCollection, arrTrick: Trick[] = [], arrBet: Bet[] = []) {
         this.playerCollection = pc;
         this.firstPlayer = firstPlayer;
         this.nbCards = nbCards;
@@ -20,8 +20,8 @@ export class Turn {
 		this.arrBet = arrBet;
 	}
 
-    getLosers():Array<Player>{
-        let res:Array<Player> = [];
+    getLosers(): Player[] {
+        let res: Player[] = [];
 
         this.playerCollection.arrPlayers.forEach( player => {
             let score:number = 0;
@@ -44,8 +44,8 @@ export class Turn {
         return this.getPlayersHavingBet().length === this.playerCollection.getNbPlayer();
     }
 
-    getPlayersHavingBet():Array<Player>{
-        let res:Array<Player> = [];
+    getPlayersHavingBet(): Player[]{
+        let res:Player[] = [];
 
         this.arrBet.forEach(bet => {
             res.push(bet.player);
@@ -100,16 +100,16 @@ export class Turn {
     /**
      * Getters / Setters
      */
-	public get arrTrick(): Array<Trick> {
+	public get arrTrick(): Trick[] {
 		return this._arrTrick;
 	}
-	public set arrTrick(value: Array<Trick>) {
+	public set arrTrick(value: Trick[]) {
 		this._arrTrick = value;
 	}
-	public get arrBet(): Array<Bet> {
+	public get arrBet(): Bet[] {
 		return this._arrBet;
 	}
-	public set arrBet(value: Array<Bet>) {
+	public set arrBet(value: Bet[]) {
 		this._arrBet = value;
 	}
 	public get playerCollection(): PlayerCollection {
