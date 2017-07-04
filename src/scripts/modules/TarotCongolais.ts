@@ -5,8 +5,12 @@ export const DEFAULT_NB_PLAYER = 2;
 
 export enum GameState {
     WaitingPlayer,
-    WaitingPlayerToBeReady,
-    InGame
+    WaitingPlayersToBeReady,
+    InGame,
+    WaitingPlayersToBet,
+    Bet,
+    WaitingPlayersToPlay,
+    Play
 }
 
 export interface BetInterface {
@@ -78,16 +82,14 @@ export interface LobbyListElt {
 export interface playerInfos {
     name?: string,
     pv?: number,
-    handLength?: number,
     betValue?: number,
     nbTricks?: number,
     isReady?: boolean,
     cardPlayed?: Card
+    hand?: Hand    
 }
 
-export interface myPlayerInfos extends playerInfos {
-    hand?: Hand
-}
+export interface myPlayerInfos extends playerInfos {}
 
 // others? : playerInfos[],
 export interface VueBoardData {
