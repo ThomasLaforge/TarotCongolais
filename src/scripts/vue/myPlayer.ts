@@ -2,8 +2,8 @@ import { card } from './card'
 
 let template = `
 <div class="my-player">
-    <div class="my-player-cards">
-        <card v-for="(card, i) in myPlayer.cards" :key="i" :value="card" :selected="selectedCards.indexOf(i) !== -1"/>
+    <div class="my-player-cards" v-if="myPlayer.hand">
+        <card v-for="(card, i) in myPlayer.hand" :key="i" :value="card.value" :selected="selectedCard === i"/>
     </div>
     <div class="my-player-info">
             <div class="player-info-name">PV : {{ myPlayer.pv }}</div>
@@ -18,9 +18,9 @@ let template = `
 export const myPlayer = {
     template : template,
     props : ['myPlayer'],
-    data() : { selectedCards: number[] } {
+    data() : { selectedCard: number } {
         return {
-            selectedCards : []
+            selectedCard : null
         }
     },
     computed : {
