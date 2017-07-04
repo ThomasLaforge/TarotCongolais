@@ -49,6 +49,12 @@ export class PlayerCollection {
             return p
         });
     }
+    // get players ordered with player on parameter.
+    getPlayersPOV(p: Player) : Player[] {
+        let players = this.getPlayers()
+        let playersOrdered = players.slice(players.indexOf(p)).concat(players.slice(0, players.indexOf(p)))
+        return playersOrdered
+    }
 
     getNames():Array<string> {
         let res:Array<string> = [];

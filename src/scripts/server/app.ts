@@ -288,7 +288,7 @@ function playerEnterGameRoom(socket: SocketTarotInterface, gameRoomId: string) {
     socket.broadcast.emit('lobby_update-list')
     io.emit('update_lobby_list', GC.getLobbyList());
     let others: any = {};
-    game.players.getPlayers().filter(p => { return p.username !== socket.player.username }).forEach( p => { 
+    game.players.getPlayersPOV(socket.player).filter(p => { return p.username !== socket.player.username }).forEach( p => { 
         others[p.username] = {
                 betValue : null,
                 cardPlayed: null, 
