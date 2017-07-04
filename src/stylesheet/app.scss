@@ -22,6 +22,16 @@ hr {
     background-color: grey;
 }
 
+.other-players {
+    display: flex;
+    justify-content: space-around;
+
+    .other-player {
+        width: 20%;
+        border: 1px solid black;
+    }
+}
+
 // .boardgame {
 //     position: relative;
 //     margin: 50px auto;

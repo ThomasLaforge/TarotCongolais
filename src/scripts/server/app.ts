@@ -215,10 +215,6 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     * Game states
     */
 
-    socket.on('get_initial_state', (data:any) => {
-        console.log('initial state to implement')
-    })
-
     socket.on('player_is_ready', (data:any) => {
         let game = GC.getGame(socket.gameRoomId)
         if(game){
@@ -226,17 +222,8 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
             if(game.areAllPlayersReady()){
                 io.to(socket.gameRoomId).emit('game_is_starting')
             }
-            socketIOTarot.updateGameUI(socket.gameRoomId, game);
-            let dataForPlayer = { isReady : true };
-
-            let dataForOthers = {
-                name : socket.player.username,
-                pv : socket.player.pv,
-                nbTricks : Date.now(),
-                isReady : true
-            };
-            socket.emit('self_board_update', dataForPlayer)
-            socket.broadcast.to(socket.gameRoomId).emit('other_board_update', dataForOthers);    
+            let dataChanged = { isReady : true };
+            updateUI(socket, dataChanged)
         }
     })
 
@@ -244,8 +231,18 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         console.log('player_bet', playerBet)
         let g = GC.getGame(socket.gameRoomId);
         if(g){
-            g.addBet( new Bet(socket.player, playerBet) )
-            let res = g.turn.allPlayerBet();
+            try {
+                g.addBet( new Bet(socket.player, playerBet) )
+            } catch (error) {
+                console.log('player already played')
+            }
+            let dataChanged = { betValue : playerBet };
+            updateUI(socket, dataChanged)
+            if(g.turn.allPlayerBet()){
+
+            }
+            
+
         }
     })
 
@@ -287,9 +284,34 @@ function playerEnterGameRoom(socket: SocketTarotInterface, gameRoomId: string) {
     socket.emit('enter_gameroom', gameRoomId);
     socket.broadcast.emit('lobby_update-list');
     io.emit('update_lobby_list', GC.getLobbyList());
+    let others: any = {};
+    game.players.getPlayers().filter(p => { return p.username !== socket.player.username }).forEach( p => { 
+        others[p.username] = {
+                betValue : null,
+                cardPlayed: null, 
+                hand: null, 
+                handLength: null, 
+                isReady: null, 
+                name: p.username, 
+                nbTricks: null, 
+                pv: null
+        } 
+    });
+    socket.emit('first_step', others)
+    socket.broadcast.to(socket.gameRoomId).emit('new_player', socket.player.username);    
+
     
     if(game.isFull()){
         console.log(gameRoomId + 'is full')
         io.to(gameRoomId).emit('game_is_full')
     }
+}
+
+function updateUI(socket: SocketTarotInterface, dataChanged: any) {
+    let dataForOthers = {
+        playerName : socket.player.username,
+        data : dataChanged
+    };
+    socket.emit('self_board_update', dataChanged)
+    socket.broadcast.to(socket.gameRoomId).emit('other_board_update', dataForOthers);
 }

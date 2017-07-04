@@ -11,6 +11,7 @@ let template = `
         <div class="player-info-bet">Bet : {{ myPlayer.betValue }}</div>
         <div class="player-info-ready">isReady : {{ myPlayer.isReady }}</div>
     </div>
+    <button @click="bet">Bet 1</button>
 </div>
 `
 
@@ -34,8 +35,8 @@ export const myPlayer = {
         // }
     },
     methods: {
-        // auto(){
-        //     this.$socket.emit('lobby-auto')
-        // }
+        bet(){
+            this.$socket.emit('player_bet', 1)
+        }
     }
 }

@@ -33,7 +33,7 @@ export const board = {
         return {
             others : {},
             me : { 
-                betValue : null, 
+                betValue : null,
                 cardPlayed: null, 
                 hand: null, 
                 handLength: null, 
@@ -67,13 +67,23 @@ export const board = {
             console.log('game is starting')
             this.gameState = GameState.InGame
         },
+        new_player(username){
+            let objCopy = _.cloneDeep(this.others)
+            objCopy[username] = { name : username }
+            this.others = objCopy;
+        },
+        first_step(initialOthers){
+            console.log('first step', initialOthers)
+            this.others = initialOthers;
+        },
         self_board_update(dataForPlayer:any){
             this.me = Object.assign(this.me, dataForPlayer)
-            console.log('this.me', this.me)
+            console.log('self board update', this. me)
         },
         other_board_update(dataForOthers:any){
             let objCopy = _.cloneDeep(this.others)
-            objCopy[dataForOthers.name] = Object.assign(objCopy[dataForOthers.name] || {}, dataForOthers)
+            objCopy[dataForOthers.playerName] = Object.assign(objCopy[dataForOthers.playerName] || {}, dataForOthers.data)
+            console.log('add other board data', objCopy[dataForOthers.name])
             this.others = objCopy;
         }
 

@@ -1,7 +1,7 @@
 import { Hand } from './Hand'
 import { Card } from './Card'
 
-export const DEFAULT_NB_PLAYER = 3;
+export const DEFAULT_NB_PLAYER = 2;
 
 export enum GameState {
     WaitingPlayer,
