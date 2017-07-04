@@ -11,15 +11,24 @@ export class Deck {
     private _arrayDeck: Array<Card>;
     private _arrayDiscard: Array<Card>;
 
-    constructor(arrayDeck : Array<Card> = []) {
-        this.arrayDeck = arrayDeck
+    constructor(arrayDeck?: Array<Card>) {
+        if(arrayDeck){
+            this.arrayDeck = arrayDeck
+        }
+        else {
+            this.initDeck();
+        }
     }
 
-    initDeck():void{
+    initDeck():void {
+        this.arrayDeck = [];
         for (let value = 0; value <= 21; value++) {
             this.addCard( value );
         }
         this.shuffle();
+    }
+    reset() {
+        this.initDeck();
     }
 
     // States of arrays : deck and discard
@@ -57,7 +66,7 @@ export class Deck {
 
     // Missing control if empty
     drawCards( nbCards:number ){
-        let res: Array<any> = [];
+        let res: Card[] = [];
         for( let i=0; i < nbCards; i++ ){
             if(this.arrayDeck.length > 0){
                 res.push( this.drawOneCard() );
