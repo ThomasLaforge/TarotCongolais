@@ -62,12 +62,10 @@ export class Game {
 	}
 
 	dealCards(){
-		console.log('deal cards')
 		this.players.getPlayers().forEach( p => {
 			let newPlayerCards = this.deck.drawCards(this.turnCards);
 			p.hand.addCards(newPlayerCards);
 		});
-		console.log(this.players.getFirstPlayer())
 	}
 
 	nextTurn(){

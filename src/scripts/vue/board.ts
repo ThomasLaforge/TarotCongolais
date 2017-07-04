@@ -35,8 +35,7 @@ export const board = {
             me : { 
                 betValue : null,
                 cardPlayed: null, 
-                hand: null, 
-                handLength: null, 
+                hand: null,
                 isReady: null, 
                 name: null, 
                 nbTricks: null, 
@@ -61,7 +60,7 @@ export const board = {
         },
         game_is_full(){
             console.log('game is full')
-            this.gameState = GameState.WaitingPlayerToBeReady
+            this.gameState = GameState.WaitingPlayersToBeReady
         },
         game_is_starting(){
             console.log('game is starting')
@@ -83,13 +82,13 @@ export const board = {
         other_board_update(dataForOthers:any){
             let objCopy = _.cloneDeep(this.others)
             objCopy[dataForOthers.playerName] = Object.assign(objCopy[dataForOthers.playerName] || {}, dataForOthers.data)
-            console.log('add other board data', objCopy[dataForOthers.name])
+            console.log('add other board data', objCopy[dataForOthers.playerName])
             this.others = objCopy;
         }
 
 	},
     computed : {
-        showReadyButton : function(){ return this.gameState === GameState.WaitingPlayerToBeReady && !this.isReady},
+        showReadyButton : function(){ return this.gameState === GameState.WaitingPlayersToBeReady && !this.isReady},
         gameStateName : function(){ return GameState[this.gameState] },
         isReady : function(){ return this.me && !!this.me.isReady }
     },

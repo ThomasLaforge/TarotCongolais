@@ -20,7 +20,6 @@ export class Hand {
     }
 
     addCards(c:Array<Card>|Card){
-        console.log('add cards to hand', c)
         if(!Array.isArray(c)){
             c = [c];
         }

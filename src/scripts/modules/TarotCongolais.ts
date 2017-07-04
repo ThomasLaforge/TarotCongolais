@@ -85,11 +85,13 @@ export interface playerInfos {
     betValue?: number,
     nbTricks?: number,
     isReady?: boolean,
-    cardPlayed?: Card
-    hand?: Hand    
+    cardPlayed?: Card,
+    handLength?: number
 }
 
-export interface myPlayerInfos extends playerInfos {}
+export interface myPlayerInfos extends playerInfos {
+    hand?: Hand
+}
 
 // others? : playerInfos[],
 export interface VueBoardData {
