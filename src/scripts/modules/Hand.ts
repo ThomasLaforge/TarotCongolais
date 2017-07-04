@@ -20,6 +20,7 @@ export class Hand {
     }
 
     addCards(c:Array<Card>|Card){
+        console.log('add cards to hand', c)
         if(!Array.isArray(c)){
             c = [c];
         }
@@ -56,6 +57,10 @@ export class Hand {
     /**
      * Getters / Setters
      */
+    public get cards(): Card[] {
+        return this._arrCard;
+    }
+
 	public get arrCard(): Array<Card> {
 		return this._arrCard;
 	}

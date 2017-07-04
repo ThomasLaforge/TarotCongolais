@@ -2,7 +2,8 @@
 import * as http        from 'http';
 import * as fs          from 'fs';
 import * as nodeUtil    from 'util';
-import * as SocketIO    from 'socket.io'
+import * as SocketIO    from 'socket.io';
+import * as _           from 'lodash';
 let colors = require('colors');
 
 // Modules
@@ -219,11 +220,13 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         let game = GC.getGame(socket.gameRoomId)
         if(game){
             game.addReadyPlayer(socket.player);
+            updateUI(socket)
+
             if(game.areAllPlayersReady()){
+                game.start();
                 io.to(socket.gameRoomId).emit('game_is_starting')
+                updateUI(socket)
             }
-            let dataChanged = { isReady : true };
-            updateUI(socket, dataChanged)
         }
     })
 
@@ -236,13 +239,10 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
             } catch (error) {
                 console.log('player already played')
             }
-            let dataChanged = { betValue : playerBet };
-            updateUI(socket, dataChanged)
+            updateUI(socket)
             if(g.turn.allPlayerBet()){
-
+                updateUI(socket)               
             }
-            
-
         }
     })
 
@@ -251,8 +251,11 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         let g = GC.getGame(socket.gameRoomId);
         if(g){
             g.addPlay( new Play(socket.player, card) )
+            updateUI(socket)
+
             if(g.actualTrick.allPlayerHavePlayed()){
                 g.addTrick()
+                updateUI(socket)
             }
         }
     })
@@ -282,14 +285,13 @@ function playerEnterGameRoom(socket: SocketTarotInterface, gameRoomId: string) {
     socket.join( gameRoomId );
 
     socket.emit('enter_gameroom', gameRoomId);
-    socket.broadcast.emit('lobby_update-list');
+    socket.broadcast.emit('lobby_update-list')
     io.emit('update_lobby_list', GC.getLobbyList());
     let others: any = {};
     game.players.getPlayers().filter(p => { return p.username !== socket.player.username }).forEach( p => { 
         others[p.username] = {
                 betValue : null,
                 cardPlayed: null, 
-                hand: null, 
                 handLength: null, 
                 isReady: null, 
                 name: p.username, 
@@ -307,11 +309,29 @@ function playerEnterGameRoom(socket: SocketTarotInterface, gameRoomId: string) {
     }
 }
 
-function updateUI(socket: SocketTarotInterface, dataChanged: any) {
+function updateUI(socket: SocketTarotInterface) {
+    let g = GC.getGame(socket.gameRoomId);
+    let p = socket.player;
+
+    let playerData = {
+        name: socket.player.username, 
+        hand: socket.player.hand.cards,
+        pv: socket.player.pv,
+        betValue : g.getBet(p),
+        cardPlayed: g.getPlayedCard(p), 
+        isReady: g.isReady(p),
+        nbTricks: g.getNbWonTrick(p)
+    }
+    
+    let othersData = _.cloneDeep(playerData);
+    othersData.handLength = p.hand.length();
+    delete othersData.hand
+
     let dataForOthers = {
         playerName : socket.player.username,
-        data : dataChanged
+        data : othersData
     };
-    socket.emit('self_board_update', dataChanged)
+
+    socket.emit('self_board_update', playerData)
     socket.broadcast.to(socket.gameRoomId).emit('other_board_update', dataForOthers);
 }

@@ -30,18 +30,11 @@ export class Game {
 		this.deck             = new Deck();
 		this.turnCards		  = Math.floor(this.deck.length() / this.getNbMaxPlayer());
 		this.actualTrick 	  = new Trick(this.players);
-		// this.dealCards();
-		this.turn = new Turn(this.getFirstPlayer(), this.turnCards, this.players);		
+		this.turn = new Turn(this.getFirstPlayer(), this.turnCards, this.players);			
 	}
 
 	start(){
-		let started = false;
-
-		if( this.isFull() ){
-			started = true;
-		}
-		
-		return started;
+		this.dealCards();
 	}
 
 	addPlay(play: Play){
@@ -50,6 +43,10 @@ export class Game {
 		// History
 		let action = new ActionHistory(GameAction.Play, play.card, play.player.username);
 		this.history.add(action);
+	}
+	getPlayedCard(p: Player){
+		let play = this.actualTrick.arrPlay.filter(play => { return play.player.username === p.username })[0]
+		return play ? play.card : null
 	}
 
 	addTrick() {
@@ -65,16 +62,22 @@ export class Game {
 	}
 
 	dealCards(){
+		console.log('deal cards')
 		this.players.getPlayers().forEach( p => {
 			let newPlayerCards = this.deck.drawCards(this.turnCards);
 			p.hand.addCards(newPlayerCards);
 		});
+		console.log(this.players.getFirstPlayer())
 	}
 
 	nextTurn(){
 		this.turnCards = this.turnCards > 1 ? this.turnCards-- : Math.floor( 22 / this.getNbPlayer() );
 		this.actualTrick = new Trick(this.players);
 		this.turn = new Turn(this.getFirstPlayer(), this.turnCards, this.players);
+	}
+
+	getNbWonTrick(player: Player){
+		return this.turn.getNbWonTricks(player)
 	}
 
     changeFirstPlayer(){
@@ -95,12 +98,21 @@ export class Game {
 	addReadyPlayer(p: Player){
 		this.players.addReadyPlayer(p);
 	}
+	isReady(p: Player){
+		return this.players.isPlayerReady(p)
+	}
 	areAllPlayersReady(){
 		return this.players.areAllPlayersReady()
 	}
 
 	addBet(bet: Bet){
 		this.turn.addbet(bet)
+	}
+	getBet(p: Player){
+		return this.turn.getBetFromPlayer(p)
+	}
+	areAllPlayersBet(){
+		return this.turn.allPlayerBet()
 	}
 
 	/**
