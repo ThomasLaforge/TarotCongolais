@@ -11,7 +11,7 @@ import {History} from './History';
 import {GameAction, ActionHistory} from './ActionHistory';
 import * as Utils from './utils';
 import * as _ from 'lodash';
-import {DEFAULT_NB_PLAYER} from './TarotCongolais'
+import {DEFAULT_NB_PLAYER, GameState} from './TarotCongolais'
 
 export class Game {
 	
@@ -22,6 +22,7 @@ export class Game {
 	private _turnCards:number;
 	private _turn:Turn;
 	private _actualTrick:Trick;
+	private _gameState: GameState;
 
     constructor(players = new PlayerCollection(DEFAULT_NB_PLAYER)){
         this.timer            = new Timer();
@@ -31,34 +32,30 @@ export class Game {
 		this.turnCards		  = Math.floor(this.deck.length() / this.getNbMaxPlayer());
 		this.actualTrick 	  = new Trick(this.players);
 		this.turn 			  = new Turn(this.getFirstPlayer(), this.turnCards, this.players);			
+		this.gameState		  = GameState.WaitingPlayers
+	}
+
+	/**
+	 * Game actions
+	 */
+
+	addPlayer(p: Player){
+		this.players.addPlayer(p)
+		if(this.players.isFull()){
+			this.gameState = GameState.WaitingPlayersToBeReady
+		}
+	}
+
+	addReadyPlayer(p: Player){
+		this.players.addReadyPlayer(p);
+		if(this.areAllPlayersReady()){
+			this.start();
+		}
 	}
 
 	start(){
 		this.dealCards();
-	}
-
-	addPlay(play: Play){
-		// Action
-		this.actualTrick.addPlay( play );
-		// History
-		let action = new ActionHistory(GameAction.Play, play.card, play.player.username);
-		this.history.add(action);
-	}
-	getPlayedCard(p: Player){
-		let play = this.actualTrick.arrPlay.filter(play => { return play.player.username === p.username })[0]
-		return play ? play.card : null
-	}
-
-	addTrick() {
-		this.turn.addTrick(this.actualTrick);
-		this.actualTrick = new Trick(this.players);
-	}
-
-    getFirstPlayer(){
-        return this.players.getFirstPlayer();
-    }
-	isFirstPlayer(p: Player){
-		return _.isEqual(this.getFirstPlayer(), p)
+		this.gameState = GameState.WaitingPlayersToBet
 	}
 
 	dealCards(){
@@ -68,25 +65,46 @@ export class Game {
 		});
 	}
 
+	// Turn
+	addTrick() {
+		this.turn.addTrick(this.actualTrick);
+		this.actualTrick = new Trick(this.players);
+	}
+
 	nextTurn(){
 		if( this.turnCards > 1 ) {
 			this.turnCards--;
 		} else { 
 			this.turnCards = Math.floor( 22 / this.getNbPlayer() );
-			this.players.changeFirstPlayer();
+			this.changeFirstPlayer();
 		}
 		this.actualTrick = new Trick(this.players);
 		this.turn = new Turn(this.getFirstPlayer(), this.turnCards, this.players);
-	}
-
-	getNbWonTrick(player: Player){
-		return this.turn.getNbWonTricks(player)
 	}
 
     changeFirstPlayer(){
 		this.players.changeFirstPlayer();
     }
 
+	// Play
+	addPlay(play: Play){
+		// Action
+		this.actualTrick.addPlay( play );
+		// History
+		let action = new ActionHistory(GameAction.Play, play.card, play.player.username);
+		this.history.add(action);
+	}
+
+	// Bet
+	addBet(bet: Bet){
+		this.turn.addbet(bet)
+	}
+
+	/**
+	 * Getters
+	 */
+
+	// Game
 	isFull(){
 		return this.players.isFull();
 	}
@@ -94,23 +112,36 @@ export class Game {
 		return !this.isFull()
 	}
 
-	addPlayer(p: Player){
-		this.players.addPlayer(p)
-	}
-
-	addReadyPlayer(p: Player){
-		this.players.addReadyPlayer(p);
-	}
 	isReady(p: Player){
 		return this.players.isPlayerReady(p)
 	}
+	
 	areAllPlayersReady(){
+		let allPlayerReady = this.players.areAllPlayersReady()
+		if(allPlayerReady) { this.gameState = GameState.InGame }
 		return this.players.areAllPlayersReady()
 	}
 
-	addBet(bet: Bet){
-		this.turn.addbet(bet)
+	// First player
+    getFirstPlayer(){
+        return this.players.getFirstPlayer();
+    }
+
+	isFirstPlayer(p: Player){
+		return _.isEqual(this.getFirstPlayer(), p)
 	}
+
+	// Play
+	getPlayedCard(p: Player){
+		let play = this.actualTrick.arrPlay.filter(play => { return play.player.username === p.username })[0]
+		return play ? play.card : null
+	}
+
+	// Turn
+	getNbWonTrick(player: Player){
+		return this.turn.getNbWonTricks(player)
+	}
+
 	getBet(p: Player){
 		return this.turn.getBetFromPlayer(p)
 	}
@@ -169,6 +200,12 @@ export class Game {
 	}
 	public set turn(value: Turn) {
 		this._turn = value;
+	}
+	public get gameState(): GameState {
+		return this._gameState;
+	}
+	public set gameState(newGameState) {
+		this._gameState = newGameState;
 	}
 	
     
