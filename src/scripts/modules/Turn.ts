@@ -66,12 +66,20 @@ export class Turn {
         return res;
     }
 
+    isPlayerToBet(player: Player){
+        let nbPlayerAlreadyBet = this.arrBet.length;
+        let playerToBet = this.playerCollection.getPlayersPOV(this.firstPlayer)[ nbPlayerAlreadyBet-1 + 1];
+        
+        return _.isEqual(playerToBet, player)
+    }
+
     addbet(bet:Bet){
-        if(!this.playerAlreadyBet(bet.player)){
+        let player = bet.player;
+        if( this.isPlayerToBet(player) ) {
             this.arrBet.push(bet);
         }
         else{
-            throw new Error('Player already played');
+            throw new Error('Not good player to bet');
         }
     }
 

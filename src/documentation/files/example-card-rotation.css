@@ -1,0 +1,29 @@
+$startAngle : 0;
+$spaceAngle : 0;
+
+@for $i from 1 through 6 {
+	@if $i == 1 {
+	  $startAngle : 0;
+	  $spaceAngle : 0;
+	} @else if $i == 2 {
+	  $startAngle : -10;
+	  $spaceAngle : 20;
+	} @else if $i == 3 {
+	  $startAngle : -15;
+	  $spaceAngle : 15;
+	} @else if $i == 4 {
+	  $startAngle : -30;
+	  $spaceAngle : 20;
+	} @else if $i == 5 {
+	  $startAngle : -30;
+	  $spaceAngle : 20;
+	} @else if $i == 6 {
+	  $startAngle : -30;
+	  $spaceAngle : 20;
+	}
+	@for $j from 1 through $i {
+		.card-in-cards-zone:nth-child(#{$j}):nth-last-child(#{($i - $j + 1)}){
+			@include transform(rotate(#{$startAngle + ($spaceAngle * ($j - 1))}deg));
+		}
+	}
+}
