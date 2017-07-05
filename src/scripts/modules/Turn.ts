@@ -7,14 +7,12 @@ import * as  _ from 'lodash';
 export class Turn {
 
     private _playerCollection: PlayerCollection;
-    private _firstPlayer: Player;
     private _nbCards: number;
     private _arrTrick:Trick[];
     private _arrBet:Bet[];
 
-	constructor(firstPlayer: Player, nbCards: number, pc: PlayerCollection, arrTrick: Trick[] = [], arrBet: Bet[] = []) {
+	constructor(nbCards: number, pc: PlayerCollection, arrTrick: Trick[] = [], arrBet: Bet[] = []) {
         this.playerCollection = pc;
-        this.firstPlayer = firstPlayer;
         this.nbCards = nbCards;
 		this.arrTrick = arrTrick;
 		this.arrBet = arrBet;
@@ -68,7 +66,7 @@ export class Turn {
 
     isPlayerToBet(player: Player){
         let nbPlayerAlreadyBet = this.arrBet.length;
-        let playerToBet = this.playerCollection.getPlayersPOV(this.firstPlayer)[ nbPlayerAlreadyBet-1 + 1];
+        let playerToBet = this.playerCollection.getPlayersPOV(this.playerCollection.getFirstPlayer())[ nbPlayerAlreadyBet-1 + 1];
         
         return _.isEqual(playerToBet, player)
     }
@@ -125,12 +123,6 @@ export class Turn {
 	}
 	public set playerCollection(value: PlayerCollection) {
 		this._playerCollection = value;
-	}
-	public get firstPlayer(): Player {
-		return this._firstPlayer;
-	}
-	public set firstPlayer(value: Player) {
-		this._firstPlayer = value;
 	}
 	public get nbCards(): number {
 		return this._nbCards;

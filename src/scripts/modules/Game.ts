@@ -31,7 +31,7 @@ export class Game {
 		this.deck             = new Deck();
 		this.turnCards		  = Math.floor(this.deck.length() / this.getNbMaxPlayer());
 		this.actualTrick 	  = new Trick(this.players);
-		this.turn 			  = new Turn(this.getFirstPlayer(), this.turnCards, this.players);			
+		this.turn 			  = new Turn(this.turnCards, this.players);			
 		this.gameState		  = GameState.WaitingPlayers
 	}
 
@@ -79,7 +79,7 @@ export class Game {
 			this.changeFirstPlayer();
 		}
 		this.actualTrick = new Trick(this.players);
-		this.turn = new Turn(this.getFirstPlayer(), this.turnCards, this.players);
+		this.turn = new Turn(this.turnCards, this.players);
 	}
 
     changeFirstPlayer(){
@@ -115,7 +115,7 @@ export class Game {
 	isReady(p: Player){
 		return this.players.isPlayerReady(p)
 	}
-	
+
 	areAllPlayersReady(){
 		let allPlayerReady = this.players.areAllPlayersReady()
 		if(allPlayerReady) { this.gameState = GameState.InGame }
@@ -136,6 +136,9 @@ export class Game {
 		let play = this.actualTrick.arrPlay.filter(play => { return play.player.username === p.username })[0]
 		return play ? play.card : null
 	}
+	isPlayerToPlay(p: Player){
+		return this.actualTrick.isPlayerToPlay(p)
+	}
 
 	// Turn
 	getNbWonTrick(player: Player){
@@ -144,6 +147,9 @@ export class Game {
 
 	getBet(p: Player){
 		return this.turn.getBetFromPlayer(p)
+	}
+	isPlayerToBet(p: Player){
+		return this.turn.isPlayerToBet(p)
 	}
 	areAllPlayersBet(){
 		return this.turn.allPlayerBet()

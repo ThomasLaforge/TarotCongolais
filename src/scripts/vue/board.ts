@@ -40,9 +40,9 @@ export const board = {
                 isReady: null, 
                 name: null, 
                 nbTricks: null, 
-                pv: null
-            },
-            gameState : GameState.WaitingPlayer
+                pv: null,
+                gameState: null
+            }
         }
     },
     components : {
@@ -51,28 +51,17 @@ export const board = {
         otherPlayer
     },
     sockets : {
-        start_game(gameData: any){
-            
-        },
         isOnGame(isOnGame: boolean){
             if(!isOnGame){
                 this.$router.push({path: '/login'});
             }
         },
-        game_is_full(){
-            console.log('game is full')
-            this.gameState = GameState.WaitingPlayersToBeReady
-        },
-        game_is_starting(){
-            console.log('game is starting')
-            this.gameState = GameState.InGame
-        },
-        new_player(username){
+        new_player(username: string){
             let objCopy = _.cloneDeep(this.others)
             objCopy[username] = { name : username }
             this.others = objCopy;
         },
-        first_step(initialOthers){
+        first_step(initialOthers: any){
             console.log('first step', initialOthers)
             this.others = initialOthers;
         },
@@ -89,8 +78,8 @@ export const board = {
 
 	},
     computed : {
-        showReadyButton : function(){ return this.gameState === GameState.WaitingPlayersToBeReady && !this.isReady},
-        gameStateName : function(){ return GameState[this.gameState] },
+        showReadyButton : function(){ return this.me.gameState === GameState.WaitingPlayersToBeReady && !this.isReady},
+        gameStateName : function(){ return GameState[this.me.gameState] },
         isReady : function(){ return this.me && !!this.me.isReady }
     },
 	methods: {

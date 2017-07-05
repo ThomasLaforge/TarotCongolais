@@ -15,7 +15,7 @@ import {port} from '../modules/Config';
 import {Bet}    from '../modules/Bet';
 import {PlayerCollection} from '../modules/PlayerCollection';
 import {GameCollection} from '../modules/GameCollection'
-import {VueBoardData} from '../modules/TarotCongolais'
+import {VueBoardData, GameState, playerInfos, myPlayerInfos} from '../modules/TarotCongolais'
 
 // Server
 let server = http.createServer(function(req, res) {
@@ -25,8 +25,8 @@ let server = http.createServer(function(req, res) {
     });
 });
 
-import {SocketIOTarot, SocketTarot, SocketTarotInterface} from './SocketTarot'
-let io:SocketIO.Server = require('socket.io').listen(server);632.63
+import { SocketIOTarot, SocketTarot, SocketTarotInterface } from './SocketTarot'
+let io:SocketIO.Server = require('socket.io').listen(server);
 let socketIOTarot = new SocketIOTarot(io); 
 
 // reset console
@@ -59,7 +59,7 @@ console.log(colors.green('-------------- Server started on localhost: %s -------
 
     // sending to individual socketid
     socket.broadcast.to(socketid).emit('message', 'for your eyes only');
- */
+*/
 
 interface PlayerInfo {
     // hand : Hand
@@ -219,13 +219,12 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     socket.on('player_is_ready', (data:any) => {
         let game = GC.getGame(socket.gameRoomId)
         if(game){
-            game.addReadyPlayer(socket.player);
-            updateUI(socket)
-
-            if(game.areAllPlayersReady()){
-                game.start();
-                io.to(socket.gameRoomId).emit('game_is_starting')
-                updateUI(socket)
+            try {
+                game.addReadyPlayer(socket.player);
+                updateUI(socket);
+            }
+            catch(e) {
+                console.log(e)
             }
         }
     })
@@ -236,12 +235,9 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         if(g){
             try {
                 g.addBet( new Bet(socket.player, playerBet) )
+                updateUI(socket)                
             } catch (error) {
                 console.log('player already played')
-            }
-            updateUI(socket)
-            if(g.turn.allPlayerBet()){
-                updateUI(socket)               
             }
         }
     })
@@ -250,13 +246,12 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         console.log('player_play', card)
         let g = GC.getGame(socket.gameRoomId);
         if(g){
-            g.addPlay( new Play(socket.player, card) )
-            updateUI(socket)
-
-            if(g.actualTrick.allPlayerHavePlayed()){
-                g.addTrick()
+            try {
+                g.addPlay( new Play(socket.player, card) )
                 updateUI(socket)
-            }
+            } catch (error) {
+                console.log('player already played')
+            }            
         }
     })
 
@@ -309,23 +304,50 @@ function playerEnterGameRoom(socket: SocketTarotInterface, gameRoomId: string) {
     }
 }
 
-function updateUI(socket: SocketTarotInterface) {
+function updateUI(socket: SocketTarotInterface, updateGameState = true) {
     let g = GC.getGame(socket.gameRoomId);
     let p = socket.player;
+    let gameState = null;
+    if(updateGameState){
+        gameState = GameState.WaitingPlayers;
+        if(g.isFull()){ 
+            gameState = GameState.WaitingPlayersToBeReady 
+            
+            if(g.areAllPlayersReady()) { 
+                gameState = GameState.WaitingPlayersToBet
 
-    let playerData = {
+                if(g.areAllPlayersBet()){ 
+                    gameState = GameState.WaitingPlayersToPlay
+                    if(g.isPlayerToPlay(p)){
+                        gameState = GameState.Play
+                    } 
+                }
+                else{
+                    if(g.isPlayerToBet(p)){
+                        gameState = GameState.Bet;
+                    }
+                }
+            }
+        }
+    }
+
+
+    let playerData: myPlayerInfos = {
         name: socket.player.username, 
         hand: socket.player.hand.cards,
-        pv: socket.player.pv,
-        betValue : g.getBet(p),
-        cardPlayed: g.getPlayedCard(p), 
-        isReady: g.isReady(p),
-        nbTricks: g.getNbWonTrick(p)
+        pv  : socket.player.pv,
+        betValue    : g.getBet(p),
+        cardPlayed  : g.getPlayedCard(p), 
+        nbTricks    : g.getNbWonTrick(p)
     }
     
-    let othersData = _.cloneDeep(playerData);
-    othersData.handLength = p.hand.length();
-    delete othersData.hand
+    if(gameState != null){
+        playerData.gameState = gameState
+    }
+    let othersDataBeforeModif = _.cloneDeep(playerData);
+    othersDataBeforeModif.handLength = p.hand.length();
+    delete othersDataBeforeModif.hand
+    let othersData: playerInfos = othersDataBeforeModif;
 
     let dataForOthers = {
         playerName : socket.player.username,

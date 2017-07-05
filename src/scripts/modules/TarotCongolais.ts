@@ -4,7 +4,7 @@ import { Card } from './Card'
 export const DEFAULT_NB_PLAYER = 2;
 
 export enum GameState {
-    WaitingPlayer,
+    WaitingPlayers,
     WaitingPlayersToBeReady,
     InGame,
     WaitingPlayersToBet,
@@ -86,11 +86,12 @@ export interface playerInfos {
     nbTricks?: number,
     isReady?: boolean,
     cardPlayed?: Card,
-    handLength?: number
+    handLength?: number,
+    gameState?: GameState
 }
 
 export interface myPlayerInfos extends playerInfos {
-    hand?: Hand
+    hand?: Card[]
 }
 
 // others? : playerInfos[],

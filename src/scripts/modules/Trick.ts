@@ -16,11 +16,12 @@ export class Trick {
     }
 
     addPlay(play:Play){
-        if(!this.playerAlreadyPlayed(play.player)){
+        let player = play.player;
+        if( this.isPlayerToPlay(player) ) {
             this.arrPlay.push(play);
         }
         else{
-            throw new Error('Player already played');
+            throw new Error('Not good player to play');
         }
     }
 
@@ -52,6 +53,13 @@ export class Trick {
             }
         })
         return res;
+    }
+
+    isPlayerToPlay(p: Player){
+        let nbPlayerAlreadyPlay = this.arrPlay.length;
+        let playerToPlay = this.playerCollection.getPlayersPOV(this.playerCollection.getFirstPlayer())[ nbPlayerAlreadyPlay - 1 + 1];
+        
+        return _.isEqual(playerToPlay, p)
     }
 
     getListOfPlayerHavingPlayed(){
