@@ -128,7 +128,6 @@ export class PlayerCollection {
     }
 
     areAllPlayersReady(): boolean {
-        console.log('are all p ready', this.arrReadyPlayers.length, this.maxNbPlayer)
         return this.arrReadyPlayers.length === this.maxNbPlayer
     }
 

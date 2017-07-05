@@ -61,21 +61,7 @@ console.log(colors.green('-------------- Server started on localhost: %s -------
     socket.broadcast.to(socketid).emit('message', 'for your eyes only');
 */
 
-interface PlayerInfo {
-    // hand : Hand
-    pv : number
-    bet : number
-}
-
-interface GameData {
-    me: PlayerInfo
-    left: PlayerInfo
-    top: PlayerInfo
-    right: PlayerInfo
-}
-
 // init
-let current_pc = new PlayerCollection();
 let GC = new GameCollection();
 let startRoomCounterValue = 1;
 let roomCounter = startRoomCounterValue - 1;
@@ -95,6 +81,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
 	socket.on('disconnect', function(){
         if(socket.player){
             console.log('player disconnect', socket.player.username)
+            
             // retirer le joueur de la collection
         }     
 	});
@@ -131,8 +118,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     
     // Player is connected on site
     socket.on('isLoggedIn', () => {
-        let isLoggedIn = socket.player ? true : false;
-        socket.emit('isLoggedIn', isLoggedIn);
+        socket.emit('isLoggedIn', !!socket.player);
     })
 
     // Player is connected on site
@@ -150,7 +136,6 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     /**
     * Chat
     */
-
 	socket.on('new_game_message', function (msg: string) {
 		io.to(socket.gameRoomId).emit('updatechat', { pseudo : socket.player.username, msg: msg});  
 	});
@@ -162,12 +147,11 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     /**
     * Lobby
     */
-
 	socket.on('update_lobby_list', function (msg: string) {
         io.emit('update_lobby_list', GC.getLobbyList());
     });
 
-        // connect on game room by matchmaking
+    // connect on game room by matchmaking
     socket.on('lobby-auto', () => {
         // get game room id by auto matchmaking
         let gameRoomId = GC.getRandomAndNotFullGameRoomId();
@@ -215,7 +199,6 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     /**
     * Game states
     */
-
     socket.on('player_is_ready', (data:any) => {
         let game = GC.getGame(socket.gameRoomId)
         if(game){
@@ -295,19 +278,15 @@ function playerEnterGameRoom(socket: SocketTarotInterface, gameRoomId: string) {
         } 
     });
     socket.emit('first_step', others)
-    socket.broadcast.to(socket.gameRoomId).emit('new_player', socket.player.username);    
-
-    
-    if(game.isFull()){
-        console.log(gameRoomId + 'is full')
-        io.to(gameRoomId).emit('game_is_full')
-    }
+    socket.broadcast.to(socket.gameRoomId).emit('new_player', socket.player.username);
+    updateUI(socket);
 }
 
 function updateUI(socket: SocketTarotInterface, updateGameState = true) {
     let g = GC.getGame(socket.gameRoomId);
     let p = socket.player;
     let gameState = null;
+
     if(updateGameState){
         gameState = GameState.WaitingPlayers;
         if(g.isFull()){ 
@@ -330,7 +309,6 @@ function updateUI(socket: SocketTarotInterface, updateGameState = true) {
             }
         }
     }
-
 
     let playerData: myPlayerInfos = {
         name: socket.player.username, 

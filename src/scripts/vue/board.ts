@@ -32,7 +32,7 @@ export const board = {
     data: function(): VueBoardData {
         return {
             others : {},
-            me : { 
+            me : {
                 betValue : null,
                 cardPlayed: null, 
                 hand: null,
@@ -67,12 +67,12 @@ export const board = {
         },
         self_board_update(dataForPlayer:any){
             this.me = Object.assign(this.me, dataForPlayer)
-            // console.log('self board update', this. me)
+            console.log('self board update', this. me)
         },
         other_board_update(dataForOthers:any){
             let objCopy = _.cloneDeep(this.others)
             objCopy[dataForOthers.playerName] = Object.assign(objCopy[dataForOthers.playerName] || {}, dataForOthers.data)
-            // console.log('add other board data', objCopy[dataForOthers.playerName])
+            console.log('add other board data', objCopy[dataForOthers.playerName])
             this.others = objCopy;
         }
 
