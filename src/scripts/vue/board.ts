@@ -40,9 +40,9 @@ export const board = {
                 isReady: null, 
                 name: null, 
                 nbTricks: null, 
-                pv: null,
-                gameState: null
-            }
+                pv: null
+            },
+            gameState: GameState.WaitingPlayers
         }
     },
     components : {
@@ -74,12 +74,15 @@ export const board = {
             objCopy[dataForOthers.playerName] = Object.assign(objCopy[dataForOthers.playerName] || {}, dataForOthers.data)
             console.log('add other board data', objCopy[dataForOthers.playerName])
             this.others = objCopy;
+        },
+        update_game_state(newState: GameState){
+            this.gameState = newState
         }
 
 	},
     computed : {
-        showReadyButton : function(){ return this.me.gameState === GameState.WaitingPlayersToBeReady && !this.isReady},
-        gameStateName : function(){ return GameState[this.me.gameState] },
+        showReadyButton : function(){ return this.gameState === GameState.WaitingPlayersToBeReady && !this.isReady},
+        gameStateName : function(){ return GameState[this.gameState] },
         isReady : function(){ return this.me && !!this.me.isReady }
     },
 	methods: {

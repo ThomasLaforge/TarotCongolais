@@ -155,6 +155,33 @@ export class Game {
 		return this.turn.allPlayerBet()
 	}
 
+	// State
+	getPlayerGameState(p: Player){
+		let state = GameState.WaitingPlayers;
+
+		if(this.isFull()){ 
+            state = GameState.WaitingPlayersToBeReady 
+            
+            if(this.areAllPlayersReady()) { 
+                state = GameState.WaitingPlayersToBet
+
+                if(this.areAllPlayersBet()){ 
+                    state = GameState.WaitingPlayersToPlay
+                    if(this.isPlayerToPlay(p)){
+                        state = GameState.Play
+                    } 
+                }
+                else{
+                    if(this.isPlayerToBet(p)){
+                        state = GameState.Bet;
+                    }
+                }
+            }
+        }
+    
+		return state;
+	}
+
 	/**
 	 *  Getters / Setters
 	 */

@@ -99,7 +99,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         }
         else{
             socket.join('lobby');
-            let newPlayer = new Player(pseudo);
+            let newPlayer = new Player(pseudo, socket.id);
             socket.player = newPlayer;
             console.log('new player connected', pseudo);
             socket.emit('player_added');
@@ -285,30 +285,6 @@ function playerEnterGameRoom(socket: SocketTarotInterface, gameRoomId: string) {
 function updateUI(socket: SocketTarotInterface, updateGameState = true) {
     let g = GC.getGame(socket.gameRoomId);
     let p = socket.player;
-    let gameState = null;
-
-    if(updateGameState){
-        gameState = GameState.WaitingPlayers;
-        if(g.isFull()){ 
-            gameState = GameState.WaitingPlayersToBeReady 
-            
-            if(g.areAllPlayersReady()) { 
-                gameState = GameState.WaitingPlayersToBet
-
-                if(g.areAllPlayersBet()){ 
-                    gameState = GameState.WaitingPlayersToPlay
-                    if(g.isPlayerToPlay(p)){
-                        gameState = GameState.Play
-                    } 
-                }
-                else{
-                    if(g.isPlayerToBet(p)){
-                        gameState = GameState.Bet;
-                    }
-                }
-            }
-        }
-    }
 
     let playerData: myPlayerInfos = {
         name: socket.player.username, 
@@ -319,9 +295,6 @@ function updateUI(socket: SocketTarotInterface, updateGameState = true) {
         nbTricks    : g.getNbWonTrick(p)
     }
     
-    if(gameState != null){
-        playerData.gameState = gameState
-    }
     let othersDataBeforeModif = _.cloneDeep(playerData);
     othersDataBeforeModif.handLength = p.hand.length();
     delete othersDataBeforeModif.hand
@@ -334,4 +307,11 @@ function updateUI(socket: SocketTarotInterface, updateGameState = true) {
 
     socket.emit('self_board_update', playerData)
     socket.broadcast.to(socket.gameRoomId).emit('other_board_update', dataForOthers);
+    if(updateGameState){
+        g.players.getPlayers().forEach(p => {
+            let socketId = p.socketid;
+            let playerGameState = g.getPlayerGameState(p)
+            socket.broadcast.to(socketId).emit('update_game_state', playerGameState);
+        })
+    }
 }

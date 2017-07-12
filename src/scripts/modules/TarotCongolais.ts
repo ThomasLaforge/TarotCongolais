@@ -98,7 +98,7 @@ export interface myPlayerInfos extends playerInfos {
 export interface VueBoardData {
     others? : {},
     me? : myPlayerInfos,
-    gameState?: GameState,
+    gameState?: GameState
 }
 
 export interface VueChatData {
