@@ -37,6 +37,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
+    "start": "npm run server",
     "client": "gulp",
     "server-compile": "tsc -w",
     "server-watch": "nodemon dist/scripts/server/app.js --watch dist/scripts/**/*.js",
