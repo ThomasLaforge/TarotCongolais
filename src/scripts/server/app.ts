@@ -294,6 +294,10 @@ function updateUI(socket: SocketTarotInterface, updateGameState = true) {
         cardPlayed  : g.getPlayedCard(p), 
         nbTricks    : g.getNbWonTrick(p)
     }
+
+    if(updateGameState){
+        playerData.gameState = g.getPlayerGameState(p)
+    }
     
     let othersDataBeforeModif = _.cloneDeep(playerData);
     othersDataBeforeModif.handLength = p.hand.length();
