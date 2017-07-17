@@ -160,7 +160,10 @@ export class Game {
 		let state = GameState.WaitingPlayers;
 
 		if(this.isFull()){ 
-            state = GameState.WaitingPlayersToBeReady 
+			state = GameState.WaitingPlayersToBeReady
+			if(!this.isReady(p)){
+				state = GameState.WaitingToBeReady
+			}
             
             if(this.areAllPlayersReady()) { 
                 state = GameState.WaitingPlayersToBet

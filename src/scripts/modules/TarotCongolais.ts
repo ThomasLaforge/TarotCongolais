@@ -5,6 +5,7 @@ export const DEFAULT_NB_PLAYER = 2;
 
 export enum GameState {
     WaitingPlayers,
+    WaitingToBeReady,
     WaitingPlayersToBeReady,
     InGame,
     WaitingPlayersToBet,

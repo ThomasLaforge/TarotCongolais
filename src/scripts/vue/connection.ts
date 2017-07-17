@@ -1,9 +1,14 @@
+import { board } from './board'
+import { GameState } from '../modules/TarotCongolais'
+
 let template = `
 <div>
     <h2>Connexion</h2>
 
     <input type="text" v-model="pseudo" />
     <button @click="register">Connexion</button>
+
+    <board :gameroomid="'test room id'" :gameState="gameState"/>
 </div>
 `
 
@@ -11,8 +16,12 @@ export const connection = {
     template : template,
     data: function(){
         return {
-            pseudo: ''
+            pseudo: '',
+            gamestate: GameState.WaitingToBeReady
         }
+    },
+    components : {
+        board
     },
     sockets: {
         pseudo_already_used(){

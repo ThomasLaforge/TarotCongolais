@@ -15,16 +15,12 @@ let template = `
         <div class="other-players">
             <otherPlayer v-for="playerInfoIndex in Object.keys(others)" :key="playerInfoIndex" :playerInfo="others[playerInfoIndex]" />
         </div>
-        <hr />
-        <myPlayer :myPlayer="me" />
-        <hr />
-        <button v-if="showReadyButton" @click="ready">Ready</button>
+        <myPlayer :myPlayer="me" gameState="gameState" />
     </div>
 
     <chat socketActionSendMessage="new_game_message" />
 </div>
 `
-
 
 export const board = {
     template : template,
@@ -90,8 +86,8 @@ export const board = {
 	},
     mounted: function(){
         // Checking integrity => Fuck hackers
-        this.$socket.emit('isLoggedIn')
-        this.$socket.emit('isOnGame', this.gameroomid)
+        // this.$socket.emit('isLoggedIn')
+        // this.$socket.emit('isOnGame', this.gameroomid)
     },
     beforeRouteLeave(to:string, from:string, next:Function) {
         // called when the route that renders this component is about to
