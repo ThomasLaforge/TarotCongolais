@@ -11,6 +11,7 @@ let template = `
     </div>
     <div class="other-player-card-played" v-if="playerInfo.card">
         <card :value="playerInfo.card.value" />
+        Play Value: {{playerInfo.card.value}}
     </div>
 </div>
 `

@@ -58,7 +58,7 @@ gulp.task('watch', function() {
 });
 
 gulp.task('img', function() {
-    return gulp.src('src/img/*.jpg') // Gets all files ending with
+    return gulp.src(['src/img/**/*.jpg', 'src/img/**/*.jpeg']) // Gets all files ending with
         .pipe(gulp.dest('dist/img'))
 });
 
@@ -78,7 +78,7 @@ gulp.task('js-libs', () => {
 gulp.task('browserSync', function() {
     browserSync({
         port: 3000,
-        files: ['**/*.html', '**/*.js'],
+        files: ['**/*.html', '**/*.js', '**/*.css'],
         injectChanges: true,
         notify: true,
         reloadDelay: 0,

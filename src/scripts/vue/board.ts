@@ -2,6 +2,7 @@ import { chat } from './chat'
 import { otherPlayer } from './otherPlayer'
 import { myPlayer } from './myPlayer'
 import { VueBoardData, GameState } from '../modules/TarotCongolais'
+import { Card } from '../modules/Card'
 
 import * as _ from 'lodash'
 
@@ -9,13 +10,15 @@ let template = `
 <div class="board">
     <h2>{{gameroomid}}</h2>
 
-    State: {{ gameStateName }}
+    <div class="board-game-state">
+        State: {{ gameStateName }}
+    </div>
 
     <div class="boardgame">
         <div class="other-players">
             <otherPlayer v-for="playerInfoIndex in Object.keys(others)" :key="playerInfoIndex" :playerInfo="others[playerInfoIndex]" />
         </div>
-        <myPlayer :myPlayer="me" gameState="gameState" />
+        <myPlayer :myPlayer="me" :gameState="gameState" />
     </div>
 
     <chat socketActionSendMessage="new_game_message" />
@@ -31,12 +34,11 @@ export const board = {
             me : {
                 betValue : null,
                 cardPlayed: null, 
-                hand: null,
+                hand: [ new Card(0), new Card(4), new Card(5), new Card(2), new Card(4), new Card(5)],
                 handLength: null,
-                isReady: null, 
                 name: null, 
                 nbTricks: null, 
-                pv: null
+                pv: 8
             },
             gameState: GameState.WaitingPlayers
         }
@@ -77,12 +79,14 @@ export const board = {
 
 	},
     computed : {
-        showReadyButton : function(){ return this.gameState === GameState.WaitingPlayersToBeReady && !this.isReady},
         gameStateName : function(){ return GameState[this.gameState] },
-        isReady : function(){ return this.me && !!this.me.isReady }
+        toReady : function(){ return this.gameState === GameState.WaitingToBeReady },
+        toBet: function() { return this.gameState === GameState.Bet },
+        toPlay: function() { return this.gameState === GameState.Play },
+        waitingPlayers: function() { return this.gameState === GameState.WaitingPlayers },
+        waitingToBeReady: function() { return this.gameState === GameState.WaitingToBeReady },
     },
 	methods: {
-        ready(){ this.$socket.emit('player_is_ready')}
 	},
     mounted: function(){
         // Checking integrity => Fuck hackers

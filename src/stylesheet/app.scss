@@ -14,10 +14,6 @@ body {
     padding-bottom: 50px;
 }
 
-hr {
-    margin : 10px 0;
-}
-
 .game-list-elt-selected {
     background-color: grey;
 }
@@ -32,84 +28,36 @@ hr {
     }
 }
 
-// .boardgame {
-//     position: relative;
-//     margin: 50px auto;
-//     width: 1200px;
-//     min-height: 650px;
-//     height: 650px;
-//     background-color: green;
-// }
+.my-player {
+    display: flex;
+    flex-direction: column;
 
-// .cards-zone {
-//     text-align: center;
-//     border: 2px solid yellow;
-//     position: absolute;
-//     background-color: #aaa;
-//     min-height: 100px;
-//     height: 100px;
-//     width: 300px;
-// }
+    .my-player-info {
+        display: flex;
+        flex-direction: row;
 
-// .cards-zone-me {
-//     top: 500px;
-//     left: 450px;
-//     @include transform(rotate(180deg));
-// }
 
-// .cards-zone-left {
-//     top: 300px;
-//     left: 50px;
-//     @include transform(rotate(90deg));
-// }
+    }
 
-// .cards-zone-top {
-//     top: 100px;
-//     left: 450px;
-// }
+    .my-player-main{
+        display: flex;
+        flex-direction: row;
 
-// .cards-zone-right {
-//     top: 300px;
-//     left: 850px;
-//     @include transform(rotate(-90deg));
-// }
+        .my-player-hand {
+            width: 80%;
+            overflow-x: auto;
 
-// .card-in-cards-zone {
-//     height: 100px;
-//     min-height: 100px;
-//     width: 50px;
-//     display: inline-block;
-//     background-image: url('../img/dos_carte.jpg');
-//     /* @include transform(scaleY(1.25)); */
-// }
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
 
-// $startAngle : 0;
-// $spaceAngle : 0;
-// @for $i from 1 through 6 {
-// 	@if $i == 1 {
-// 	  $startAngle : 0;
-// 	  $spaceAngle : 0;
-// 	} @else if $i == 2 {
-// 	  $startAngle : -10;
-// 	  $spaceAngle : 20;
-// 	} @else if $i == 3 {
-// 	  $startAngle : -15;
-// 	  $spaceAngle : 15;
-// 	} @else if $i == 4 {
-// 	  $startAngle : -30;
-// 	  $spaceAngle : 20;
-// 	} @else if $i == 5 {
-// 	  $startAngle : -30;
-// 	  $spaceAngle : 20;
-// 	} @else if $i == 6 {
-// 	  $startAngle : -30;
-// 	  $spaceAngle : 20;
-// 	}
-// 	@for $j from 1 through $i {
-// 		@for $k from 2 through 4{
-// 			.cards-zone-#{$k} .card-in-cards-zone:nth-child(#{$j}):nth-last-child(#{($i - $j + 1)}){
-// 				@include transform(rotate(#{$startAngle + ($spaceAngle * ($j - 1))}deg));
-// 			}
-// 		}
-// 	}
-// }
+            .card {
+                padding: 0 10px;
+            }
+
+            .card-selected {
+                border: 1px solid green;
+            }
+        }
+    }
+}

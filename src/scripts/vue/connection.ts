@@ -8,7 +8,7 @@ let template = `
     <input type="text" v-model="pseudo" />
     <button @click="register">Connexion</button>
 
-    <board :gameroomid="'test room id'" :gameState="gameState"/>
+    <board :gameroomid="'test room id'"/>
 </div>
 `
 
@@ -16,8 +16,7 @@ export const connection = {
     template : template,
     data: function(){
         return {
-            pseudo: '',
-            gamestate: GameState.WaitingToBeReady
+            pseudo: ''
         }
     },
     components : {
