@@ -7,11 +7,10 @@ let template = `
         <div class="player-info-pv">PV : {{ playerInfo.pv }}</div>
         <div class="player-info-tricks">Tricks : {{ playerInfo.nbTricks }}</div>
         <div class="player-info-bet">Bet : {{ playerInfo.betValue }}</div>
-        <div class="player-info-ready">isReady : {{ playerInfo.isReady }}</div>
     </div>
     <div class="other-player-card-played" v-if="playerInfo.card">
-        <card :card="playerInfo.card" />
-        Play Value: {{playerInfo.card.value}}
+        <card :card="playerInfo.cardPlayed" />
+        Play Value: {{playerInfo.cardPlayed.value}}
     </div>
 </div>
 `

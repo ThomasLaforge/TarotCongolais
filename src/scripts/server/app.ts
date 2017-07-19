@@ -250,6 +250,10 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         console.log('player_not_playing', data)
     })
 
+    socket.on('update_ui', () => {
+        updateUI(socket, true, false)
+    })
+
 });
 
 server.listen(port);
@@ -282,7 +286,7 @@ function playerEnterGameRoom(socket: SocketTarotInterface, gameRoomId: string) {
     updateUI(socket);
 }
 
-function updateUI(socket: SocketTarotInterface, updateGameState = true) {
+function updateUI(socket: SocketTarotInterface, updateGameState = true, forceUpdate = true) {
     let g = GC.getGame(socket.gameRoomId);
     let p = socket.player;
 
@@ -295,7 +299,8 @@ function updateUI(socket: SocketTarotInterface, updateGameState = true) {
         betValue    : g.getBet(p),
         cardPlayed  : g.getPlayedCard(p), 
         nbTricks    : g.getNbWonTrick(p),
-        turnNbCard  : g.turnCards
+        turnNbCard  : g.turnCards,
+        isReady: g.isReady(p)         
     }
 
     if(updateGameState){
@@ -313,12 +318,17 @@ function updateUI(socket: SocketTarotInterface, updateGameState = true) {
     };
 
     socket.emit('self_board_update', playerData)
+    console.log('update other board')
     socket.broadcast.to(socket.gameRoomId).emit('other_board_update', dataForOthers);
-    if(updateGameState){
+
+    // if(updateGameState){
         g.players.getPlayers().forEach(p => {
             let socketId = p.socketid;
             let playerGameState = g.getPlayerGameState(p)
             socket.broadcast.to(socketId).emit('update_game_state', playerGameState);
+            if(forceUpdate){
+                socket.broadcast.to(socketId).emit('force_update_ui');
+            }
         })
-    }
+    // }
 }

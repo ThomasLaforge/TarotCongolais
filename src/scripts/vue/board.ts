@@ -66,26 +66,32 @@ export const board = {
             this.me = Object.assign(this.me, dataForPlayer)
             if(dataForPlayer.gameState || dataForPlayer.gameState === 0){
                 this.gameState = dataForPlayer.gameState
-            } 
-            console.log('self board update', this.me)
+            }
+            this.me = Object.assign(this.me, { hand : this.me.hand.map(obj => { return new Card(obj._value) }) })
+            console.log('self board update', this.me);
         },
         other_board_update(dataForOthers:any){
             let objCopy = _.cloneDeep(this.others)
             objCopy[dataForOthers.playerName] = Object.assign(objCopy[dataForOthers.playerName] || {}, dataForOthers.data)
-            console.log('add other board data', objCopy[dataForOthers.playerName])
+            console.log('add other board data', objCopy[dataForOthers.playerName]);
             this.others = objCopy;
         },
         update_game_state(newState: GameState){
+            console.log("update state")
             this.gameState = newState
+        },
+        force_update_ui(){
+            console.log('force update ui')
+            this.$socket.emit('update_ui')
         }
 
 	},
     computed : {
         chatTypeGame: function(){ return ChatType.Game },
         gameStateName : function(){ return GameState[this.gameState] },
-        toReady : function(){ return this.gameState === GameState.WaitingToBeReady || (this.gameState === GameState.WaitingPlayersToBeReady && !this.myPlayer.isReady )},
-        toBet: function() { return this.gameState === GameState.Bet || (this.gameState === GameState.WaitingPlayersToBet && !this.myPlayer.betValue )},
-        toPlay: function() { return this.gameState === GameState.Play || (this.gameState === GameState.WaitingPlayersToPlay && !this.myPlayer.cardPlayed ) },
+        toReady : function(){ return this.gameState === GameState.WaitingToBeReady || (this.gameState === GameState.WaitingPlayersToBeReady && !this.me.isReady )},
+        toBet: function() { return this.gameState === GameState.Bet || (this.gameState === GameState.WaitingPlayersToBet && !this.me.betValue )},
+        toPlay: function() { return this.gameState === GameState.Play || (this.gameState === GameState.WaitingPlayersToPlay && !this.me.cardPlayed ) },
         waitingPlayers: function() { return this.gameState === GameState.WaitingPlayers },
         waitingToBeReady: function() { return this.gameState === GameState.WaitingToBeReady },
         computedStates: function(){

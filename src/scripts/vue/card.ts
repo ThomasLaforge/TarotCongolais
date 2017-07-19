@@ -1,5 +1,5 @@
 let template = `
-<div class="card" :class="selectedClass" @click="select">
+<div class="card" :class="selectedClass" @click="select" v-if="card">
     <img :src="imgPath" />
 </div>
 `
@@ -12,7 +12,7 @@ export const card = {
         }
     },
     computed : {
-        imgPath: function(){ 
+        imgPath: function(){
             return '../../img/cartes/' + this.card.getPath() + '.jpeg' 
         },
         selectedClass: function(){
