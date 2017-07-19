@@ -1,5 +1,5 @@
 import { chat } from './chat'
-import { VueLobbyData, LobbyListElt } from '../modules/TarotCongolais'
+import { VueLobbyData, LobbyListElt, ChatType } from '../modules/TarotCongolais'
 let template = `
 <div>
     <h2>Lobby</h2>
@@ -26,7 +26,7 @@ let template = `
     <button @click="create">Create</button>
     <button @click="join">Join</button>
 
-    <chat socketActionSendMessage="new_lobby_message" />
+    <chat socketActionSendMessage="new_lobby_message" :type="chatTypeLobby"/>
 </div>
 `
 
@@ -41,6 +41,9 @@ export const lobby = {
                 playerOn : 2
             }]
         }
+    },
+    computed: {
+        chatTypeLobby: function(){ return ChatType.Lobby }
     },
     components: {
         chat

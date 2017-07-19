@@ -125,6 +125,12 @@ export interface VueLobbyData {
 // ------------------------- //
 
 export interface ChatLine {
-    pseudo: string
-    msg: string
+    pseudo: string,
+    msg: string,
+    chatType: ChatType
+}
+
+export enum ChatType {
+    Lobby,
+    Game
 }

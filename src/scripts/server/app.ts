@@ -15,7 +15,7 @@ import {port} from '../modules/Config';
 import {Bet}    from '../modules/Bet';
 import {PlayerCollection} from '../modules/PlayerCollection';
 import {GameCollection} from '../modules/GameCollection'
-import {VueBoardData, GameState, playerInfos, myPlayerInfos} from '../modules/TarotCongolais'
+import {VueBoardData, GameState, playerInfos, myPlayerInfos, ChatType} from '../modules/TarotCongolais'
 
 // Server
 let server = http.createServer(function(req, res) {
@@ -103,7 +103,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
             socket.player = newPlayer;
             console.log('new player connected', pseudo);
             socket.emit('player_added');
-            socket.broadcast.to('lobby').emit('player_added', socket.player.username);
+            socket.broadcast.to('lobby').emit('player_connected', socket.player.username);
         }
     })
 
@@ -137,11 +137,11 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
     * Chat
     */
 	socket.on('new_game_message', function (msg: string) {
-		io.to(socket.gameRoomId).emit('updatechat', { pseudo : socket.player.username, msg: msg});  
+		io.to(socket.gameRoomId).emit('update_chat', { pseudo : socket.player.username, msg: msg, chatType: ChatType.Game });  
 	});
 
     socket.on('new_lobby_message', function (msg: string) {
-		io.to('lobby').emit('updatechat', { pseudo : socket.player.username, msg: msg});  
+		io.to('lobby').emit('update_chat', { pseudo : socket.player.username, msg: msg, chatType: ChatType.Lobby });  
 	});
 
     /**
@@ -220,7 +220,7 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
                 g.addBet( new Bet(socket.player, playerBet) )
                 updateUI(socket)                
             } catch (error) {
-                console.log('player already played')
+                console.log('player already bet')
             }
         }
     })
@@ -285,6 +285,8 @@ function playerEnterGameRoom(socket: SocketTarotInterface, gameRoomId: string) {
 function updateUI(socket: SocketTarotInterface, updateGameState = true) {
     let g = GC.getGame(socket.gameRoomId);
     let p = socket.player;
+
+    // console.log('hand', socket.player.hand.cards, socket.player.hand.arrCard, g.players)
 
     let playerData: myPlayerInfos = {
         name: socket.player.username, 

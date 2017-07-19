@@ -1,4 +1,4 @@
-import {ChatLine, VueChatData} from '../modules/TarotCongolais'
+import {ChatLine, ChatType, VueChatData} from '../modules/TarotCongolais'
 
 let template = `
 <div class="chat-zone">
@@ -18,7 +18,7 @@ let template = `
 
 export const chat = {
     template : template,
-    props: ['socketActionSendMessage'],
+    props: ['socketActionSendMessage', 'type'],
     data: function(): VueChatData{
         return {
             chatHistory: [],
@@ -26,13 +26,18 @@ export const chat = {
         }
     },
     sockets : {
-        updatechat(chatLine : ChatLine){
-            this.chatHistory.push(chatLine);
+        update_chat(chatLine : ChatLine){
+            if(chatLine.chatType === this.type){
+                this.chatHistory.push(chatLine);
+            }
         },
         player_connected(pseudo: string){
-            this.chatHistory.push({ pseudo : 'Admin', msg: 'Un nouveau joueur vient de se connecter : ' + pseudo})    
+            if(this.type === ChatType.Lobby){
+                this.chatHistory.push({ pseudo : 'Admin', msg: 'Un nouveau joueur vient de se connecter : ' + pseudo})    
+            }
         },
-        player_added(pseudo: string){
+        new_player(pseudo: string){
+            if(this.type === ChatType.Game)
             this.chatHistory.push({ pseudo : 'Admin', msg: 'Un nouveau joueur vient de rejoindre la partie : ' + pseudo})                
         }
     },

@@ -25,11 +25,13 @@ let template = `
         <button v-if="computedStates.toPlay" @click="play">Play</button>
     </div>
 
-    <div class="my-player-main">
+    <div class="my-player-main" v-if="onGame">
         <div class="my-player-hand" v-if="myPlayer.hand">
             <card v-for="(card, i) in myPlayer.hand" :key="i" :card="card" :selected="selectedCard === i" @selection="selectCard(i)"/>
         </div>
-        <div class="player-info-pv"> <img :src="pvImgPath" /> </div>
+        <div class="player-info-pv">
+            <img :src="pvImgPath" />
+        </div>
     </div>
 </div>
 `
@@ -49,7 +51,7 @@ export const myPlayer = {
             return '../../img/cartes/' + this.lifeColor + this.myPlayer.pv + '.jpeg' 
         },
         notInGame: function(){ 
-            return this.waitingPlayers || this.waitingToBeReady || this.computedStates.toReady
+            return this.computedStates.waitingPlayers || this.computedStates.waitingToBeReady || this.computedStates.toReady
         },
         onGame: function(){ return !this.notInGame }
     },

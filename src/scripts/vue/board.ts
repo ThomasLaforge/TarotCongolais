@@ -1,7 +1,7 @@
 import { chat } from './chat'
 import { otherPlayer } from './otherPlayer'
 import { myPlayer } from './myPlayer'
-import { VueBoardData, GameState } from '../modules/TarotCongolais'
+import { VueBoardData, GameState, ChatType } from '../modules/TarotCongolais'
 import { Card } from '../modules/Card'
 
 import * as _ from 'lodash'
@@ -21,7 +21,7 @@ let template = `
         <myPlayer :myPlayer="me" :computedStates="computedStates" />
     </div>
 
-    <chat socketActionSendMessage="new_game_message" />
+    <chat socketActionSendMessage="new_game_message" :type="chatTypeGame" />
 </div>
 `
 
@@ -34,12 +34,12 @@ export const board = {
             me : {
                 betValue : null,
                 cardPlayed: null,
-                hand: [ new Card(0), new Card(-1), new Card(22), new Card(2), new Card(4), new Card(5)],
-                nbTricks: 3, 
-                pv: 8,
-                turnNbCard : 4
+                hand: null,
+                nbTricks: null, 
+                pv: null,
+                turnNbCard : null
             },
-            gameState: GameState.Bet
+            gameState: GameState.WaitingPlayers
         }
     },
     components : {
@@ -78,6 +78,7 @@ export const board = {
 
 	},
     computed : {
+        chatTypeGame: function(){ return ChatType.Game },
         gameStateName : function(){ return GameState[this.gameState] },
         toReady : function(){ return this.gameState === GameState.WaitingToBeReady || (this.gameState === GameState.WaitingPlayersToBeReady && !this.myPlayer.isReady )},
         toBet: function() { return this.gameState === GameState.Bet || (this.gameState === GameState.WaitingPlayersToBet && !this.myPlayer.betValue )},
@@ -98,8 +99,8 @@ export const board = {
 	},
     mounted: function(){
         // Checking integrity => Fuck hackers
-        // this.$socket.emit('isLoggedIn')
-        // this.$socket.emit('isOnGame', this.gameroomid)
+        this.$socket.emit('isLoggedIn')
+        this.$socket.emit('isOnGame', this.gameroomid)
     },
     beforeRouteLeave(to:string, from:string, next:Function) {
         // called when the route that renders this component is about to
