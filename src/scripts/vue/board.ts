@@ -64,7 +64,10 @@ export const board = {
         },
         self_board_update(dataForPlayer:any){
             this.me = Object.assign(this.me, dataForPlayer)
-            console.log('self board update', this. me)
+            if(dataForPlayer.gameState || dataForPlayer.gameState === 0){
+                this.gameState = dataForPlayer.gameState
+            } 
+            console.log('self board update', this.me)
         },
         other_board_update(dataForOthers:any){
             let objCopy = _.cloneDeep(this.others)
