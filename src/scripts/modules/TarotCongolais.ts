@@ -2,6 +2,8 @@ import { Hand } from './Hand'
 import { Card } from './Card'
 
 export const DEFAULT_NB_PLAYER = 2;
+export const EXCUSE_VALUE_LOW = 0;
+export const EXCUSE_VALUE_HIGH = 22;
 
 export enum GameState {
     WaitingPlayers,
@@ -12,6 +14,11 @@ export enum GameState {
     Bet,
     WaitingPlayersToPlay,
     Play
+}
+
+export enum ExcuseValue {
+    LOW,
+    HIGH
 }
 
 export interface BetInterface {
@@ -92,7 +99,8 @@ export interface playerInfos {
 }
 
 export interface myPlayerInfos extends playerInfos {
-    hand?: Card[]
+    hand?: Card[],
+    turnNbCard?: number
 }
 
 // others? : playerInfos[],

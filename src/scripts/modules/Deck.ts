@@ -22,7 +22,10 @@ export class Deck {
 
     initDeck():void {
         this.arrayDeck = [];
-        for (let value = 0; value <= 21; value++) {
+        // add excuse
+        this.addCard( -1 );
+        // add trumps
+        for (let value = 1; value <= 21; value++) {
             this.addCard( value );
         }
         this.shuffle();

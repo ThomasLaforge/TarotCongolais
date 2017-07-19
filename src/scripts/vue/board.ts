@@ -18,7 +18,7 @@ let template = `
         <div class="other-players">
             <otherPlayer v-for="playerInfoIndex in Object.keys(others)" :key="playerInfoIndex" :playerInfo="others[playerInfoIndex]" />
         </div>
-        <myPlayer :myPlayer="me" :gameState="gameState" />
+        <myPlayer :myPlayer="me" :computedStates="computedStates" />
     </div>
 
     <chat socketActionSendMessage="new_game_message" />
@@ -33,14 +33,13 @@ export const board = {
             others : {},
             me : {
                 betValue : null,
-                cardPlayed: null, 
-                hand: [ new Card(0), new Card(4), new Card(5), new Card(2), new Card(4), new Card(5)],
-                handLength: null,
-                name: null, 
-                nbTricks: null, 
-                pv: 8
+                cardPlayed: null,
+                hand: [ new Card(0), new Card(-1), new Card(22), new Card(2), new Card(4), new Card(5)],
+                nbTricks: 3, 
+                pv: 8,
+                turnNbCard : 4
             },
-            gameState: GameState.WaitingPlayers
+            gameState: GameState.Bet
         }
     },
     components : {
@@ -80,11 +79,20 @@ export const board = {
 	},
     computed : {
         gameStateName : function(){ return GameState[this.gameState] },
-        toReady : function(){ return this.gameState === GameState.WaitingToBeReady },
-        toBet: function() { return this.gameState === GameState.Bet },
-        toPlay: function() { return this.gameState === GameState.Play },
+        toReady : function(){ return this.gameState === GameState.WaitingToBeReady || (this.gameState === GameState.WaitingPlayersToBeReady && !this.myPlayer.isReady )},
+        toBet: function() { return this.gameState === GameState.Bet || (this.gameState === GameState.WaitingPlayersToBet && !this.myPlayer.betValue )},
+        toPlay: function() { return this.gameState === GameState.Play || (this.gameState === GameState.WaitingPlayersToPlay && !this.myPlayer.cardPlayed ) },
         waitingPlayers: function() { return this.gameState === GameState.WaitingPlayers },
         waitingToBeReady: function() { return this.gameState === GameState.WaitingToBeReady },
+        computedStates: function(){
+            return {
+                toReady : this.toReady,
+                toBet : this.toBet,
+                toPlay : this.toPlay,
+                waitingPlayers : this.waitingPlayers,
+                waitingToBeReady : this.waitingToBeReady
+            }
+        }
     },
 	methods: {
 	},

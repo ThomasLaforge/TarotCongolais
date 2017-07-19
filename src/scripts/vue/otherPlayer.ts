@@ -10,7 +10,7 @@ let template = `
         <div class="player-info-ready">isReady : {{ playerInfo.isReady }}</div>
     </div>
     <div class="other-player-card-played" v-if="playerInfo.card">
-        <card :value="playerInfo.card.value" />
+        <card :card="playerInfo.card" />
         Play Value: {{playerInfo.card.value}}
     </div>
 </div>

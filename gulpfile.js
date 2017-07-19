@@ -38,7 +38,7 @@ gulp.task('compass', function() {
 gulp.task('scripts-client', function() {
     let bundler = browserify({ basedir: config.client.path })
         .add(config.client.path + '/' + config.client.main)
-        .plugin(tsify, { target: 'ES5' });
+        .plugin(tsify, { target: 'ES5' })
 
     return bundler.bundle()
         .on('error', function(error) { console.error(error.toString()); })

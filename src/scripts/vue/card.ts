@@ -6,14 +6,14 @@ let template = `
 
 export const card = {
     template : template,
-    props : ['value', 'selected'],
+    props : ['card', 'selected'],
     data(){
         return {
         }
     },
     computed : {
         imgPath: function(){ 
-            return '../../img/cartes/' + this.value + '.jpeg' 
+            return '../../img/cartes/' + this.card.getPath() + '.jpeg' 
         },
         selectedClass: function(){
             return this.selected ? 'card-selected' : 'card-not-selected'

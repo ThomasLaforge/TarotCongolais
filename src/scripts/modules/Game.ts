@@ -11,7 +11,7 @@ import {History} from './History';
 import {GameAction, ActionHistory} from './ActionHistory';
 import * as Utils from './utils';
 import * as _ from 'lodash';
-import {DEFAULT_NB_PLAYER, GameState} from './TarotCongolais'
+import {DEFAULT_NB_PLAYER, ExcuseValue, GameState} from './TarotCongolais'
 
 export class Game {
 	
@@ -66,6 +66,10 @@ export class Game {
 	}
 
 	// Turn
+	choseExcuseValue(card: Card, val : ExcuseValue){
+		card.choseExcuseValue(val)
+	}
+
 	addTrick() {
 		this.turn.addTrick(this.actualTrick);
 		this.actualTrick = new Trick(this.players);

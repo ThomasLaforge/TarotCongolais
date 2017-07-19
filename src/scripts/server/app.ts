@@ -292,7 +292,8 @@ function updateUI(socket: SocketTarotInterface, updateGameState = true) {
         pv  : socket.player.pv,
         betValue    : g.getBet(p),
         cardPlayed  : g.getPlayedCard(p), 
-        nbTricks    : g.getNbWonTrick(p)
+        nbTricks    : g.getNbWonTrick(p),
+        turnNbCard  : g.turnCards
     }
 
     if(updateGameState){
