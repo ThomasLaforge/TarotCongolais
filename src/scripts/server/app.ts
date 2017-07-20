@@ -225,7 +225,8 @@ io.sockets.on('connection', function (socket: SocketTarotInterface) {
         }
     })
 
-    socket.on('player_play', (card: Card) => {
+    socket.on('player_play', (cardValue: number) => {
+        let card = new Card(cardValue)
         console.log('player_play', card)
         let g = GC.getGame(socket.gameRoomId);
         if(g){

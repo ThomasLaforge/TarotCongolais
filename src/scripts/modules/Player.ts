@@ -24,8 +24,12 @@ export class Player implements PlayerInterface {
 		this.pv += nbPV
 	}
 
-	addCard(card: Card|Array<Card>){
+	addCard(card: Card | Card[]){
 		this.hand.addCards(card)
+	}
+
+	playCard(card: Card | Card[]){
+		this.hand.playCard(card)
 	}
 
 	/**

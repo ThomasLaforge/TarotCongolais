@@ -64,11 +64,13 @@ export const myPlayer = {
         bet(){ this.$socket.emit('player_bet', this.betValue) },
         play(){ 
             if(this.selectedCard){
-                this.$socket.emit('player_play', this.myPlayer.hand[this.selectedCard])
+                console.log('emit play', this.myPlayer.hand[this.selectedCard], this.myPlayer.hand[this.selectedCard].value)
+                this.$socket.emit('player_play', this.myPlayer.hand[this.selectedCard].value)
+                this.selectedCard = null
             }
         },
         selectCard(cardIndex: number){
-            if(this.toPlay){
+            if(this.computedStates.toPlay){
                 this.selectedCard = cardIndex !== this.selectedCard ? cardIndex : null
                 console.log('selected', this.selectedCard)
             }

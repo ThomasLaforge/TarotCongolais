@@ -75,6 +75,7 @@ export class Game {
 		this.actualTrick = new Trick(this.players);
 	}
 
+
 	nextTurn(){
 		if( this.turnCards > 1 ) {
 			this.turnCards--;
@@ -93,7 +94,11 @@ export class Game {
 	// Play
 	addPlay(play: Play){
 		// Action
-		this.actualTrick.addPlay( play );
+		play.player.playCard(play.card)
+		let trickWinner = this.actualTrick.addPlay( play );
+		if(trickWinner){
+			this.addTrick();
+		}
 		// History
 		let action = new ActionHistory(GameAction.Play, play.card, play.player.username);
 		this.history.add(action);

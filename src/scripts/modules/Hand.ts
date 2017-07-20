@@ -28,19 +28,22 @@ export class Hand {
         })
     }
 
-    playCard(card:Card): Card{
-        let indexOfCard:number = this.indexOfCard(card);
-        let res:boolean = false;
-        if (indexOfCard > -1){
-            return this.arrCard.splice(indexOfCard,1)[0];
-        }
-        else{
-            throw new Error(`card doesn't exist`);
-        }
+    playCard(card:Card | Card[]): void {
+        let cards = Array.isArray(card) ? card : [card]
+        cards.forEach(card => {
+            let indexOfCard:number = this.indexOfCard(card);
+            let res:boolean = false;
+            if (indexOfCard > -1){
+                this.arrCard.splice(indexOfCard,1)[0];
+            }
+            else{
+                throw new Error(`card doesn't exist`);
+            }
+        })
     }
 
-    playFirstCard():Card{
-        return this.playCard(this.arrCard[0]);
+    playFirstCard(): void{
+        this.playCard(this.arrCard[0]);
     }
 
     indexOfCard(card:Card){

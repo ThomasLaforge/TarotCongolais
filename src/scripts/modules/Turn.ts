@@ -98,7 +98,9 @@ export class Turn {
     getNbWonTricks(player: Player){
         let sum = 0;
         this.arrTrick.forEach( t => { 
-            sum += t.arrPlay.filter( p => { return p.player.username === player.username }).length
+            if( t.isWinner(player) ) {
+                sum++
+            }
         })
         return sum;
     }

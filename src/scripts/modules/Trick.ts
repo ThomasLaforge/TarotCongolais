@@ -19,19 +19,23 @@ export class Trick {
         let player = play.player;
         if( this.isPlayerToPlay(player) ) {
             this.arrPlay.push(play);
+            return this.getWinner()
         }
         else{
             throw new Error('Not good player to play');
         }
     }
 
+    isWinner(p: Player){
+        return _.isEqual(this.getWinner(), p)
+    }
+
     getWinner(): Player { 
-        if(this.allPlayerHavePlayed())
-        return this.getLeader()
+        return this.allPlayerHavePlayed() ? this.getLeader() : null
     }
     
     getLeader(): Player {
-        let res: Player;
+        let res: Player = null;
         let maxValueCard:number = -1;
 
         this.arrPlay.forEach( (play: Play) => {
