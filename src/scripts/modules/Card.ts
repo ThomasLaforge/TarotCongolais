@@ -12,8 +12,12 @@ export class Card {
         this._value = val === ExcuseValue.HIGH ? EXCUSE_VALUE_HIGH : EXCUSE_VALUE_LOW
     }
 
+    isExcuse(){
+        return this.value === -1 || this.value === 0 || this.value === 22
+    }
+
     getPath(){
-        return ( this.value === -1 || this.value === 0 || this.value === 22 ) ? 0 : this.value
+        return this.isExcuse() ? 0 : this.value
     }
 
     log(){

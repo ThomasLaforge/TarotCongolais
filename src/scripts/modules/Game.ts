@@ -29,7 +29,8 @@ export class Game {
 		this.history          = new History();
         this.players          = players;
 		this.deck             = new Deck();
-		this.turnCards		  = Math.floor(this.deck.length() / this.getNbMaxPlayer());
+		// this.turnCards		  = Math.floor(this.deck.length() / this.getNbMaxPlayer());
+		this.turnCards		  = Math.floor(this.deck.length() / this.getNbMaxPlayer());		
 		this.actualTrick 	  = new Trick(this.players);
 		this.turn 			  = new Turn(this.turnCards, this.players);			
 		this.gameState		  = GameState.WaitingPlayers

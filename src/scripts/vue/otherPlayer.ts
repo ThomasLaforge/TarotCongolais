@@ -1,4 +1,5 @@
 import { card } from './card'
+import { Card } from '../modules/Card'
 
 let template = `
 <div class="other-player">
@@ -8,9 +9,11 @@ let template = `
         <div class="player-info-tricks">Tricks : {{ playerInfo.nbTricks }}</div>
         <div class="player-info-bet">Bet : {{ playerInfo.betValue }}</div>
     </div>
-    <div class="other-player-card-played" v-if="playerInfo.card">
-        <card :card="playerInfo.cardPlayed" />
-        Play Value: {{playerInfo.cardPlayed.value}}
+    <div class="other-player-card-played" v-if="cardPlayed">
+        <card :card="cardPlayed" />
+        <div class="card-played-value" v-if="cardPlayed.isExcuse()">
+            {{  cardPlayed.value }}
+        </div>
     </div>
 </div>
 `
@@ -23,6 +26,7 @@ export const otherPlayer = {
         }
     },
     computed : {
+        cardPlayed: function(){ return this.playerInfo.cardPlayed && new Card(this.playerInfo.cardPlayed._value) }
     },
     components: {
         card
